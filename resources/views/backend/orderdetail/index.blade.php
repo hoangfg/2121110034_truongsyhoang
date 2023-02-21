@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Tắt cả thành viên')
+@section('title', 'Chi tiết đơn hàng')
 @section('header')
 
 @endsection
@@ -10,7 +10,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>TẤT CẢ THÀNH VIÊN</h1>
+                        <h1>CHI TIẾT ĐƠN HÀNG</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">

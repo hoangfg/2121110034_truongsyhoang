@@ -47,16 +47,20 @@
                 <div class="card-body">
                     <table class="table table-bordered">
                         <thead>
-                            <tr class="text-center">
-                                <th class="col-md-1 col-sm-1 col-1">
+                            <tr class="text-center " >
+                                <th class="col-md-1 col-sm-1 col-1 align-middle">
                                     <input type="checkbox" name="" id="">
                                 </th>
-                                <th class="col-md-1 col-sm-1 col-1">image</th>
-                                <th class="col-md-3 col-sm-3 col-3">Tên danh mục</th>
-                                <th class="col-md-3 col-sm-3 col-3">Slug</th>
-                                <th class="col-md-2 col-sm-2 col-2">Chức năng</th>
-                                <th class="col-md-1 col-sm-1 col-1">Trạng thái</th>
-                                <th class="col-md-1 col-sm-1 col-1">id</th>
+                                <th class="col-md-1 col-sm-1 col-1 align-middle">image</th>
+                                <th class="col-md-2 col-sm-3 col-3 align-middle">Tên sản phẩm</th>
+                                <th class="col-md-1 col-sm-1 col-1 align-middle">Danh mục</th>
+                                <th class="col-md-1 col-sm-1 col-1 align-middle">Thương hiệu</th>
+                                <th class="col-md-1 col-sm-1 col-1 align-middle">Số lượng</th>
+                                <th class="col-md-1 col-sm-1 col-1 align-middle">Giá</th>
+                               
+                                <th class="col-md-2 col-sm-2 col-2 align-middle">Chức năng</th>
+                                <th class="col-md-1 col-sm-1 col-1 align-middle">Trạng thái</th>
+                                <th class="col-md-1 col-sm-1 col-1 align-middle">id</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -64,10 +68,14 @@
                                 <tr>
                                     <td class="text-center"> <input type="checkbox" name="" id=""></td>
                                     <td>
-                                        <img src="{{ asset('images/'.$product->image) }}" alt="" class="w-100">
+                                        <img src="{{ asset('images/product/'.$product->image) }}" alt="" class="w-100">
                                     </td>
                                     <td>{{ $product->name }}</td>
-                                    <td>{{ $product->slug }}</td>
+                                    <td>{{ $product->qty }}</td>
+                                    <td>{{ $product->category_id }}</td>
+                                    <td>{{ $product->brand_id }}</td>
+                                    <td>{{ $product->price }}</td>
+                                   
                                     <td class="text-center">
                                         <a href="" class="btn btn-sm btn-danger" title="delete"><i
                                                 class="fa-solid fa-delete-left"></i></a>

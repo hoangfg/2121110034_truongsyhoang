@@ -14,7 +14,7 @@ class OrderdetailController extends Controller
      */
     public function index()
     {
-        return view("backend.order.index");
+        return view("backend.orderdetail.index");
     }
 
     /**

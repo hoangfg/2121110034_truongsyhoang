@@ -52,15 +52,15 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr class="text-center">
-                                <th class="col-md-1 col-sm-1 col-1">
+                                <th class="col-md-1 col-sm-1 col-1 align-middle">
                                     <input type="checkbox" name="" id="">
                                 </th>
-                                <th class="col-md-1 col-sm-1 col-1">image</th>
-                                <th class="col-md-3 col-sm-3 col-3">Tên danh mục</th>
-                                <th class="col-md-3 col-sm-3 col-3">Slug</th>
-                                <th class="col-md-2 col-sm-2 col-2">Chức năng</th>
-                                <th class="col-md-1 col-sm-1 col-1">Trạng thái</th>
-                                <th class="col-md-1 col-sm-1 col-1">id</th>
+                                <th class="col-md-1 col-sm-1 col-1 align-middle">image</th>
+                                <th class="col-md-3 col-sm-3 col-3 align-middle">Tên danh mục</th>
+                                <th class="col-md-3 col-sm-3 col-3 align-middle">Slug</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle">Chức năng</th>
+                                <th class="col-md-1 col-sm-1 col-1 align-middle">Trạng thái</th>
+                                <th class="col-md-1 col-sm-1 col-1 align-middle">id</th>
                             </tr>
                         </thead>
                         <tbody>
