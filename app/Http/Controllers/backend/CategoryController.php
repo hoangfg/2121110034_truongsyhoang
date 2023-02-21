@@ -16,8 +16,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $list_category = Category::get();
-        return view("backend.category.index" , ['list_category'=>$list_category]);
+        $list_category = Category::where('status',  '!=', '0')->get();
+        return view("backend.category.index" ,compact('list_category'));
     }
 
     /**
@@ -27,7 +27,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -51,7 +51,7 @@ class CategoryController extends Controller
     {
         //
     }
-
+    
     /**
      * Show the form for editing the specified resource.
      *

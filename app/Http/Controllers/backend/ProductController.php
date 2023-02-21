@@ -4,6 +4,7 @@ namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Product;
 
 class ProductController extends Controller
 {
@@ -14,7 +15,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view("backend.product.index");
+        $list_product = Product::where('status',  '!=', '0')->get();
+        return view("backend.product.index", compact('list_product'));
+        
     }
 
     /**
