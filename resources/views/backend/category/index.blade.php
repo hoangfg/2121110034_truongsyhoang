@@ -73,14 +73,6 @@
                                     <td>{{ $category->name }}</td>
                                     <td>{{ $category->slug }}</td>
                                     <td class="text-center">
-                                        <a href="" class="btn btn-sm btn-danger" title="delete"><i
-                                                class="fa-solid fa-delete-left"></i></a>
-                                        <a href="" class="btn btn-sm btn-info" title="edit"><i
-                                                class="fa-solid fa-pen-to-square"></i></a>
-                                        <a href="" class="btn btn-sm btn-warning" title="view"><i
-                                                class="fa-regular fa-eye"></i></a>
-                                    </td>
-                                    <td class="text-center">
                                         @if ($category->status == 1)
                                             <a class="btn btn-sm btn-success" href="">
                                                 <i class="fas fa-toggle-on"></i>
@@ -90,6 +82,20 @@
                                                 <i class="fas fa-toggle-off"></i>
                                             </a>
                                         @endif
+                                        
+                                        <a href="{{ route('category.edit', ['category' => $category->id]) }}"
+                                            class="btn btn-sm btn-info" title="edit">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </a>
+                                        <a href="{{ route('category.show', ['category' => $category->id]) }}" class="btn btn-sm btn-primary" title="view">
+                                            <i class="fa-regular fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('category.destroy', ['category' => $category->id]) }}" class="btn btn-sm btn-danger" title="delete">
+                                            <i class="fa-solid fa-delete-left"></i>
+                                        </a>
+                                    </td>
+                                    <td class="text-center">
+                                        12
                                     </td>
                                     <td class="text-center">{{ $category->id }}</td>
                                 </tr>

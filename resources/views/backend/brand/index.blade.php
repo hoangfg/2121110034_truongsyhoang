@@ -69,18 +69,6 @@
                                     <td>{{ $brand->name }}</td>
                                     <td>{{ $brand->slug }}</td>
                                     <td class="text-center">
-                                        <a href="{{ route('brand.destroy', ['brand' => $brand->id]) }}" class="btn btn-sm btn-danger" title="delete">
-                                            <i class="fa-solid fa-delete-left"></i>
-                                        </a>
-                                        <a href="{{ route('brand.edit', ['brand' => $brand->id]) }}"
-                                            class="btn btn-sm btn-info" title="edit">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </a>
-                                        <a href="{{ route('brand.show', ['brand' => $brand->id]) }}" class="btn btn-sm btn-warning" title="view">
-                                            <i class="fa-regular fa-eye"></i>
-                                        </a>
-                                    </td>
-                                    <td class="text-center">
                                         @if ($brand->status == 1)
                                             <a class="btn btn-sm btn-success" href="">
                                                 <i class="fas fa-toggle-on"></i>
@@ -90,6 +78,20 @@
                                                 <i class="fas fa-toggle-off"></i>
                                             </a>
                                         @endif
+                                        
+                                        <a href="{{ route('brand.edit', ['brand' => $brand->id]) }}"
+                                            class="btn btn-sm btn-info" title="edit">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </a>
+                                        <a href="{{ route('brand.show', ['brand' => $brand->id]) }}" class="btn btn-sm btn-primary" title="view">
+                                            <i class="fa-regular fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('brand.destroy', ['brand' => $brand->id]) }}" class="btn btn-sm btn-danger" title="delete">
+                                            <i class="fa-solid fa-delete-left"></i>
+                                        </a>
+                                    </td>
+                                    <td class="text-center">
+                                        12
                                     </td>
                                     <td class="text-center">{{ $brand->id }}</td>
                                 </tr>
