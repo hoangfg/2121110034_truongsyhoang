@@ -28,7 +28,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <button class="btn btn-sm btn-danger" type="submit" name="DELETE_ALL">
-                                <i class="fas fa-trash"></i> Xóa đã chọn
+                                <i class="fa-solid fa-trash-can"></i></i> Xóa đã chọn
                             </button>
                         </div>
                         <div class="col-md-6 text-right">

@@ -1,16 +1,18 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+// controller frontend
 use App\Http\Controllers\frontend\SiteController;
+// controller backend
 use App\Http\Controllers\backend\DashboardController;
-use App\Http\Controllers\backend\ProductController;
-use App\Http\Controllers\backend\CategoryController;
 use App\Http\Controllers\backend\BrandController;
+use App\Http\Controllers\backend\CategoryController;
 use App\Http\Controllers\backend\ContactController;
 use App\Http\Controllers\backend\MenuController;
 use App\Http\Controllers\backend\OrderController;
 use App\Http\Controllers\backend\OrderdetailController;
 use App\Http\Controllers\backend\PostController;
+use App\Http\Controllers\backend\ProductController;
 use App\Http\Controllers\backend\SliderController;
 use App\Http\Controllers\backend\TopicController;
 use App\Http\Controllers\backend\UserController;

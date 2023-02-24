@@ -90,18 +90,7 @@
                                <p>Chi tiết đặt hàng</p>
                            </a>
                        </li>
-                       <li class="nav-item">
-                           <a href="../UI/buttons.html" class="nav-link">
-                               <i class="far fa-circle nav-icon"></i>
-                               <p>Buttons</p>
-                           </a>
-                       </li>
-                       <li class="nav-item">
-                           <a href="../UI/sliders.html" class="nav-link">
-                               <i class="far fa-circle nav-icon"></i>
-                               <p>Sliders</p>
-                           </a>
-                       </li>
+
 
                    </ul>
                </li>

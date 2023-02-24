@@ -32,7 +32,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <button class="btn btn-sm btn-danger" type="submit" name="DELETE_ALL">
-                                <i class="fas fa-trash"></i> Xóa đã chọn
+                                <i class="fa-solid fa-trash-can"></i></i> Xóa đã chọn
                             </button>
                         </div>
                         <div class="col-md-6 text-right">
@@ -56,10 +56,10 @@
                                     <input type="checkbox" name="" id="">
                                 </th>
                                 <th class="col-md-1 col-sm-1 col-1 align-middle">image</th>
-                                <th class="col-md-3 col-sm-3 col-3 align-middle">Tên danh mục</th>
-                                <th class="col-md-3 col-sm-3 col-3 align-middle">Slug</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle">Tên danh mục</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle">Slug</th>
                                 <th class="col-md-2 col-sm-2 col-2 align-middle">Chức năng</th>
-                                <th class="col-md-1 col-sm-1 col-1 align-middle">Trạng thái</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle">Ngày tạo</th>
                                 <th class="col-md-1 col-sm-1 col-1 align-middle">id</th>
                             </tr>
                         </thead>
@@ -95,7 +95,7 @@
                                         </a>
                                     </td>
                                     <td class="text-center">
-                                        12
+                                        {{ $category->created_at }}
                                     </td>
                                     <td class="text-center">{{ $category->id }}</td>
                                 </tr>
