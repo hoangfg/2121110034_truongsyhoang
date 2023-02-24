@@ -4,6 +4,7 @@ namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -14,7 +15,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view("backend.user.index");
+        $list_user=User::where('status', '<>', '0')->orderBy('created_at', 'desc')->get();
+        return view("backend.user.index", compact('list_user'));
     }
 
     /**

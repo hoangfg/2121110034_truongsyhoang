@@ -4,6 +4,7 @@ namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Topic;
 
 class TopicController extends Controller
 {
@@ -14,7 +15,8 @@ class TopicController extends Controller
      */
     public function index()
     {
-        return view("backend.topic.index");
+        $list_topic = Topic::where('status', '<>', '0')->orderBy('created_at', 'desc')->get();
+        return view("backend.topic.index", compact('list_topic'));
     }
 
     /**

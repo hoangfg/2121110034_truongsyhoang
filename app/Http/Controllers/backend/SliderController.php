@@ -4,6 +4,7 @@ namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Slider;
 
 class SliderController extends Controller
 {
@@ -14,7 +15,8 @@ class SliderController extends Controller
      */
     public function index()
     {
-        return view("backend.slider.index");
+        $list_slider = Slider::where('status', '<>', '0')->orderBy('created_at', 'desc')->get();
+        return view("backend.slider.index", compact('list_slider'));
     }
 
     /**

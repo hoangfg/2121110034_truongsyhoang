@@ -45,18 +45,18 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" id="myTable">
                         <thead>
-                            <tr class="text-center">
-                                <th class="col-md-1 col-sm-1 col-1 align-middle">
+                            <tr >
+                                <th class="col-md-1 col-sm-1 col-1 align-middle text-center">
                                     <input type="checkbox" name="" id="">
                                 </th>
-                                <th class="col-md-1 col-sm-1 col-1 align-middle">image</th>
-                                <th class="col-md-2 col-sm-2 col-2 align-middle">Tên danh mục</th>
-                                <th class="col-md-2 col-sm-2 col-2 align-middle">Slug</th>
-                                <th class="col-md-2 col-sm-2 col-2 align-middle">Chức năng</th>
-                                <th class="col-md-2 col-sm-1 col-2 align-middle">Ngày tạo</th>
-                                <th class="col-md-1 col-sm-1 col-1 align-middle">id</th>
+                                <th class="col-md-1 col-sm-1 col-1 align-middle text-center">image</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Tên danh mục</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Slug</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Chức năng</th>
+                                <th class="col-md-2 col-sm-1 col-2 align-middle text-center">Ngày tạo</th>
+                                <th class="col-md-1 col-sm-1 col-1 align-middle text-center">id</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -111,5 +111,17 @@
     </div>
 @endsection
 @section('footer')
+<script>
+    $(document).ready(function() {
+        $('#myTable').DataTable({
+            "pagingType": "full_numbers",
+            "lengthMenu": [
+                [7, 9, 11, -1],
+                [7, 9, 11, "ALL"],
+            ],
+            responsive: true
 
+        });
+    });
+</script>
 @endsection

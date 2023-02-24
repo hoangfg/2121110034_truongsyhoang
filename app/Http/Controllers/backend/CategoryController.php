@@ -16,7 +16,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $list_category = Category::where('status',  '!=', '0')->get();
+        $list_category = Category::where('status',  '<>', '0')->get();
         return view("backend.category.index" ,compact('list_category'));
     }
 

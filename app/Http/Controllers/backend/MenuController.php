@@ -4,6 +4,7 @@ namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Menu;
 
 class MenuController extends Controller
 {
@@ -14,7 +15,8 @@ class MenuController extends Controller
      */
     public function index()
     {
-        return view("backend.menu.index");
+        $list_menu = Menu::where('status', '<>', '0')->orderBy('created_at', 'desc')->get();
+        return view("backend.menu.index", compact('list_menu'));
     }
 
     /**

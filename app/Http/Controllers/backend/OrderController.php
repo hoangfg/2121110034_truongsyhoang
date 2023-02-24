@@ -4,6 +4,7 @@ namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Order;
 
 class OrderController extends Controller
 {
@@ -14,7 +15,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        return view("backend.order.index");
+        $list_order = Order::where('status', '<>', '0')->orderBy('created_at', 'desc')->get();
+        return view("backend.order.index", compact('list_order'));
     }
 
     /**

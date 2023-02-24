@@ -15,7 +15,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $list_product = Product::where('status',  '!=', '0')->get();
+        $list_product = Product::where('status',  '<>', '0')->orderBy('created_at', 'desc')->get();
+        // return view("backend.product.index", ['list_product' => $list_product]);
         return view("backend.product.index", compact('list_product'));
         
     }

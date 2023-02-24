@@ -45,28 +45,33 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" id="myTable">
                         <thead>
                             <tr class="text-center ">
-                                <th class="col-md-1 col-sm-1 col-1 align-middle">
-                                    <input type="checkbox" name="" id="">
+                                <th class="col-md-1 col-sm-1 col-1 align-middle text-center">
+                                    <div class="form-group select-all">
+                                        <input type="checkbox">
+                                    </div>
                                 </th>
-                                <th class="col-md-1 col-sm-1 col-1 align-middle">image</th>
-                                <th class="col-md-2 col-sm-3 col-3 align-middle">Tên sản phẩm</th>
-                                <th class="col-md-2 col-sm-2 col-2 align-middle">Danh mục</th>
-                                <th class="col-md-2 col-sm-2 col-2 align-middle">Thương hiệu</th>
+                                <th class="col-md-1 col-sm-1 col-1 align-middle text-center">image</th>
+                                <th class="col-md-2 col-sm-3 col-3 align-middle text-center">Tên sản phẩm</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Danh mục</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Thương hiệu</th>
                                 
-                                <th class="col-md-1 col-sm-1 col-1 align-middle">Giá</th>
+                                <th class="col-md-1 col-sm-1 col-1 align-middle text-center">Giá</th>
 
-                                <th class="col-md-2 col-sm-2 col-2 align-middle">Chức năng</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Chức năng</th>
                                
-                                <th class="col-md-1 col-sm-1 col-1 align-middle">id</th>
+                                <th class="col-md-1 col-sm-1 col-1 align-middle text-center">id</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($list_product as $product)
                                 <tr>
-                                    <td class="text-center"> <input type="checkbox" name="" id=""></td>
+                                    <td class="text-center">
+                                        <div class="form-group">
+                                            <input type="checkbox" name="checkId[]" value="{{$product->id}}" id="productCheck{{$product->id}}">
+                                        </div>
                                     <td>
                                         <img src="{{ asset('images/product/' . $product->image) }}" alt=""
                                             class="w-100">
@@ -114,5 +119,18 @@
     </div>
 @endsection
 @section('footer')
+<script>
+    $(document).ready(function() {
+        $('#myTable').DataTable({
+            "pagingType": "full_numbers",
+            "lengthMenu": [
+                [7, 9, 11, -1],
+                [7, 9, 11, "ALL"],
+            ],
+            responsive: true
+
+        });
+    });
+</script>
 
 @endsection
