@@ -127,17 +127,5 @@
 
 @endsection
 @section('footer')
-<script>
-    $(document).ready(function() {
-        $('#myTable').DataTable({
-            "pagingType": "full_numbers",
-            "lengthMenu": [
-                [7, 9, 11, -1],
-                [7, 9, 11, "ALL"],
-            ],
-            responsive: true
 
-        });
-    });
-</script>
 @endsection

@@ -5,7 +5,6 @@
 @endsection
 @section('content')
     <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
@@ -21,26 +20,88 @@
                 </div>
             </div><!-- /.container-fluid -->
         </section>
-
-        <!-- Main content -->
         <section class="content">
 
             <!-- Default box -->
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Title</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn btn-sm btn-danger" type="submit" name="DELETE_ALL">
+                                <i class="fa-solid fa-trash-can"></i> Xóa đã chọn
+                            </button>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <div class="text-right">
+                                <a class="btn btn-sm btn-success" href="{{ route('user.create') }}">
+                                    <i class="fas fa-plus"></i> Thêm
+                                </a>
+                                <a class="btn btn-sm btn-danger" href="index.php?option=user&cat=trash">
+                                    <i class="fas fa-trash" aria-hidden="true"></i> Thùng rác
+                                </a>
+                            </div>
 
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
-                            <i class="fas fa-times"></i>
-                        </button>
+                        </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    Start creating your amazing application!
+                    <table class="table table-bordered" id="myTable">
+                        <thead>
+                            <tr >
+                                <th class="col-md-1 col-sm-1 col-1 align-middle text-center">
+                                    <input type="checkbox" name="" id="">
+                                </th>
+                                <th class="col-md-1 col-sm-1 col-1 align-middle text-center">image</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Tên</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Email</th>
+                                <th class="col-md-1 col-sm-1 col-1 align-middle text-center">Phone</th>
+                                
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Chức năng</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Ngày tham gia</th>
+                                <th class="col-md-1 col-sm-1 col-1 align-middle text-center">id</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($list_user as $user)
+                                <tr>
+                                    <td class="text-center"> <input type="checkbox" name="" id=""></td>
+                                    <td>
+                                        <img src="{{ asset('images/user/'.$user->image) }}" alt="" class="w-100 ">
+                                    </td>
+                                    <td>{{ $user->name }}</td>
+                                    <td>{{ $user->email }}</td>
+                                    <td>{{ $user->phone }}</td>
+                                    
+                                    <td class="text-center">
+                                        @if ($user->status == 1)
+                                            <a class="btn btn-sm btn-success" href="">
+                                                <i class="fas fa-toggle-on"></i>
+                                            </a>
+                                        @else
+                                            <a class="btn btn-sm btn-danger" href="">
+                                                <i class="fas fa-toggle-off"></i>
+                                            </a>
+                                        @endif
+                                        
+                                        <a href="{{ route('user.edit', ['user' => $user->id]) }}"
+                                            class="btn btn-sm btn-info" title="edit">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </a>
+                                        <a href="{{ route('user.show', ['user' => $user->id]) }}" class="btn btn-sm btn-primary" title="view">
+                                            <i class="fa-regular fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('user.destroy', ['user' => $user->id]) }}" class="btn btn-sm btn-danger" title="delete">
+                                            <i class="fa-solid fa-delete-left"></i>
+                                        </a>
+                                    </td>
+                                    <td class="text-center">
+                                       {{ $user->created_at}}
+                                    </td>
+                                    <td class="text-center">{{ $user->id }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
@@ -51,7 +112,6 @@
             <!-- /.card -->
 
         </section>
-        <!-- /.content -->
     </div>
 @endsection
 @section('footer')

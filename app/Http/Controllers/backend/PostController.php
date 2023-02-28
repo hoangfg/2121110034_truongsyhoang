@@ -15,7 +15,13 @@ class PostController extends Controller
      */
     public function index()
     {
-        $list_post = Post::where('status', '<>', '0')->orderBy('created_at', 'desc')->get();
+        $list_post = Post::where([['post.status', '<>', '0'], ['post.type', '=', 'post']])
+            ->join('topic', 'topic.id', 'post.topic_id')
+            ->select('post.*', 'topic.name as topic_name')
+            ->orderBy('post.created_at', 'desc')->get();
+
+       
+
         return view("backend.post.index", compact('list_post'));
     }
 

@@ -40,7 +40,67 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    Start creating your amazing application!
+                                        <table class="table table-bordered" id="myTable">
+                        <thead>
+                            <tr class="text-center ">
+                                <th class="col-md-1 col-sm-1 col-1 align-middle text-center">
+                                    <div class="form-group select-all">
+                                        <input type="checkbox">
+                                    </div>
+                                </th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Khách hàng</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Email</th>
+                                <th class="col-md-1 col-sm-1 col-1 align-middle text-center">Phone</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Ngày tạo</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Trạng thái</th>
+                                <th class="col-md-1 col-sm-1 col-1 align-middle text-center">Chức năng</th>
+                               
+                                <th class="col-md-1 col-sm-1 col-1 align-middle text-center">id</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($list_order as $order) : ?>
+                            
+                                <tr>
+                                    <td class="text-center">
+                                        <div class="form-group">
+                                            <input type="checkbox" name="checkId[]" value="{{ $order->id }}">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {{ $order->user_name }}
+                                    </td>
+                                    <td>
+                                        {{ $order->user_email }}
+                                    </td>
+                                    <td>
+                                        {{ $order->user_phone }}
+                                    </td>
+
+                                    <td class="text-center">
+                                        {{ $order->created_at }}
+                                    </td>
+                                    <td>
+                                        <span class='btn btn-sm btn-<?= $list_status[$order['status']]['type'] ?>'><?= $list_status[$order['status']]['text'] ?></span>
+                                    </td>
+                                    <td class=" text-center">
+
+                                        <a class="btn btn-sm btn-info" href="">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+
+                                        <a class="btn btn-sm btn-danger" href="">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+                                    <td class="text-center">
+                                        {{ $order->id }}
+                                    </td>
+                                </tr>
+
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">

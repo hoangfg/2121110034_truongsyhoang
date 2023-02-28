@@ -14,6 +14,7 @@
 
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.css">
     @yield('header')
 </head>
@@ -211,6 +212,20 @@
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.js"></script>
 
     @yield('footer')
+
+    <script>
+        $(document).ready(function() {
+            $('#myTable').DataTable({
+                "pagingType": "full_numbers",
+                "lengthMenu": [
+                    [7, 9, 11, -1],
+                    [7, 9, 11, "ALL"],
+                ],
+                responsive: true
+
+            });
+        });
+    </script>
 </body>
 
 </html>

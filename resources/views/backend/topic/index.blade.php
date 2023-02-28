@@ -28,19 +28,79 @@
             <!-- Default box -->
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Title</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn btn-sm btn-danger" type="submit" name="DELETE_ALL">
+                                <i class="fa-solid fa-trash-can"></i> Xóa đã chọn
+                            </button>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <div class="text-right">
+                                <a class="btn btn-sm btn-success" href="{{ route('topic.create') }}">
+                                    <i class="fas fa-plus"></i> Thêm
+                                </a>
+                                <a class="btn btn-sm btn-danger" href="index.php?option=topic&cat=trash">
+                                    <i class="fas fa-trash" aria-hidden="true"></i> Thùng rác
+                                </a>
+                            </div>
 
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
-                            <i class="fas fa-times"></i>
-                        </button>
+                        </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    Start creating your amazing application!
+                    <table class="table table-bordered" id="myTable">
+                        <thead>
+                            <tr >
+                                <th class="col-md-1 col-sm-1 col-1 align-middle text-center">
+                                    <input type="checkbox" name="" id="">
+                                </th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Tên chủ đề</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Từ khóa</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Mô ta</th>
+                                <th class="col-md-2 col-sm-1 col-2 align-middle text-center">Ngày tạo</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Chức năng</th>
+                                <th class="col-md-1 col-sm-1 col-1 align-middle text-center">id</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($list_topic as $topic)
+                                <tr>
+                                    <td class="text-center"> <input type="checkbox" name="" id=""></td>
+                                    
+                                    <td>{{ $topic->name }}</td>
+                                    <td>{{ $topic->metakey }}</td>
+                                    <td>{{ $topic->metadesc }}</td>
+                                    <td class="text-center">
+                                       {{ $topic->created_at}}
+                                    </td>
+                                    <td class="text-center">
+                                        @if ($topic->status == 1)
+                                            <a class="btn btn-sm btn-success" href="">
+                                                <i class="fas fa-toggle-on"></i>
+                                            </a>
+                                        @else
+                                            <a class="btn btn-sm btn-danger" href="">
+                                                <i class="fas fa-toggle-off"></i>
+                                            </a>
+                                        @endif
+                                        
+                                        <a href="{{ route('topic.edit', ['topic' => $topic->id]) }}"
+                                            class="btn btn-sm btn-info" title="edit">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </a>
+                                        <a href="{{ route('topic.show', ['topic' => $topic->id]) }}" class="btn btn-sm btn-primary" title="view">
+                                            <i class="fa-regular fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('topic.destroy', ['topic' => $topic->id]) }}" class="btn btn-sm btn-danger" title="delete">
+                                            <i class="fa-solid fa-delete-left"></i>
+                                        </a>
+                                    </td>
+                                    
+                                    <td class="text-center">{{ $topic->id }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">

@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Models\Post;
 
-
-class CategoryController extends Controller
+class PageController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +15,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $list_category = Category::where('status',  '<>', '0')->get();
-        return view("backend.category.index", compact('list_category'));
+        $list_page = Post::where([['post.status', '<>', '0'], ['post.type', '=', 'page']])
+            ->orderBy('post.created_at', 'desc')->get();
+
+        return view("backend.page.index", compact('list_page'));
     }
 
     /**
@@ -27,6 +28,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
+        //
     }
 
     /**
@@ -83,35 +85,5 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    #delete
-    public function delete($id)
-    {
-        $category = Category::find($id);
-        if ($category == null) {
-            return redirect()->route('category.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
-        } else {
-            $category->status = 0;
-            $category->updated_at = date('Y-m-d H:i:s');
-            $category->updated_by = 1;
-            $category->save();
-            return redirect()->route('category.index')->with('message',['type' => 'success','msg'=>'Chuyển vào thùng rác thành công']);
-        }
-
-    }
-    #status
-    public function status($id)
-    {
-        $category = Category::find($id);
-        if ($category == null) {
-            return redirect()->route('category.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
-        } else {
-            $category->status = ($category->status==1) ? 2 : 1;
-            $category->updated_at = date('Y-m-d H:i:s');
-            $category->updated_by = 1;
-            $category->save();
-            return redirect()->route('category.index')->with('message',['type' => 'success','msg'=>'Thay đổi trạng thái thành công']);
-        }
     }
 }

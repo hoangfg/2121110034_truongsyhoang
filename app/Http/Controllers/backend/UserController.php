@@ -15,7 +15,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $list_user=User::where('status', '<>', '0')->orderBy('created_at', 'desc')->get();
+        $list_user=User::where([['status', '<>', '0'], ['roles', '!=', '0']])->orderBy('created_at', 'desc')->get();
         return view("backend.user.index", compact('list_user'));
     }
 

@@ -118,9 +118,9 @@
                            </a>
                        </li>
                        <li class="nav-item">
-                           <a href="../examples/e-commerce.html" class="nav-link">
+                           <a href="{{ route('page.index') }}" class="nav-link">
                                <i class="far fa-circle nav-icon"></i>
-                               <p>E-commerce</p>
+                               <p>Giới thiệu</p>
                            </a>
                        </li>
 
@@ -174,6 +174,17 @@
                            </a>
                        </li>
                    </ul>
+               </li>
+               {{-- customer --}}
+               <li class="nav-item">
+                   <a href="{{ route('customer.index') }}" class="nav-link">
+                       <i class="nav-icon fa-solid fa-person-military-pointing"></i>
+                       <p>
+                           người dùng
+                           
+                       </p>
+                   </a>
+                   
                </li>
                <li class="nav-header">LABELS</li>
                <li class="nav-item">

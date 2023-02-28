@@ -5,6 +5,10 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
+use Illuminate\Support\Facades\DB;
+
+
+
 
 class OrderController extends Controller
 {
@@ -15,8 +19,22 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $list_order = Order::where('status', '<>', '0')->orderBy('created_at', 'desc')->get();
-        return view("backend.order.index", compact('list_order'));
+
+        $list_order = Order::join('user', 'user.id', '=', 'order.user_id')
+        ->join('orderdetail', 'orderdetail.order_id', '=', 'order.id')
+        ->select('order.*', 'user.name as user_name', 'user.email as user_email', 'user.phone as user_phone')
+        ->distinct()
+        ->get();
+        // return dd($list_order);
+        $list_status = [
+            ['type' => 'secondary', 'text' => 'Đơn hàng mới'],
+            ['type' => 'primary', 'text' => 'Đã xác nhận'],
+            ['type' => 'info', 'text' => 'Đóng gói'],
+            ['type' => 'warning', 'text' => 'Vận chuyển'],
+            ['type' => 'success', 'text' => 'Đã giao'],
+            ['type' => 'danger', 'text' => 'Đã hủy'],
+        ];
+        return view("backend.order.index", compact('list_order', 'list_status'));
     }
 
     /**

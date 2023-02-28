@@ -5,6 +5,10 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Menu;
+use App\Models\Category;
+use App\Models\Brand;
+use App\Models\Topic;
+use App\Models\Post;
 
 class MenuController extends Controller
 {
@@ -15,8 +19,24 @@ class MenuController extends Controller
      */
     public function index()
     {
-        $list_menu = Menu::where('status', '<>', '0')->orderBy('created_at', 'desc')->get();
-        return view("backend.menu.index", compact('list_menu'));
+        $list_menu = Menu::where('status', '<>', '0')
+        ->orderBy('position', 'asc')
+        ->orderBy('sort_order', 'asc')
+        ->get();
+        $list_category = Category::where('status', '<>', '0')
+        ->orderBy('created_at', 'desc')
+        ->get();
+        $list_brand = Brand::where('status', '<>', '0')
+        ->orderBy('created_at', 'desc')
+        ->get();
+        $list_topic = Topic::where('status', '<>', '0')
+        ->orderBy('created_at', 'desc')
+        ->get();
+        $list_page = Post::where([['status', '<>', '0'], ['type', '=', 'page']])
+        ->orderBy('created_at', 'desc')
+        ->get();
+        
+        return view("backend.menu.index", compact('list_menu', 'list_category', 'list_brand', 'list_topic', 'list_page'));
     }
 
     /**
