@@ -34,8 +34,8 @@
                                     <a class="btn btn-sm btn-info" href="{{ route('category.index') }}">
                                         <i class="fas fa-arrow-circle-left"></i> Quay về danh sách
                                     </a>
-                                    <a href="{{ route('category.edit', ['category' => $category->id]) }}" class="btn btn-sm btn-info"
-                                        title="edit">
+                                    <a href="{{ route('category.edit', ['category' => $category->id]) }}"
+                                        class="btn btn-sm btn-info" title="edit">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
                                     <a href="{{ route('category.delete', ['category' => $category->id]) }}"
@@ -95,6 +95,9 @@
                                             <li class="nav-item"><a class="nav-link" href="#timeline"
                                                     data-toggle="tab">Timeline</a>
                                             </li>
+                                            <li class="nav-item"><a class="nav-link" href="#product_category"
+                                                    data-toggle="tab">Sản phẩm theo danh mục</a>
+                                            </li>
                                         </ul>
                                     </div><!-- /.card-header -->
                                     <div class="card-bodys">
@@ -144,7 +147,8 @@
 
                                                         <hr>
                                                         <strong>
-                                                            <i class="fa-brands fa-creative-commons-by"></i></i> Người sửa cuối:
+                                                            <i class="fa-brands fa-creative-commons-by"></i></i> Người sửa
+                                                            cuối:
                                                             <span class="text-muted">{{ $category->updated_name }}</span>
                                                         </strong>
 
@@ -154,7 +158,51 @@
                                                     <!-- /.card-body -->
                                                 </div>
                                             </div>
+                                            {{-- product_category --}}
+                                            <div class="tab-pane" id="product_category">
+                                                <!-- The timeline -->
+                                                <div class="card card-primary">
+                                                    <div class="card-body">
+                                                        <table class="table table-bordered" id="myTable">
+                                                            <thead>
+                                                                <tr class="text-center ">
 
+                                                                    <th
+                                                                        class="col-md-1 col-sm-1 col-1 align-middle text-center">
+                                                                        image</th>
+                                                                    <th
+                                                                        class="col-md-8 col-sm-8 col-8 align-middle text-center">
+                                                                        Tên sản phẩm</th>
+                                                                    <th
+                                                                        class="col-md-2 col-sm-2 col-2 align-middle text-center">
+                                                                        Giá</th>
+                                                                    <th
+                                                                        class="col-md-1 col-sm-1 col-1 align-middle text-center">
+                                                                        id</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach ($product_category as $product)
+                                                                    <tr>
+                                                                        <td>
+                                                                            <img src="{{ asset('images/product/' . $product->image) }}"
+                                                                                alt="" class="w-100">
+                                                                        </td>
+                                                                        <td>{{ $product->product_name }}</td>
+                                                                        <td>{{ number_format($product->price) }}₫</td>
+                                                                        <td class="text-center">{{ $product->product_id }}
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                        </table>
+
+
+
+                                                    </div>
+                                                    <!-- /.card-body -->
+                                                </div>
+                                            </div>
                                         </div>
                                         <!-- /.tab-content -->
                                     </div><!-- /.card-body -->

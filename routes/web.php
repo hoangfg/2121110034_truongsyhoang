@@ -64,7 +64,7 @@ Route::prefix('admin')->group(function () {
     Route::resource('customer', CustomerController::class);
 
     Route::resource('menu', MenuController::class);
-
+    
     Route::resource('order', OrderController::class);
 
     Route::resource('orderdetail', OrderdetailController::class);

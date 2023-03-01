@@ -66,6 +66,7 @@ class BrandController extends Controller
         $product_brand = Brand::join('product', 'product.brand_id', '=', 'brand.id')
             ->select('product.*', 'product.name as product_name', 'product.id as product_id')
             ->where('brand.id', '=', $id)
+            ->orderBy('created_at', 'desc')
             ->distinct()
             ->get();
 

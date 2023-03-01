@@ -164,12 +164,7 @@
                                                         <table class="table table-bordered" id="myTable">
                                                             <thead>
                                                                 <tr class="text-center ">
-                                                                    <th
-                                                                        class="col-md-1 col-sm-1 col-1 align-middle text-center">
-                                                                        <div class="form-group select-all">
-                                                                            <input type="checkbox">
-                                                                        </div>
-                                                                    </th>
+                                                                    
                                                                     <th
                                                                         class="col-md-1 col-sm-1 col-1 align-middle text-center">
                                                                         image</th>
@@ -187,24 +182,12 @@
                                                             <tbody>
                                                                 @foreach ($product_brand as $product)
                                                                     <tr>
-                                                                        <td class="text-center">
-                                                                            <div class="form-group">
-                                                                                <input type="checkbox" name="checkId[]"
-                                                                                    value="{{ $product->id }}"
-                                                                                    id="productCheck{{ $product->id }}">
-                                                                            </div>
                                                                         <td>
                                                                             <img src="{{ asset('images/product/' . $product->image) }}"
                                                                                 alt="" class="w-100">
                                                                         </td>
                                                                         <td>{{ $product->product_name }}</td>
-
-
-
                                                                         <td>{{ number_format($product->price) }}₫</td>
-
-
-
                                                                         <td class="text-center">{{ $product->product_id }}</td>
                                                                     </tr>
                                                                 @endforeach

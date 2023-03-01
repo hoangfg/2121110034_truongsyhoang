@@ -5,7 +5,8 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
+use App\Models\User;
 
 class CategoryController extends Controller
 {
@@ -56,15 +57,24 @@ class CategoryController extends Controller
             ->where('category.id', '=', $id)
             ->count();
 
+        $product_category = Category::join('product', 'product.category_id', '=', 'category.id')
+            ->select('product.*', 'product.name as product_name', 'product.id as product_id')
+            ->where('category.id', '=', $id)
+            ->orderBy('created_at', 'desc')
+            ->distinct()
+            ->get();
 
-        $category = category::join("user as user_1", "user_1.id", "=", "category.created_by")
-            ->join("user as user_2", "user_2.id", "=", "category.updated_by")
-            ->select("category.*", "user_1.name as created_name", "user_2.name as updated_name")
-            ->find($id);
+        $category = category::where('category.id', '=', $id)
+            ->select(
+                "*",
+                DB::raw("(" . User::select("name")->whereColumn("user.id", "=", "category.updated_by")->toSql() . ") as updated_name"),
+                DB::raw("(" . User::select("name")->whereColumn("user.id", "=", "category.created_by")->toSql() . ") as created_name")
+            )
+            ->first();
         if ($category == null) {
             return redirect()->route('category.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
         } else {
-            return view('backend.category.show', compact('category', 'total', 'total_sale'));
+            return view('backend.category.show', compact('category', 'total', 'total_sale', 'product_category'));
         }
     }
 

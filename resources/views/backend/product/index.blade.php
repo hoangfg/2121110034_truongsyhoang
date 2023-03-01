@@ -75,6 +75,7 @@
                                             <input type="checkbox" name="checkId[]" value="{{ $product->id }}"
                                                 id="productCheck{{ $product->id }}">
                                         </div>
+                                    </td>
                                     <td>
                                         <img src="{{ asset('images/product/' . $product->image) }}" alt=""
                                             class="w-100">
@@ -87,11 +88,13 @@
 
                                     <td class="text-center">
                                         @if ($product->status == 1)
-                                            <a class="btn btn-sm btn-success" href="{{ route('product.status', ['product' => $product->id]) }}">
+                                            <a class="btn btn-sm btn-success"
+                                                href="{{ route('product.status', ['product' => $product->id]) }}">
                                                 <i class="fas fa-toggle-on"></i>
                                             </a>
                                         @else
-                                            <a class="btn btn-sm btn-danger" href="{{ route('product.status', ['product' => $product->id]) }}">
+                                            <a class="btn btn-sm btn-danger"
+                                                href="{{ route('product.status', ['product' => $product->id]) }}">
                                                 <i class="fas fa-toggle-off"></i>
                                             </a>
                                         @endif

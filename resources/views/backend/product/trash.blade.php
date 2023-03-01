@@ -72,6 +72,7 @@
                                             <input type="checkbox" name="checkId[]" value="{{ $product->id }}"
                                                 id="productCheck{{ $product->id }}">
                                         </div>
+                                    </td>
                                     <td>
                                         <img src="{{ asset('images/product/' . $product->image) }}" alt=""
                                             class="w-100">

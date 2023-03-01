@@ -5,7 +5,10 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
-
+use App\Models\User;
+use App\Models\Brand;
+use App\Models\Category;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -55,12 +58,24 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::join("category", "category.id", "=", "product.category_id")
-            ->join("brand", "brand.id", "=", "product.brand_id")
-            ->join("user as user_1", "user_1.id", "=", "product.created_by")
-            ->join("user as user_2", "user_2.id", "=", "product.updated_by")
-            ->select("product.*", "category.name as category_name", "brand.name as brand_name", "user_1.name as created_name", "user_2.name as updated_name")
-            ->find($id);
+        // $product = Product::join("category", "category.id", "=", "product.category_id")
+        //     ->join("brand", "brand.id", "=", "product.brand_id")
+        //     ->join("user as user_1", "user_1.id", "=", "product.created_by")
+        //     ->join("user as user_2", "user_2.id", "=", "product.updated_by")
+        //     ->select("product.*", "category.name as category_name", "brand.name as brand_name", "user_1.name as created_name", "user_2.name as updated_name")
+        //     ->find($id);
+        $product = Product::where('product.id', '=', $id)
+            // ->join("category", "category.id", "=", "product.category_id")
+            // ->join("brand", "brand.id", "=", "product.brand_id")
+            // ->select("product.*", "category.name as category_name", "brand.name as brand_name")
+            ->select(
+                "*",
+                DB::raw("(" . User::select("name")->whereColumn("user.id", "=", "product.updated_by")->toSql() . ") as updated_name"),
+                DB::raw("(" . User::select("name")->whereColumn("user.id", "=", "product.created_by")->toSql() . ") as created_name"),
+                DB::raw("(" . Brand::select("name")->whereColumn("brand.id", "=", "product.brand_id")->toSql() . ") as brand_name"),
+                DB::raw("(" . Category::select("name")->whereColumn("category.id", "=", "product.category_id")->toSql() . ") as category_name")
+            )
+            ->first();
         if ($product == null) {
             return redirect()->route('product.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
         } else {
@@ -142,10 +157,10 @@ class ProductController extends Controller
         if ($product == null) {
             return redirect()->route('product.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
         } else {
-            $product->status=($product->status == 1) ? 2 : 1;
-            $product-> updated_at = date('Y-m-d H:i:m');
+            $product->status = ($product->status == 1) ? 2 : 1;
+            $product->updated_at = date('Y-m-d H:i:m');
             $product->updated_by = 1;
-            $product -> save();         
+            $product->save();
             return redirect()->route('product.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công']);
         }
     }
@@ -154,12 +169,12 @@ class ProductController extends Controller
     public function trash()
     {
         $list_product = Product::join("category", "category.id", "=", "product.category_id")
-        ->join("brand", "brand.id", "=", "product.brand_id")
-        ->select("product.*", "category.name as category_name", "brand.name as brand_name")
-        ->where('product.status',  '=', '0')
+            ->join("brand", "brand.id", "=", "product.brand_id")
+            ->select("product.*", "category.name as category_name", "brand.name as brand_name")
+            ->where('product.status',  '=', '0')
             ->orderBy('product.created_at', 'desc')
             ->get();
-        
+
         return view("backend.product.trash", compact('list_product'));
     }
 }
