@@ -16,8 +16,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $list_product = Product::leftJoin("category", "category.id", "=", "product.category_id")
-            ->leftJoin("brand", "brand.id", "=", "product.brand_id")
+        $list_product = Product::join("category", "category.id", "=", "product.category_id")
+            ->join("brand", "brand.id", "=", "product.brand_id")
             ->select("product.*", "category.name as category_name", "brand.name as brand_name")
             ->where('product.status',  '<>', '0')
             ->orderBy('product.created_at', 'desc')
@@ -55,10 +55,10 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::leftJoin("category", "category.id", "=", "product.category_id")
-            ->leftJoin("brand", "brand.id", "=", "product.brand_id")
-            ->leftJoin("user as user_1", "user_1.id", "=", "product.created_by")
-            ->leftJoin("user as user_2", "user_2.id", "=", "product.updated_by")
+        $product = Product::join("category", "category.id", "=", "product.category_id")
+            ->join("brand", "brand.id", "=", "product.brand_id")
+            ->join("user as user_1", "user_1.id", "=", "product.created_by")
+            ->join("user as user_2", "user_2.id", "=", "product.updated_by")
             ->select("product.*", "category.name as category_name", "brand.name as brand_name", "user_1.name as created_name", "user_2.name as updated_name")
             ->find($id);
         if ($product == null) {
@@ -99,7 +99,13 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product = Product::find($id);
+        if ($product == null) {
+            return redirect()->route('product.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
+        } else {
+            $product->delete();
+            return redirect()->route('product.index')->with('message', ['type' => 'success', 'msg' => 'Xóa sản phẩm thành công thành công']);
+        }
     }
     // delete
     public function delete($id)
@@ -147,8 +153,8 @@ class ProductController extends Controller
     // trash
     public function trash()
     {
-        $list_product = Product::leftJoin("category", "category.id", "=", "product.category_id")
-        ->leftJoin("brand", "brand.id", "=", "product.brand_id")
+        $list_product = Product::join("category", "category.id", "=", "product.category_id")
+        ->join("brand", "brand.id", "=", "product.brand_id")
         ->select("product.*", "category.name as category_name", "brand.name as brand_name")
         ->where('product.status',  '=', '0')
             ->orderBy('product.created_at', 'desc')

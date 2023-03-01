@@ -36,7 +36,7 @@
                                 <a class="btn btn-sm btn-success" href="{{ route('brand.create') }}">
                                     <i class="fas fa-plus"></i> Thêm
                                 </a>
-                                <a class="btn btn-sm btn-danger" href="index.php?option=brand&cat=trash">
+                                <a class="btn btn-sm btn-danger" href="{{ route('brand.trash') }}">
                                     <i class="fas fa-trash" aria-hidden="true"></i> Thùng rác
                                 </a>
                             </div>
@@ -45,9 +45,10 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    @includeIf('backend.messageAlert', ['some' => 'data'])
                     <table class="table table-bordered" id="myTable">
                         <thead>
-                            <tr >
+                            <tr>
                                 <th class="col-md-1 col-sm-1 col-1 align-middle text-center">
                                     <input type="checkbox" name="" id="">
                                 </th>
@@ -64,34 +65,36 @@
                                 <tr>
                                     <td class="text-center"> <input type="checkbox" name="" id=""></td>
                                     <td>
-                                        <img src="{{ asset('images/brand/'.$brand->image) }}" alt="" class="w-100">
+                                        <img src="{{ asset('images/brand/' . $brand->image) }}" alt="" class="w-100">
                                     </td>
                                     <td>{{ $brand->name }}</td>
                                     <td>{{ $brand->slug }}</td>
                                     <td class="text-center">
                                         @if ($brand->status == 1)
-                                            <a class="btn btn-sm btn-success" href="">
+                                            <a class="btn btn-sm btn-success" href="{{ route('brand.status', ['brand'=>$brand->id])}}">
                                                 <i class="fas fa-toggle-on"></i>
                                             </a>
                                         @else
-                                            <a class="btn btn-sm btn-danger" href="">
+                                            <a class="btn btn-sm btn-danger" href="{{ route('brand.status', ['brand'=>$brand->id])}}">
                                                 <i class="fas fa-toggle-off"></i>
                                             </a>
                                         @endif
-                                        
+
                                         <a href="{{ route('brand.edit', ['brand' => $brand->id]) }}"
                                             class="btn btn-sm btn-info" title="edit">
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </a>
-                                        <a href="{{ route('brand.show', ['brand' => $brand->id]) }}" class="btn btn-sm btn-primary" title="view">
+                                        <a href="{{ route('brand.show', ['brand' => $brand->id]) }}"
+                                            class="btn btn-sm btn-primary" title="view">
                                             <i class="fa-regular fa-eye"></i>
                                         </a>
-                                        <a href="{{ route('brand.destroy', ['brand' => $brand->id]) }}" class="btn btn-sm btn-danger" title="delete">
+                                        <a href="{{ route('brand.delete', ['brand' => $brand->id]) }}"
+                                            class="btn btn-sm btn-danger" title="delete">
                                             <i class="fa-solid fa-delete-left"></i>
                                         </a>
                                     </td>
                                     <td class="text-center">
-                                       {{ $brand->created_at}}
+                                        {{ $brand->created_at }}
                                     </td>
                                     <td class="text-center">{{ $brand->id }}</td>
                                 </tr>

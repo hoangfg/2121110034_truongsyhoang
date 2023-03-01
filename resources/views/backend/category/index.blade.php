@@ -38,7 +38,7 @@
                                 <a class="btn btn-sm btn-success" href="{{ route('category.create') }}">
                                     <i class="fas fa-plus"></i> Thêm
                                 </a>
-                                <a class="btn btn-sm btn-danger" href="#">
+                                <a class="btn btn-sm btn-danger" href="{{ route('category.trash') }}">
                                     <i class="fas fa-trash" aria-hidden="true"></i> Thùng rác
                                 </a>
                             </div>
