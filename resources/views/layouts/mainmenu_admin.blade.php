@@ -181,16 +181,14 @@
                        <i class="nav-icon fa-solid fa-person-military-pointing"></i>
                        <p>
                            người dùng
-                           
                        </p>
                    </a>
-                   
                </li>
                <li class="nav-header">LABELS</li>
                <li class="nav-item">
                    <a href="#" class="nav-link">
-                       <i class="nav-icon far fa-circle text-danger"></i>
-                       <p class="text">Important</p>
+                       <i class="nav-icon fa-solid fa-arrow-right-from-bracket text-danger"></i>
+                       <p class="text">Logout</p>
                    </a>
                </li>
                <li class="nav-item">

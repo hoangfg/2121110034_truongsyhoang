@@ -39,7 +39,7 @@ Route::prefix('admin')->group(function () {
     // brand
     Route::resource('brand', BrandController::class);
     route::get('brand_trash', [BrandController::class, 'trash'])->name('brand.trash');
-    route::prefix('brand')->group(function() {
+    route::prefix('brand')->group(function () {
         route::get('status/{brand}', [BrandController::class, 'status'])->name('brand.status');
         Route::get('show/{brand}', [BrandController::class, 'show'])->name('brand.show');
         route::get('delete/{brand}', [BrandController::class, 'delete'])->name('brand.delete');
@@ -48,6 +48,7 @@ Route::prefix('admin')->group(function () {
     });
     // category
     Route::resource('category', CategoryController::class);
+    
     route::get('category_trash', [CategoryController::class, 'trash'])->name('category.trash');
     Route::prefix('category')->group(function () {
         Route::get('status/{category}', [CategoryController::class, 'status'])->name('category.status');
@@ -58,26 +59,37 @@ Route::prefix('admin')->group(function () {
     });
 
 
-
+    // contact
     Route::resource('contact', ContactController::class);
-
+    // customer
     Route::resource('customer', CustomerController::class);
-
+    // menu
     Route::resource('menu', MenuController::class);
-    
+    // order
     Route::resource('order', OrderController::class);
-
+    // orderdertail
     Route::resource('orderdetail', OrderdetailController::class);
-
+    // page
     Route::resource('page', PageController::class);
-
+    Route::get('page_trash', [PageController::class, 'trash'])->name('page.trash');
+    Route::prefix('page')->group(function () {
+        Route::get('status/{page}', [PageController::class, 'status'])->name('page.status');
+        Route::get('delete/{page}', [PageController::class, 'delete'])->name('page.delete');
+        Route::get('destroy/{page}', [PageController::class, 'destroy'])->name('page.destroy');
+        // Route::get('show/{page}', [PageController::class, 'show'])->name('page.show');
+        Route::get('restore/{page}', [PageController::class, 'restore'])->name('page.restore');
+    });
+    // post
     Route::resource('post', PostController::class);
-
+    // slider
     Route::resource('slider', SliderController::class);
-
+    // topic
     Route::resource('topic', TopicController::class);
 
+
+    // user
     Route::resource('user', UserController::class);
 
-    Route::resource('login', LoginController::class);
+    // login - res...
+    Route::post('login', [LoginController::class, 'login'])->name('login');
 });

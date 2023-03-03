@@ -31,15 +31,15 @@
                     <div class="row">
                         <div class="col-md-6">
                             <button class="btn btn-sm btn-danger" type="submit" name="DELETE_ALL">
-                                <i class="fa-solid fa-trash-can"></i> Xóa đã chọn
+                                <i class="fa-solid fa-trash-can"></i></i> Xóa đã chọn
                             </button>
                         </div>
                         <div class="col-md-6 text-right">
                             <div class="text-right">
-                                <a class="btn btn-sm btn-success" href="{{ route('page.create') }}">
+                                <a class="btn btn-sm btn-success" href="index.php?option=post&cat=create">
                                     <i class="fas fa-plus"></i> Thêm
                                 </a>
-                                <a class="btn btn-sm btn-danger" href="{{ route('page.trash') }}">
+                                <a class="btn btn-sm btn-danger" href="index.php?option=post&cat=trash">
                                     <i class="fas fa-trash" aria-hidden="true"></i> Thùng rác
                                 </a>
                             </div>

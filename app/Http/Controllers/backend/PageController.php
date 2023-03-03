@@ -84,6 +84,20 @@ class PageController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $page = Post::find($id);
+        if ($page == null) {
+            return redirect()->route('page.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
+        } else {
+            $page->delete();
+            return redirect()->route('page.trash')->with('message', ['type' => 'success', 'msg' => 'Hủy sản phẩm thành công']);
+        }
+    }
+
+    // trash
+    public function trash()
+    {
+        $list_page = Post::where([['post.status', '=', '0'], ['post.type', '=', 'page']])
+            ->orderBy('post.created_at', 'desc')->get();
+        return view("backend.page.trash", compact('list_page'));
     }
 }

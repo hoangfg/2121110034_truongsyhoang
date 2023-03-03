@@ -4,6 +4,7 @@ namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -15,72 +16,49 @@ class LoginController extends Controller
     public function index()
     {
         $title = 'Đăng nhập hệ thống';
-        return view("backend.login.index", compact('title'));
+        return view("backend.login", compact('title'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function login(Request $request)
     {
-        //
+        if (isset($request->DANGNHAP)) {
+            $username = $request['username'];
+            $password = sha1($request['password']);
+            if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
+                $args = [
+                    ['email', '=', $username],
+                    ['roles', '=', 1],
+                    ['status', '=', 1]
+                ];
+            } else {
+                $args = [
+                    ['username', '=', $username],
+                    ['roles', '=', 1],
+                    ['status', '=', 1]
+                ];
+            }
+            $row = User::where($args)->first();
+            if ($row != null) {
+                if ($row->password == $password) {
+                    session(['useradmin' => $username]);
+                    session(['name' => $row->name]);
+                    session(['user_id' => $row->id]);
+                    session(['image' => isset($row->image) ? $row->image : 'user.jpg']);
+                    return redirect()->route('dashboard.index');
+                } else {
+                    $error_login = "Sai mật khẩu";
+                }
+            } else {
+                $error_login = "Sai tên đăng nhập";
+            }
+            echo '11';
+        }
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function logout(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $request->session()->forget('useradmin');
+        $request->session()->forget('name');
+        $request->session()->forget('user_id');
+        $request->session()->forget('image');
+        return redirect()->route('dashboard.index');
     }
 }

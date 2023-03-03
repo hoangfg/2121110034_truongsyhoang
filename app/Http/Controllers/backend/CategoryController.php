@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use App\Http\Requests\StoreCategoryRequest;
 
 class CategoryController extends Controller
 {
@@ -28,6 +29,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
+
+        return view('backend.category.create');
     }
 
     /**
