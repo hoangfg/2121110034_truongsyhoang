@@ -15,6 +15,7 @@ class PostController extends Controller
      */
     public function index()
     {
+        $title = 'Tất cả bài viết';
         $list_post = Post::where([['post.status', '<>', '0'], ['post.type', '=', 'post']])
             ->join('topic', 'topic.id', 'post.topic_id')
             ->select('post.*', 'topic.name as topic_name')
@@ -22,7 +23,7 @@ class PostController extends Controller
 
        
 
-        return view("backend.post.index", compact('list_post'));
+        return view("backend.post.index", compact('list_post', 'title'));
     }
 
     /**
@@ -88,6 +89,64 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = Post::find($id);
+        if ($post == null) {
+            return redirect()->route('post.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
+        } else {
+            $post->delete();
+            return redirect()->route('post.trash')->with('message', ['type' => 'success', 'msg' => 'Hủy sản phẩm thành công']);
+        }
+    }
+    #delete
+    public function delete($id, Request $request)
+    {
+        $post = Post::find($id);
+        if ($post == null) {
+            return redirect()->route('post.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
+        } else {
+            $post->status = 0;
+            $post->updated_at = date('Y-m-d H:i:s');
+            $post->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+            $post->save();
+            return redirect()->route('post.index')->with('message', ['type' => 'success', 'msg' => 'Chuyển vào thùng rác thành công']);
+        }
+    }
+    #restore
+    public function restore($id, Request $request)
+    {
+        $post = Post::find($id);
+        if ($post == null) {
+            return redirect()->route('post.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
+        } else {
+            $post->status = 2;
+            $post->updated_at = date('Y-m-d H:i:s');
+            $post->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+            $post->save();
+            return redirect()->route('post.trash')->with('message', ['type' => 'success', 'msg' => 'Khôi phục sản phẩm thành công']);
+        }
+    }
+    // trash
+    public function trash()
+    {
+        $title = 'Thùng rác bài viết';
+        $list_post = Post::where([['post.status', '=', '0'], ['post.type', '=', 'post']])
+        ->join('topic', 'topic.id', 'post.topic_id')
+        ->select('post.*', 'topic.name as topic_name')
+        ->orderBy('post.created_at', 'desc')->get();
+        return view("backend.post.trash", compact('list_post', 'title'));
+    }
+    // status
+    public function status($id, Request $request)
+    {
+        $post = Post::find($id);
+        if ($post == null) {
+            return redirect()->route('post.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
+        } else {
+            $post->status = ($post->status == 1) ? 2 : 1;
+            $post->updated_at = date('Y-m-d H:i:s');
+            $post->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+            $post->save();
+            return redirect()->route('post.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công']);
+        }
     }
 }

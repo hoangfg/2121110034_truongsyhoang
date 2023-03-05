@@ -45,7 +45,16 @@
                         <div class="group mt-3">
                             <input type="submit" name="DANGNHAP" class="submit-btn" value="Login">
                         </div>
-                        <input type="checkbox" name="" id="" /><span>Remember Me</span>
+                        <div>
+                            <input type="checkbox" name="" id="" /><span>Remember Me</span>
+                        </div>
+                        @if (isset($error_login))
+                            <div class="mt-3">
+                                <div class="text-danger text-center ">
+                                    {{ $error_login }}
+                                </div>
+                            </div>
+                        @endif
                     </form>
                     <button type="button" class="btn mt-7" onclick="openRegister()">
                         I'm new here
@@ -71,10 +80,8 @@
                             <input type="password" class="input-box" placeholder="password" required />
                             <i class="far fa-eye btn" onclick="togglePassword(this)"></i>
                         </div>
-
                         <div class="group">
                             <input type="submit" name="DANGNHAP" class="submit-btn" value="Register">
-
                         </div>
                         <input type="checkbox" name="" id="" /><span class="checkbox">Remember
                             Me</span>

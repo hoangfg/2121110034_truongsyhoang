@@ -4,7 +4,6 @@
 
 @endsection
 @section('content')
-    
 
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
@@ -30,15 +29,20 @@
             <!-- Default box -->
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Title</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn btn-sm btn-danger" type="submit" name="DELETE_ALL">
+                                <i class="fa-solid fa-trash-can"></i></i> Xóa đã chọn
+                            </button>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <div class="text-right">
+                                <a class="btn btn-sm btn-info" href="{{ route('contact.index') }}">
+                                    <i class="fas fa-arrow-circle-left"></i> Quay về danh sách
+                                </a>
+                            </div>
 
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
-                            <i class="fas fa-times"></i>
-                        </button>
+                        </div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -52,61 +56,62 @@
                                         <input type="checkbox">
                                     </div>
                                 </th>
-                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Khách hàng</th>
-                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Email</th>
-                                <th class="col-md-1 col-sm-1 col-1 align-middle text-center">Phone</th>
-                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Ngày tạo</th>
-                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Trạng thái</th>
-                                <th class="col-md-1 col-sm-1 col-1 align-middle text-center">Chức năng</th>
+                                <th class="col-md-1 col-sm-1 col-1 align-middle text-center">Trạng thái</th>
+                                <th class="col-md-2 col-sm-3 col-3 align-middle text-center">Tên người gửi</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Tiêu đề liên hệ</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Nội dung liên hệ</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Chức năng</th>
 
                                 <th class="col-md-1 col-sm-1 col-1 align-middle text-center">id</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($list_order as $order) : ?>
-
+                            <?php foreach ($list_contact as $contact) : ?>
                             <tr>
                                 <td class="text-center">
                                     <div class="form-group">
-                                        <input type="checkbox" name="checkId[]" value="{{ $order->id }}">
+                                        <input type="checkbox" name="checkId[]" value="<?= $contact->id ?>">
                                     </div>
                                 </td>
-                                <td>
-                                    {{ $order->user_name }}
-                                </td>
-                                <td>
-                                    {{ $order->user_email }}
-                                </td>
-                                <td>
-                                    {{ $order->user_phone }}
-                                </td>
-
                                 <td class="text-center">
-                                    {{ $order->created_at }}
+                                    @if (!empty(trim($contact->replaydetail)))
+                                        <i class="fa-solid fa-star text-success"></i>
+                                    @endif
                                 </td>
                                 <td>
-                                    {{-- <span class='btn btn-sm btn-<?= $list_status[$order['status']]['type'] ?>'><?= $list_status[$order['status']]['text'] ?></span> --}}
-                                    <span class="btn btn-sm btn-{{ $list_status[$order['status']]['type']}}">
-                                        {{ $list_status[$order['status']]['text'] }}
-                                    </span>
+                                    {{ $contact->name }}
                                 </td>
-                                <td class=" text-center">
 
-                                    <a class="btn btn-sm btn-info" href="">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
 
-                                    <a class="btn btn-sm btn-danger" href="">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
+
+                                <td>
+                                    <strong>{{ $contact->title }}</strong>
+                                </td>
+                                <td>
+                                    {{ $contact->detail }}
                                 </td>
                                 <td class="text-center">
-                                    {{ $order->id }}
+                                    <a href="{{ route('contact.show', ['contact' => $contact->id]) }}"
+                                        class="btn btn-sm btn-primary" title="view">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </a>
+                                    <a href="{{ route('contact.restore', ['contact' => $contact->id]) }}"
+                                        class="btn btn-sm btn-info" title="view">
+                                        <i class="fas fa-undo-alt"></i>
+                                    </a>
+                                    <a href="{{ route('contact.destroy', ['contact' => $contact->id]) }}"
+                                        class="btn btn-sm btn-danger" title="delete">
+                                        <i class="fa-solid fa-circle-xmark"></i>
+                                    </a>
+                                </td>
+                                <td class="text-center">
+                                    {{ $contact->id }}
                                 </td>
                             </tr>
 
                             <?php endforeach; ?>
                         </tbody>
+
                     </table>
                 </div>
                 <!-- /.card-body -->
@@ -120,6 +125,7 @@
         </section>
         <!-- /.content -->
     </div>
+
 @endsection
 @section('footer')
 

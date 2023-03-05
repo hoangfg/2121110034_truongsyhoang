@@ -18,8 +18,9 @@ class BrandController extends Controller
      */
     public function index()
     {
+        $title = 'Tất cả thương hiệu';
         $list_brand = Brand::where('status',  '<>', '0')->orderBy('created_at', 'desc')->get();
-        return view("backend.brand.index", compact('list_brand'));
+        return view("backend.brand.index", compact('list_brand', 'title'));
     }
 
     /**
@@ -51,6 +52,7 @@ class BrandController extends Controller
      */
     public function show($id)
     {
+        $title = 'Thông tin thương hiệu';
         $total = Brand::join('product', 'product.brand_id', '=', 'brand.id')
             ->where('brand.id', '=', $id)
             ->distinct()
@@ -80,7 +82,7 @@ class BrandController extends Controller
         if ($brand == null) {
             return redirect()->route('brand.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
         } else {
-            return view('backend.brand.show', compact('brand', 'total', 'total_sale', 'product_brand'));
+            return view('backend.brand.show', compact('brand', 'total', 'total_sale', 'product_brand', 'title'));
         }
     }
 
@@ -140,8 +142,9 @@ class BrandController extends Controller
     // trash
     public function trash()
     {
+        $title = 'Thùng rác thương hiệu';
         $list_brand = Brand::where('status',  '=', '0')->orderBy('created_at', 'desc')->get();
-        return view("backend.brand.trash", compact('list_brand'));
+        return view("backend.brand.trash", compact('list_brand', 'title'));
     }
     // delete
     public function status($id)
@@ -168,7 +171,7 @@ class BrandController extends Controller
             $brand->updated_at = date('Y-m-d H:i:m');
             $brand->updated_by = 1;
             $brand->save();
-            return redirect()->route('brand.index')->with('message', ['type' => 'success', 'msg' => 'Khôi phục sản phâm thành công']);
+            return redirect()->route('brand.trash')->with('message', ['type' => 'success', 'msg' => 'Khôi phục sản phâm thành công']);
         }
     }
 }

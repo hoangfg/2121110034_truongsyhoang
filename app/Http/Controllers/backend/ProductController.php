@@ -19,6 +19,7 @@ class ProductController extends Controller
      */
     public function index()
     {
+        $title = 'Tất cả sản phẩm';
         $list_product = Product::join("category", "category.id", "=", "product.category_id")
             ->join("brand", "brand.id", "=", "product.brand_id")
             ->select("product.*", "category.name as category_name", "brand.name as brand_name")
@@ -26,7 +27,7 @@ class ProductController extends Controller
             ->orderBy('product.created_at', 'desc')
             ->get();
         // return view("backend.product.index", ['list_product' => $list_product]);
-        return view("backend.product.index", compact('list_product'));
+        return view("backend.product.index", compact('list_product', 'title'));
     }
 
     /**
@@ -58,6 +59,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
+        $title = 'Chi tiết sản phẩm';
         // $product = Product::join("category", "category.id", "=", "product.category_id")
         //     ->join("brand", "brand.id", "=", "product.brand_id")
         //     ->join("user as user_1", "user_1.id", "=", "product.created_by")
@@ -79,7 +81,7 @@ class ProductController extends Controller
         if ($product == null) {
             return redirect()->route('product.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
         } else {
-            return view("backend.product.show", compact('product'));
+            return view("backend.product.show", compact('product', 'title'));
         }
     }
 
@@ -147,7 +149,7 @@ class ProductController extends Controller
             $product->updated_at = date('Y-m-d H:i:m');
             $product->updated_by = 1;
             $product->save();
-            return redirect()->route('product.index')->with('message', ['type' => 'success', 'msg' => 'Khôi phục sản phẩm thành công']);
+            return redirect()->route('product.trash')->with('message', ['type' => 'success', 'msg' => 'Khôi phục sản phẩm thành công']);
         }
     }
     // status
@@ -168,6 +170,7 @@ class ProductController extends Controller
     // trash
     public function trash()
     {
+        $title = 'Thùng rác sản phẩm';
         $list_product = Product::join("category", "category.id", "=", "product.category_id")
             ->join("brand", "brand.id", "=", "product.brand_id")
             ->select("product.*", "category.name as category_name", "brand.name as brand_name")
@@ -175,6 +178,6 @@ class ProductController extends Controller
             ->orderBy('product.created_at', 'desc')
             ->get();
 
-        return view("backend.product.trash", compact('list_product'));
+        return view("backend.product.trash", compact('list_product', 'title'));
     }
 }

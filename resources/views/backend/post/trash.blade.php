@@ -4,7 +4,7 @@
 
 @endsection
 @section('content')
-    <form action="{{ route('page.store') }}" method="post" enctype="multipart/form-data">
+    <form action="{{ route('post.store') }}" method="post" enctype="multipart/form-data">
         @csrf
 
         <div class="content-wrapper">
@@ -32,7 +32,6 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="row">
-
                             <div class="col-md-6">
                                 <button class="btn btn-sm btn-danger" type="submit" name="DELETE_ALL">
                                     <i class="fa-solid fa-trash-can"></i></i> Xóa đã chọn
@@ -40,7 +39,7 @@
                             </div>
                             <div class="col-md-6 text-right">
                                 <div class="text-right">
-                                    <a class="btn btn-sm btn-info" href="{{ route('page.index') }}">
+                                    <a class="btn btn-sm btn-info" href="{{ route('post.index') }}">
                                         <i class="fas fa-arrow-circle-left"></i> Quay về danh sách
                                     </a>
                                 </div>
@@ -50,6 +49,7 @@
                     </div>
                     <div class="card-body">
                         @includeIf('backend.messageAlert', ['some' => 'data'])
+
                         <table class="table table-bordered" id="myTable">
                             <thead>
                                 <tr class="text-center">
@@ -58,7 +58,7 @@
                                     </th>
                                     <th class="col-md-1 col-sm-1 col-1 align-middle text-center">image</th>
                                     <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Tiêu đề bài viết</th>
-                                    <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Mô tả</th>
+                                    <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Chủ đề</th>
                                     <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Từ khóa</th>
                                     <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Chức năng</th>
                                     <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Ngày tạo</th>
@@ -66,35 +66,35 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($list_page as $page)
+                                @foreach ($list_post as $post)
                                     <tr>
                                         <td class="text-center"> <input type="checkbox" name="" id=""></td>
                                         <td>
 
-                                            <img src="{{ asset('images/post/' . $page->image) }}" alt=""
+                                            <img src="{{ asset('images/post/' . $post->image) }}" alt=""
                                                 class="w-100">
                                         </td>
-                                        <td class="">{{ $page->title }}</td>
-                                        <td>{{ $page->metadesc }}</td>
+                                        <td class="">{{ $post->title }}</td>
+                                        <td>{{ $post->topic_name }}</td>
                                         <td class="">
-                                            {{ $page->metakey }}
+                                            {{ $post->metakey }}
                                         </td>
                                         <td class="text-center">
-                                            <a href="{{ route('page.show', ['page' => $page->id]) }}"
+                                            <a href="{{ route('post.show', ['post' => $post->id]) }}"
                                                 class="btn btn-sm btn-primary" title="view">
                                                 <i class="fa-regular fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('page.restore', ['page' => $page->id]) }}"
+                                            <a href="{{ route('post.restore', ['post' => $post->id]) }}"
                                                 class="btn btn-sm btn-info" title="view">
                                                 <i class="fas fa-undo-alt"></i>
                                             </a>
-                                            <a href="{{ route('page.destroy', ['page' => $page->id]) }}"
+                                            <a href="{{ route('post.destroy', ['post' => $post->id]) }}"
                                                 class="btn btn-sm btn-danger" title="delete">
                                                 <i class="fa-solid fa-circle-xmark"></i>
                                             </a>
                                         </td>
-                                        <td class="text-center">{{ $page->created_at }}</td>
-                                        <td class="text-center">{{ $page->id }}</td>
+                                        <td class="text-center">{{ $post->created_at }}</td>
+                                        <td class="text-center">{{ $post->id }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

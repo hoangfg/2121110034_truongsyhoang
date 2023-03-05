@@ -1,6 +1,6 @@
 @extends('layouts.admin') 
 {{-- kế thừa từ layouts/admin --}}
-@section('title','Bảng điều khiển')
+@section('title','trang quản lý')
 @section('header')
 
 @endsection

@@ -13,6 +13,10 @@ body {
 a {
     text-decoration: none;
 }
+.text-danger {
+    color: red;
+}
+
 .container {
     /* position: absolute;
     top: 50%;
@@ -22,7 +26,7 @@ a {
     height: 100vh;
     font-family: sans-serif;
     background-color: rgb(187, 187, 245);
-    color: #fff;
+    color: red;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -33,7 +37,7 @@ a {
     height: 560px;
     box-shadow: 0 0 40px 20px rgba(0, 0, 0, 0.26);
     perspective: 1000px;
-    font-weight: bold;
+    font-weight: 400;
     font-size: 16px;
 }
 .inner-box {
@@ -144,6 +148,9 @@ span.checkbox {
 }
 .mt-7 {
     margin-top: 70px;
+}
+.mt-3 {
+    margin-top: 30px;
 }
 
 .card,

@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Tắt cả thương hiệu')
+@section('title', $title ?? 'trang quản lý')
 @section('header')
 
 @endsection
@@ -9,7 +9,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>THƯƠNG HIỆU SẢN PHẨM</h1>
+                        <h1 style="text-transform: uppercase;">{{ $title ?? 'trang quản lý' }}</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">

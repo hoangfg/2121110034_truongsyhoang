@@ -4,13 +4,17 @@
 
 @endsection
 @section('content')
-    <div class="content-wrapper">
-        <section class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1 style="text-transform: uppercase;">{{ $title ?? 'trang quản lý' }}</h1>
-                    </div>
+    <form action="{{ route('customer.store') }}" method="post" enctype="multipart/form-data">
+        @csrf
+
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 style="text-transform: uppercase;">{{ $title ?? 'trang quản lý' }}</h1>
+                        </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
@@ -33,19 +37,16 @@
                         </div>
                         <div class="col-md-6 text-right">
                             <div class="text-right">
-                                <a class="btn btn-sm btn-success" href="{{ route('brand.create') }}">
-                                    <i class="fas fa-plus"></i> Thêm
-                                </a>
-                                <a class="btn btn-sm btn-danger" href="{{ route('brand.trash') }}">
-                                    <i class="fas fa-trash" aria-hidden="true"></i> Thùng rác
+                                <a class="btn btn-sm btn-info" href="{{ route('customer.index') }}">
+                                    <i class="fas fa-arrow-circle-left"></i> Quay về danh sách
                                 </a>
                             </div>
-
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     @includeIf('backend.messageAlert', ['some' => 'data'])
+
                     <table class="table table-bordered" id="myTable">
                         <thead>
                             <tr>
@@ -53,53 +54,55 @@
                                     <input type="checkbox" name="" id="">
                                 </th>
                                 <th class="col-md-1 col-sm-1 col-1 align-middle text-center">image</th>
-                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Tên danh mục</th>
-                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Slug</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Tên</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Email</th>
+                                <th class="col-md-1 col-sm-1 col-1 align-middle text-center">Phone</th>
+
                                 <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Chức năng</th>
-                                <th class="col-md-2 col-sm-1 col-2 align-middle text-center">Ngày tạo</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Ngày tham gia</th>
                                 <th class="col-md-1 col-sm-1 col-1 align-middle text-center">id</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($list_brand as $brand)
+                            @foreach ($list_customer as $customer)
                                 <tr>
                                     <td class="text-center"> <input type="checkbox" name="" id=""></td>
                                     <td>
-                                        <img src="{{ asset('images/brand/' . $brand->image) }}" alt=""
-                                            class="w-100">
-                                    </td>
-                                    <td>{{ $brand->name }}</td>
-                                    <td>{{ $brand->slug }}</td>
-                                    <td class="text-center">
-                                        @if ($brand->status == 1)
-                                            <a class="btn btn-sm btn-success"
-                                                href="{{ route('brand.status', ['brand' => $brand->id]) }}">
-                                                <i class="fas fa-toggle-on"></i>
-                                            </a>
+                                        @if ($customer->image == null)
+                                            @if ($customer->gender == 0)
+                                                <img src="{{ asset('images/user/male.png') }}"
+                                                    class="card-img-top index-img" alt="male">
+                                            @else
+                                                <img src="{{ asset('images/user/Female.png') }}"
+                                                    class="card-img-top index-img" alt="Female">
+                                            @endif
                                         @else
-                                            <a class="btn btn-sm btn-danger"
-                                                href="{{ route('brand.status', ['brand' => $brand->id]) }}">
-                                                <i class="fas fa-toggle-off"></i>
-                                            </a>
+                                            <img src="{{ asset('images/user/' . $customer->image) }}" alt=""
+                                                class="w-100">
                                         @endif
+                                    </td>
+                                    <td>{{ $customer->name }}</td>
+                                    <td>{{ $customer->email }}</td>
+                                    <td>{{ $customer->phone }}</td>
 
-                                        <a href="{{ route('brand.edit', ['brand' => $brand->id]) }}"
-                                            class="btn btn-sm btn-info" title="edit">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </a>
-                                        <a href="{{ route('brand.show', ['brand' => $brand->id]) }}"
+                                    <td class="text-center">
+                                        <a href="{{ route('customer.show', ['customer' => $customer->id]) }}"
                                             class="btn btn-sm btn-primary" title="view">
                                             <i class="fa-regular fa-eye"></i>
                                         </a>
-                                        <a href="{{ route('brand.delete', ['brand' => $brand->id]) }}"
-                                            class="btn btn-sm btn-danger" title="delete">
-                                            <i class="fa-solid fa-delete-left"></i>
+                                        <a href="{{ route('customer.restore', ['customer' => $customer->id]) }}"
+                                            class="btn btn-sm btn-info" title="restore">
+                                            <i class="fas fa-undo-alt"></i>
+                                        </a>
+                                        <a href="{{ route('customer.destroy', ['customer' => $customer->id]) }}"
+                                            class="btn btn-sm btn-danger" title="destroy">
+                                            <i class="fa-solid fa-circle-xmark"></i>
                                         </a>
                                     </td>
                                     <td class="text-center">
-                                        {{ $brand->created_at }}
+                                        {{ $customer->created_at }}
                                     </td>
-                                    <td class="text-center">{{ $brand->id }}</td>
+                                    <td class="text-center">{{ $customer->id }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

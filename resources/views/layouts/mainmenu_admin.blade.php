@@ -2,10 +2,20 @@
        <!-- Sidebar user (optional) -->
        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
            <div class="image">
-               <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
+               @if (session('image') == null)
+                   @if (session('gender') == 0)
+                       <img src="{{ asset('images/user/male.png') }}" class="img-circle elevation-2" alt="male">
+                   @else
+                       <img src="{{ asset('images/user/Female.png') }}" class="img-circle elevation-2" alt="Female">
+                   @endif
+               @else
+                   <img src="{{ asset('images/user/' . session('image')) }}" class="img-circle elevation-2"
+                       alt="User Image">
+               @endif
+
            </div>
            <div class="info">
-               <a href="#" class="d-block">Alexander Pierce</a>
+               <a href="#" class="d-block">{{ session('name') }}</a>
            </div>
        </div>
 
@@ -186,7 +196,7 @@
                </li>
                <li class="nav-header">LABELS</li>
                <li class="nav-item">
-                   <a href="#" class="nav-link">
+                   <a href="{{ route('logout') }}" class="nav-link">
                        <i class="nav-icon fa-solid fa-arrow-right-from-bracket text-danger"></i>
                        <p class="text">Logout</p>
                    </a>

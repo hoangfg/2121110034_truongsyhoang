@@ -50,7 +50,7 @@ class LoginController extends Controller
             } else {
                 $error_login = "Sai tên đăng nhập";
             }
-            echo '11';
+            return view('backend.login', compact('error_login'));
         }
     }
     public function logout(Request $request)

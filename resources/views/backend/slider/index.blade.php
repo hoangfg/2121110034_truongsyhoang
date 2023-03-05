@@ -1,17 +1,20 @@
 @extends('layouts.admin')
-@section('title', 'Tắt cả slider')
+@section('title', $title ?? 'trang quản lý')
 @section('header')
 
 @endsection
 @section('content')
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1>QUẢN LÝ SLIDER</h1>
-                    </div>
+    <form action="{{ route('slider.store') }}" method="post" enctype="multipart/form-data">
+        @csrf
+
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 style="text-transform: uppercase;">{{ $title ?? 'trang quản lý' }}</h1>
+                        </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
@@ -40,7 +43,7 @@
                                 <a class="btn btn-sm btn-success" href="index.php?option=slider&cat=create">
                                     <i class="fas fa-plus"></i> Thêm
                                 </a>
-                                <a class="btn btn-sm btn-danger" href="index.php?option=slider&cat=trash">
+                                <a class="btn btn-sm btn-danger" href="{{ route('slider.trash') }}">
                                     <i class="fas fa-trash"></i> Thùng rác
                                 </a>
                             </div>
@@ -48,7 +51,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    
+                    @includeIf('backend.messageAlert', ['some' => 'data'])
                     <table class="table table-bordered" id="myTable">
                         <thead >
                             <tr>
@@ -88,22 +91,22 @@
                                     </td>
                                     <td class="text-center">
                                         @if ($slider['status'] == 1)
-                                            <a class="btn btn-sm btn-success" href="#">
+                                            <a class="btn btn-sm btn-success" href="{{ route('slider.status', ['slider'=>$slider->id]) }}">
                                                 <i class="fas fa-toggle-on"></i>
                                             </a>
                                         @else
-                                            <a class="btn btn-sm btn-danger" href="#">
+                                            <a class="btn btn-sm btn-danger" href="{{ route('slider.status', ['slider'=>$slider->id]) }}">
                                                 <i class="fas fa-toggle-off"></i>
                                             </a>
                                         @endif
-                                        <a href="{{ route('brand.edit', ['brand' => $slider->id]) }}"
+                                        <a href="{{ route('slider.edit', ['slider' => $slider->id]) }}"
                                             class="btn btn-sm btn-info" title="edit">
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </a>
-                                        <a href="{{ route('brand.show', ['brand' => $slider->id]) }}" class="btn btn-sm btn-primary" title="view">
+                                        <a href="{{ route('slider.show', ['slider' => $slider->id]) }}" class="btn btn-sm btn-primary" title="view">
                                             <i class="fa-regular fa-eye"></i>
                                         </a>
-                                        <a href="{{ route('brand.destroy', ['brand' => $slider->id]) }}" class="btn btn-sm btn-danger" title="delete">
+                                        <a href="{{ route('slider.delete', ['slider' => $slider->id]) }}" class="btn btn-sm btn-danger" title="delete">
                                             <i class="fa-solid fa-delete-left"></i>
                                         </a>
                                     </td>
@@ -120,19 +123,7 @@
                 <!-- /.card-body -->
                 <div class="card-footer">
                     <div class="row">
-                        <div class="col-md-6">
-                            <button class="btn btn-sm btn-danger" type="submit" name="DELETE_ALL">
-                                <i class="fas fa-trash"></i> Xóa đã chọn
-                            </button>
-                        </div>
-                        <div class="col-md-6 text-right">
-                            <a class="btn btn-sm btn-success" href="index.php?option=slider&cat=create">
-                                <i class="fas fa-plus"></i> Thêm
-                            </a>
-                            <a class="btn btn-sm btn-danger" href="index.php?option=slider&cat=trash">
-                                <i class="fas fa-trash"></i> Thùng rác
-                            </a>
-                        </div>
+                        
                     </div>
                 </div>
                 <!-- /.card-footer-->
@@ -148,6 +139,7 @@
         </section>
         <!-- /.content -->
     </div>
+    </form>
 @endsection
 @section('footer')
 

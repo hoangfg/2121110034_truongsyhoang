@@ -24,15 +24,26 @@ class StoreCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+           'name' => 'required|string|min:5',
+            'metakey' => 'required|min:5',
+            'metadesc' => 'required|min:5',
+
         ];
     }
 
     public function messages()
     {
+        $messages=[
+            'required'=>'Bạn chưa điền vào đây'
+        ];
         return [
-            'title.required' => 'A title is required',
-            'body.required' => 'A message is required',
+            'name.required' => $messages['required'],
+            'name.min' =>'Nhập ít nhất 5 ký tự',
+            'metakey.required' => $messages['required'],
+            'metakey.min' => 'Nhập ít nhất 5 ký tự',
+            'metadesc.required' => $messages['required'],
+            'metadesc.min' => 'Nhập ít nhất 5 ký tự',
+            
         ];
     }
 }

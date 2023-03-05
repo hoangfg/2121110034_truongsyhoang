@@ -19,10 +19,11 @@ class OrderController extends Controller
      */
     public function index()
     {
-
+        $title = 'Tất cả hóa đơn';
         $list_order = Order::join('user', 'user.id', '=', 'order.user_id')
         ->join('orderdetail', 'orderdetail.order_id', '=', 'order.id')
         ->select('order.*', 'user.name as user_name', 'user.email as user_email', 'user.phone as user_phone')
+            ->where('order.status', '<>', '5')
         ->distinct()
         ->get();
         // return dd($list_order);
@@ -34,7 +35,7 @@ class OrderController extends Controller
             ['type' => 'success', 'text' => 'Đã giao'],
             ['type' => 'danger', 'text' => 'Đã hủy'],
         ];
-        return view("backend.order.index", compact('list_order', 'list_status'));
+        return view("backend.order.index", compact('list_order', 'list_status', 'title'));
     }
 
     /**
