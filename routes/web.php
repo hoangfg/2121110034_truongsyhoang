@@ -56,6 +56,7 @@ Route::prefix('admin')->group(function () {
         Route::get('destroy/{category}', [CategoryController::class, 'destroy'])->name('category.destroy');
         Route::get('show/{category}', [CategoryController::class, 'show'])->name('category.show');
         Route::get('restore/{category}', [CategoryController::class, 'restore'])->name('category.restore');
+        Route::get('edit/{category}', [CategoryController::class, 'edit'])->name('category.edit');
     });
 
 

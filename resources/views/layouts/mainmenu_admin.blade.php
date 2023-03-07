@@ -1,7 +1,7 @@
    <div class="sidebar">
        <!-- Sidebar user (optional) -->
-       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-           <div class="image">
+       <div class=" user-panel  mt-3 pb-3 mb-3 d-flex">
+           <div class="image avatar">
                @if (session('image') == null)
                    @if (session('gender') == 0)
                        <img src="{{ asset('images/user/male.png') }}" class="img-circle elevation-2" alt="male">
@@ -14,7 +14,7 @@
                @endif
 
            </div>
-           <div class="info">
+           <div class="info info__user">
                <a href="#" class="d-block">{{ session('name') }}</a>
            </div>
        </div>

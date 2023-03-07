@@ -65,7 +65,8 @@
                                 <tr>
                                     <td class="text-center"> <input type="checkbox" name="" id=""></td>
                                     <td>
-                                        <img  src="public/images/category/{{ $category->image }}" alt="">
+                                        <img class="img-fluid" src="{{ asset('images/category/' . $category->image) }}"
+                                            alt=" {{ $category->image }}">
                                     </td>
                                     <td>{{ $category->name }}</td>
                                     <td>{{ $category->slug }}</td>

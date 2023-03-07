@@ -37,7 +37,15 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        $title = 'Thêm sản phẩm';
+        $list_category = Product::where('status', '<>', '0')->orderBy('created_at', 'desc')->get();
+        $html_parent_id = "";
+        $html_sort_order = "";
+        foreach ($list_category as $item) {
+            $html_parent_id .= "<option value='" . $item->id . "'>" . $item->name . "</option>";
+            $html_sort_order .= "<option value='" . ($item->sort_order + 1) . "'>Sau: " . $item->name . "</option>";
+        }
+        return view('backend.product.create', compact('html_parent_id', 'html_sort_order', 'title'));
     }
 
     /**
