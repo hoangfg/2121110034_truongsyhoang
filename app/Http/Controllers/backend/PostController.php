@@ -134,8 +134,9 @@ class PostController extends Controller
         $post->topic_id = $request->topic_id;
         $post->status = $request->status;
         $post->type = 'post';
-        $post->created_at = date('Y-m-d H:i:s');
-        $post->created_by = (isset($_SESSION['user_id'])) ? $_SESSION['user_id'] : 1;
+        $post->updated_at = date('Y-m-d H:i:s');
+
+        $post->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
         // upload file
         if ($request->has('image')) {
             $path_dir = "images/post/";

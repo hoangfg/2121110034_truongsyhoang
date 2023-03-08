@@ -119,8 +119,9 @@ class TopicController extends Controller
         $topic->parent_id = $_POST['parent_id'];
         $topic->sort_order = $_POST['sort_order'];
         $topic->status = $_POST['status'];
-        $topic->created_at = date('Y-m-d H:i:s');
-        $topic->created_by = (isset($_SESSION['user_id'])) ? $_SESSION['user_id'] : 1;
+        $topic->updated_at = date('Y-m-d H:i:s');
+
+        $topic->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
         if ($topic->save()) {
             $link = Link::where([['type', '=', 'topic'], ['table_id', '=', $id]])->first();
             $link->link = $topic->slug;

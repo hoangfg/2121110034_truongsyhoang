@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Link;
-use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\StorePageRequest;
 use App\Http\Requests\UpdatePageRequest;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
+
+
 class PageController extends Controller
 {
     /**
@@ -38,13 +40,8 @@ class PageController extends Controller
         return view('backend.page.create', compact('title'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StorePostRequest $request)
+
+    public function store(StorePageRequest $request)
     {
         $page = new Post();
         $page->title = $request->title;
@@ -66,17 +63,17 @@ class PageController extends Controller
             $page->image = $filename;
         }
         // end
-        // if ($page->save()) {
-        //     $link = new Link();
-        //     $link->link = $page->slug;
-        //     $link->table_id = $page->id;
-        //     $link->type = 'page';
-        //     $link->save();
-        //     return redirect()->route('page.index')->with('message', ['type' => 'success', 'msg' => 'Thêm sản phẩm thành công']);
-        // } else {
-        //     return redirect()->route('page.index')->with('message', ['type' => 'danger', 'msg' => 'Thêm sản phẩm không thành công']);
-        // }
-       dd($page);
+        if ($page->save()) {
+            $link = new Link();
+            $link->link = $page->slug;
+            $link->table_id = $page->id;
+            $link->type = 'page';
+            $link->save();
+            return redirect()->route('page.index')->with('message', ['type' => 'success', 'msg' => 'Thêm sản phẩm thành công']);
+        } else {
+            return redirect()->route('page.index')->with('message', ['type' => 'danger', 'msg' => 'Thêm sản phẩm không thành công']);
+        }
+
     }
 
     /**
@@ -98,7 +95,9 @@ class PageController extends Controller
      */
     public function edit($id)
     {
-        //
+        $page = Post::find($id);
+        $title = 'Sửa giới thiệu';  
+        return view('backend.page.edit', compact('page', 'title'));
     }
 
     /**
@@ -110,7 +109,39 @@ class PageController extends Controller
      */
     public function update(UpdatePageRequest $request, $id)
     {
-        //
+        $page = Post::find($id);
+        $page->title = $request->title;
+        $page->slug = Str::slug($request->title, '-');
+        $page->detail = $request->detail;
+        $page->metakey = $request->metakey;
+        $page->metadesc = $request->metadesc;
+        $page->status = $request->status;
+        $page->type = 'page';
+        $page->updated_at = date('Y-m-d H:i:s');
+
+        $page->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+        if ($request->has('image')) {
+            $path_dir = "images/post/";
+            if (File::exists(public_path($path_dir . $page->image))) {
+                File::delete(public_path($path_dir . $page->image));
+            }
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = $page->slug . '.' . $extension;
+            $file->move($path_dir, $filename);
+            $page->image = $filename;
+        }
+        // // end
+        if ($page->save()) {
+            $link = Link::where([['type', '=', 'page'], ['table_id', '=', $id]])->first();
+            $link->link = $page->slug;
+
+            $link->save();
+            return redirect()->route('page.index')->with('message', ['type' => 'success', 'msg' => 'Cập nhật sản phẩm thành công']);
+        } else {
+            return redirect()->route('page.index')->with('message', ['type' => 'danger', 'msg' => 'Thêm sản phẩm không thành công']);
+        }
+        // dd($page);
     }
 
     /**

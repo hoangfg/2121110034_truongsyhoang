@@ -4,7 +4,7 @@
 
 @endsection
 @section('content')
-    <form action="{{ route('post.update', ['post' => $post->id]) }}" method="post" enctype="multipart/form-data">
+    <form action="{{ route('page.update', ['page' => $page->id]) }}" method="post" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="content-wrapper">
@@ -37,7 +37,7 @@
                                     <button name="THEM" type="submit" class="btn btn-sm btn-success">
                                         <i class="fa-solid fa-floppy-disk"></i> Lưu[update]
                                     </button>
-                                    <a class="btn btn-sm btn-info" href="{{ route('post.index') }}">
+                                    <a class="btn btn-sm btn-info" href="{{ route('page.index') }}">
                                         <i class="fas fa-arrow-circle-left"></i> Quay về danh sách
                                     </a>
 
@@ -53,7 +53,7 @@
                                 <div class="mb-3">
                                     <label for="title">Tên danh mục</label>
                                     <input name="title" id="title" type="text" class="form-control "
-                                        value="{{ old('title', $post->title) }}" placeholder="vd: Tiểu thuyết">
+                                        value="{{ old('title', $page->title) }}" placeholder="vd: Tiểu thuyết">
                                     @if ($errors->has('title'))
                                         <div class="text-danger">
                                             {{ $errors->first('title') }}
@@ -63,7 +63,7 @@
                                 <div class="mb-3">
                                     <label for="detail">Nội dung</label>
                                     <textarea name="detail" id="detail" cols="10" rows="2" class="form-control "
-                                        placeholder="vd: là một thể loại văn xuôi có hư cấu, thông qua nhân vật, ">{{ old('detail', $post->detail) }}</textarea>
+                                        placeholder="vd: là một thể loại văn xuôi có hư cấu, thông qua nhân vật, ">{{ old('detail', $page->detail) }}</textarea>
                                     @if ($errors->has('detail'))
                                         <div class="text-danger">
                                             {{ $errors->first('detail') }}
@@ -73,7 +73,7 @@
                                 <div class="mb-3">
                                     <label for="metadesc">Mô tả</label>
                                     <textarea name="metadesc" id="metadesc" cols="10" rows="2" class="form-control "
-                                        placeholder="vd: là một thể loại văn xuôi có hư cấu,...">{{ old('metadesc', $post->metadesc) }}</textarea>
+                                        placeholder="vd: là một thể loại văn xuôi có hư cấu,...">{{ old('metadesc', $page->metadesc) }}</textarea>
                                     @if ($errors->has('metadesc'))
                                         <div class="text-danger">
                                             {{ $errors->first('metadesc') }}
@@ -83,7 +83,7 @@
                                 <div class="mb-3">
                                     <label for="metakey">Từ khóa</label>
                                     <textarea name="metakey" id="metakey" cols="10" rows="2" class="form-control "
-                                        placeholder="vd: harry potter">{{ old('metakey', $post->metakey) }}</textarea>
+                                        placeholder="vd: harry potter">{{ old('metakey', $page->metakey) }}</textarea>
                                     @if ($errors->has('metakey'))
                                         <div class="text-danger">
                                             {{ $errors->first('metakey') }}
@@ -107,8 +107,8 @@
                                     <label for="status">Trạng thái</label>
                                     <select name="status" id="status" class="form-control">
 
-                                        <option value="1" {{ $post->status == 1 ? 'selected' : '' }}>Xuất bản</option>
-                                        <option value="2" {{ $post->status == 2 ? 'selected' : '' }}>Chưa xuất bản
+                                        <option value="1" {{ $page->status == 1 ? 'selected' : '' }}>Xuất bản</option>
+                                        <option value="2" {{ $page->status == 2 ? 'selected' : '' }}>Chưa xuất bản
                                         </option>
                                     </select>
                                 </div>
