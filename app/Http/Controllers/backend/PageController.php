@@ -5,7 +5,11 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Post;
-
+use App\Models\Link;
+use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePageRequest;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 class PageController extends Controller
 {
     /**
@@ -29,7 +33,9 @@ class PageController extends Controller
      */
     public function create()
     {
-        //
+        $title = 'Thêm giới thiệu';
+       
+        return view('backend.page.create', compact('title'));
     }
 
     /**
@@ -38,9 +44,39 @@ class PageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
-        //
+        $page = new Post();
+        $page->title = $request->title;
+        $page->slug = Str::slug($request->title, '-');
+        $page->detail = $request->detail;
+        $page->metakey = $request->metakey;
+        $page->metadesc = $request->metadesc;
+        $page->status = $request->status;
+        $page->type = 'page';
+        $page->created_at = date('Y-m-d H:i:s');
+        $page->created_by = (isset($_SESSION['user_id'])) ? $_SESSION['user_id'] : 1;
+        // upload file
+        if ($request->has('image')) {
+            $path_dir = "images/post/";
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = $page->slug . '.' . $extension;
+            $file->move($path_dir, $filename);
+            $page->image = $filename;
+        }
+        // end
+        // if ($page->save()) {
+        //     $link = new Link();
+        //     $link->link = $page->slug;
+        //     $link->table_id = $page->id;
+        //     $link->type = 'page';
+        //     $link->save();
+        //     return redirect()->route('page.index')->with('message', ['type' => 'success', 'msg' => 'Thêm sản phẩm thành công']);
+        // } else {
+        //     return redirect()->route('page.index')->with('message', ['type' => 'danger', 'msg' => 'Thêm sản phẩm không thành công']);
+        // }
+       dd($page);
     }
 
     /**
@@ -72,7 +108,7 @@ class PageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdatePageRequest $request, $id)
     {
         //
     }

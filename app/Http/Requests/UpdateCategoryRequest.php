@@ -27,6 +27,7 @@ class UpdateCategoryRequest extends FormRequest
             'name' => 'required|string|min:5',
             'metakey' => 'required|min:5',
             'metadesc' => 'required|min:5',
+            'image' => 'image|mimes:png,jpg,jpeg|max:2048'  // Max file size is 2MB (2048KB)
         ];
     }
     public function messages()
@@ -41,7 +42,9 @@ class UpdateCategoryRequest extends FormRequest
             'metakey.min' => 'Nhập ít nhất 5 ký tự',
             'metadesc.required' => $messages['required'],
             'metadesc.min' => 'Nhập ít nhất 5 ký tự',
-
+            'image.image' => 'Vui lòng tải lên một tệp hình ảnh.',
+            'image.mimes' => 'Vui lòng tải lên một tệp hình ảnh có phần mở rộng hợp lệ (png,jpg,jpeg).',
+            'image.max' => 'Kích thước tệp tải lên không được vượt quá 2048KB (2MB).',
         ];
     }
 }

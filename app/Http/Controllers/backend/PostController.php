@@ -5,6 +5,11 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\Topic;
+use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 
 class PostController extends Controller
 {
@@ -21,7 +26,7 @@ class PostController extends Controller
             ->select('post.*', 'topic.name as topic_name')
             ->orderBy('post.created_at', 'desc')->get();
 
-       
+
 
         return view("backend.post.index", compact('list_post', 'title'));
     }
@@ -33,7 +38,15 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        $title = 'Thêm bài viết';
+        $list_topic = Topic::where('status',  '!=', '0')
+            ->get();
+        $html_topic_id = "";
+
+        foreach ($list_topic as $topic) {
+            $html_topic_id .= "<option value='" . $topic->id . "'>" . $topic->name . "</option>";
+        }
+        return view('backend.post.create', compact('html_topic_id', 'title'));
     }
 
     /**
@@ -42,9 +55,34 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
-        //
+        $post = new Post();
+        $post->title = $request->title;
+        $post->slug = Str::slug($request->title, '-');
+        $post->detail = $request->detail;
+        $post->metakey = $request->metakey;
+        $post->metadesc = $request->metadesc;
+        $post->topic_id = $request->topic_id;
+        $post->status = $request->status;
+        $post->type = 'post';
+        $post->created_at = date('Y-m-d H:i:s');
+        $post->created_by = (isset($_SESSION['user_id'])) ? $_SESSION['user_id'] : 1;
+        // upload file
+        if ($request->has('image')) {
+            $path_dir = "images/post/";
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = $post->slug . '.' . $extension;
+            $file->move($path_dir, $filename);
+            $post->image = $filename;
+            $post->save();
+            return redirect()->route('post.index')->with('message', ['type' => 'success', 'msg' => 'Thêm sản phẩm thành công']);
+        }
+        // end
+        else {
+            return redirect()->route('post.index')->with('message', ['type' => 'danger', 'msg' => 'Thêm sản phẩm không thành công']);
+        }
     }
 
     /**
@@ -66,7 +104,16 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        $post = Post::find($id);
+        $title = 'Sửa bài viết';
+        $list_topic = Topic::where('status',  '!=', '0')
+            ->get();
+        $html_topic_id = "";
+
+        foreach ($list_topic as $topic) {
+            $html_topic_id .= "<option value='" . $topic->id . "'>" . $topic->name . "</option>";
+        }
+        return view('backend.post.edit', compact('post', 'html_topic_id', 'title'));
     }
 
     /**
@@ -76,9 +123,35 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdatePostRequest $request, $id)
     {
-        //
+        $post = Post::find($id);
+        $post->title = $request->title;
+        $post->slug = Str::slug($request->title, '-');
+        $post->detail = $request->detail;
+        $post->metakey = $request->metakey;
+        $post->metadesc = $request->metadesc;
+        $post->topic_id = $request->topic_id;
+        $post->status = $request->status;
+        $post->type = 'post';
+        $post->created_at = date('Y-m-d H:i:s');
+        $post->created_by = (isset($_SESSION['user_id'])) ? $_SESSION['user_id'] : 1;
+        // upload file
+        if ($request->has('image')) {
+            $path_dir = "images/post/";
+            if (File::exists(public_path($path_dir . $post->image))) {
+                File::delete(public_path($path_dir . $post->image));
+            }
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = $post->slug . '.' . $extension;
+            $file->move($path_dir, $filename);
+            $post->image = $filename;
+        }
+        $post->save();
+        return redirect()->route('post.index')->with('message', ['type' => 'success', 'msg' => 'Sửa bài viết thành công']);
+        // end
+
     }
 
     /**
@@ -130,9 +203,9 @@ class PostController extends Controller
     {
         $title = 'Thùng rác bài viết';
         $list_post = Post::where([['post.status', '=', '0'], ['post.type', '=', 'post']])
-        ->join('topic', 'topic.id', 'post.topic_id')
-        ->select('post.*', 'topic.name as topic_name')
-        ->orderBy('post.created_at', 'desc')->get();
+            ->join('topic', 'topic.id', 'post.topic_id')
+            ->select('post.*', 'topic.name as topic_name')
+            ->orderBy('post.created_at', 'desc')->get();
         return view("backend.post.trash", compact('list_post', 'title'));
     }
     // status

@@ -91,7 +91,7 @@
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </a>
                                         <a href="{{ route('category.show', ['category' => $category->id]) }}"
-                                            class="btn btn-sm btn-primary" title="view">
+                                            class="btn btn-sm btn-primary" title="show">
                                             <i class="fa-regular fa-eye"></i>
                                         </a>
                                         <a href="{{ route('category.delete', ['category' => $category->id]) }}"

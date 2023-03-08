@@ -5,6 +5,9 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
+use App\Models\User;
+use App\Models\Orderdetail;
+use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 
 
@@ -21,11 +24,26 @@ class OrderController extends Controller
     {
         $title = 'Tất cả hóa đơn';
         $list_order = Order::join('user', 'user.id', '=', 'order.user_id')
-        ->join('orderdetail', 'orderdetail.order_id', '=', 'order.id')
-        ->select('order.*', 'user.name as user_name', 'user.email as user_email', 'user.phone as user_phone')
-            ->where('order.status', '<>', '5')
-        ->distinct()
-        ->get();
+            ->join('orderdetail', 'orderdetail.order_id', '=', 'order.id')
+            ->select('order.*', 'user.name as user_name', 'user.email as user_email', 'user.phone as user_phone')
+            
+            ->orderBy('created_at', 'desc')
+            ->distinct()
+            ->get();
+        $list_order_new = Order::join('user', 'user.id', '=', 'order.user_id')
+            ->join('orderdetail', 'orderdetail.order_id', '=', 'order.id')
+            ->select('order.*', 'user.name as user_name', 'user.email as user_email', 'user.phone as user_phone')
+            ->where('order.status', '=', '0')
+            ->orderBy('created_at', 'desc')
+            ->distinct()
+            ->get();
+        $list_order_confirm = Order::join('user', 'user.id', '=', 'order.user_id')
+            ->join('orderdetail', 'orderdetail.order_id', '=', 'order.id')
+            ->select('order.*', 'user.name as user_name', 'user.email as user_email', 'user.phone as user_phone')
+            ->where('order.status', '=', '1')
+            ->orderBy('created_at', 'desc')
+            ->distinct()
+            ->get();
         // return dd($list_order);
         $list_status = [
             ['type' => 'secondary', 'text' => 'Đơn hàng mới'],
@@ -35,7 +53,7 @@ class OrderController extends Controller
             ['type' => 'success', 'text' => 'Đã giao'],
             ['type' => 'danger', 'text' => 'Đã hủy'],
         ];
-        return view("backend.order.index", compact('list_order', 'list_status', 'title'));
+        return view("backend.order.index", compact('list_order', 'list_order_new', 'list_order_confirm', 'list_status', 'title'));
     }
 
     /**
@@ -67,7 +85,21 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        //
+
+        $title = 'Chi tiết hóa đơn';
+        $order = Order::join('user', 'user.id', '=', 'order.user_id')
+            ->where('order.id', '=', $id)
+            ->first();
+        $list_orderdetail = Product::join('Orderdetail', 'product.id', '=', 'orderdetail.product_id')
+            ->select('*', 'product.price as product_price', 'product.qty as product_qty')
+            ->where('orderdetail.order_id', '=', $id)
+            ->get();
+        if ($order == null) {
+            return redirect()->route('order.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
+        } else {
+           
+            return view('backend.order.show', compact('order',  'title', 'list_orderdetail'));
+        }
     }
 
     /**
@@ -102,5 +134,20 @@ class OrderController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    // status
+    public function status($id)
+    {
+        $order = Order::find($id);
+        if ($order == null) {
+            return redirect()->route('order.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
+        } else {
+            $order->status = ($order->status == 1) ? 2 : 1;
+            $order->updated_at = date('Y-m-d H:i:m');
+            $order->updated_by = 1;
+            $order->save();
+            return redirect()->route('order.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công']);
+        }
     }
 }

@@ -5,7 +5,10 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Topic;
-
+use App\Models\Link;
+use Illuminate\Support\Str;
+use App\Http\Requests\StoreTopicRequest;
+use App\Http\Requests\UpdateTopicRequest;
 class TopicController extends Controller
 {
     /**
@@ -27,7 +30,15 @@ class TopicController extends Controller
      */
     public function create()
     {
-        //
+        $title = 'Thêm chủ đề bài viết';
+        $list_topic = Topic::where('status', '<>', '0')->orderBy('created_at', 'desc')->get();
+        $html_parent_id = "";
+        $html_sort_order = "";
+        foreach ($list_topic as $topic) {
+            $html_parent_id .= "<option value='" . $topic->id . "'>" . $topic->name . "</option>";
+            $html_sort_order .= "<option value='" . ($topic->sort_order + 1) . "'>Sau: " . $topic->name . "</option>";
+        }
+        return view('backend.topic.create', compact('html_parent_id', 'html_sort_order', 'title'));
     }
 
     /**
@@ -36,9 +47,28 @@ class TopicController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTopicRequest $request)
     {
-        //
+        $topic = new Topic();
+        $topic->name = $_POST['name'];
+        $topic->slug = Str::slug($request->name, '-');
+        $topic->metakey = $_POST['metakey'];
+        $topic->metadesc = $_POST['metadesc'];
+        $topic->parent_id = $_POST['parent_id'];
+        $topic->sort_order = $_POST['sort_order'];
+        $topic->status = $_POST['status'];
+        $topic->created_at = date('Y-m-d H:i:s');
+        $topic->created_by = (isset($_SESSION['user_id'])) ? $_SESSION['user_id'] : 1;
+        if ($topic->save()) {
+            $link = new Link();
+            $link->link = $topic->slug;
+            $link->table_id = $topic->id;
+            $link->type = 'topic';
+            $link->save();
+            return redirect()->route('topic.index')->with('message', ['type' => 'success', 'msg' => 'Thêm sản phẩm thành công']);
+        } else {
+            return redirect()->route('topic.index')->with('message', ['type' => 'danger', 'msg' => 'Thêm sản phẩm không thành công']);
+        }
     }
 
     /**
@@ -60,7 +90,16 @@ class TopicController extends Controller
      */
     public function edit($id)
     {
-        //
+        $topic = Topic::find($id);
+        $title = 'Sửa chủ đề';
+        $list_topic = Topic::where('status', '<>', '0')->orderBy('created_at', 'desc')->get();
+        $html_parent_id = "";
+        $html_sort_order = "";
+        foreach ($list_topic as $item) {
+            $html_parent_id .= "<option value='" . $item->id . "'>" . $item->name . "</option>";
+            $html_sort_order .= "<option value='" . ($item->sort_order + 1) . "'>" . $item->name . "</option>";
+        }
+        return view('backend.topic.edit', compact('topic', 'html_parent_id', 'html_sort_order', 'title'));
     }
 
     /**
@@ -70,9 +109,26 @@ class TopicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateTopicRequest $request, $id)
     {
-        //
+        $topic = Topic::find($id);
+        $topic->name = $_POST['name'];
+        $topic->slug = Str::slug($request->name, '-');
+        $topic->metakey = $_POST['metakey'];
+        $topic->metadesc = $_POST['metadesc'];
+        $topic->parent_id = $_POST['parent_id'];
+        $topic->sort_order = $_POST['sort_order'];
+        $topic->status = $_POST['status'];
+        $topic->created_at = date('Y-m-d H:i:s');
+        $topic->created_by = (isset($_SESSION['user_id'])) ? $_SESSION['user_id'] : 1;
+        if ($topic->save()) {
+            $link = Link::where([['type', '=', 'topic'], ['table_id', '=', $id]])->first();
+            $link->link = $topic->slug;
+            $link->save();
+            return redirect()->route('topic.index')->with('message', ['type' => 'success', 'msg' => 'Thêm sản phẩm thành công']);
+        } else {
+            return redirect()->route('topic.index')->with('message', ['type' => 'danger', 'msg' => 'Thêm sản phẩm không thành công']);
+        }
     }
 
     /**

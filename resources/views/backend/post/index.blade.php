@@ -39,7 +39,7 @@
                             </div>
                             <div class="col-md-6 text-right">
                                 <div class="text-right">
-                                    <a class="btn btn-sm btn-success" href="index.php?option=post&cat=create">
+                                    <a class="btn btn-sm btn-success" href="{{ route('post.create') }}">
                                         <i class="fas fa-plus"></i> Thêm
                                     </a>
                                     <a class="btn btn-sm btn-danger" href="{{ route('post.trash') }}">

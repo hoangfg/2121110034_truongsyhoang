@@ -97,7 +97,7 @@ Route::prefix('admin')->group(function () {
         Route::get('status/{order}', [orderController::class, 'status'])->name('order.status');
         Route::get('delete/{order}', [orderController::class, 'delete'])->name('order.delete');
         Route::get('destroy/{order}', [orderController::class, 'destroy'])->name('order.destroy');
-        // Route::get('show/{order}', [orderController::class, 'show'])->name('order.show');
+        Route::get('show/{order}', [orderController::class, 'show'])->name('order.show');
         Route::get('restore/{order}', [orderController::class, 'restore'])->name('order.restore');
     });
     // orderdertail

@@ -4,16 +4,16 @@
 
 @endsection
 @section('content')
-    
 
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <section class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 style="text-transform: uppercase;">{{ $title ?? 'trang quản lý' }}</h1>
-                        </div>
+
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 style="text-transform: uppercase;">{{ $title ?? 'trang quản lý' }}</h1>
+                    </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
@@ -43,7 +43,6 @@
                 </div>
                 <div class="card-body">
                     @includeIf('backend.messageAlert', ['some' => 'data'])
-
                     <table class="table table-bordered" id="myTable">
                         <thead>
                             <tr class="text-center ">
@@ -52,12 +51,18 @@
                                         <input type="checkbox">
                                     </div>
                                 </th>
-                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Khách hàng</th>
-                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Email</th>
-                                <th class="col-md-1 col-sm-1 col-1 align-middle text-center">Phone</th>
-                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Ngày tạo</th>
-                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Trạng thái</th>
-                                <th class="col-md-1 col-sm-1 col-1 align-middle text-center">Chức năng</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Khách
+                                    hàng</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Email
+                                </th>
+                                <th class="col-md-1 col-sm-1 col-1 align-middle text-center">Phone
+                                </th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Ngày
+                                    tạo</th>
+                                <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Trạng
+                                    thái</th>
+                                <th class="col-md-1 col-sm-1 col-1 align-middle text-center">Chức
+                                    năng</th>
 
                                 <th class="col-md-1 col-sm-1 col-1 align-middle text-center">id</th>
                             </tr>
@@ -85,19 +90,20 @@
                                     {{ $order->created_at }}
                                 </td>
                                 <td>
-                                    {{-- <span class='btn btn-sm btn-<?= $list_status[$order['status']]['type'] ?>'><?= $list_status[$order['status']]['text'] ?></span> --}}
-                                    <span class="btn btn-sm btn-{{ $list_status[$order['status']]['type']}}">
+                                    <span class="btn btn-sm btn-{{ $list_status[$order['status']]['type'] }}">
                                         {{ $list_status[$order['status']]['text'] }}
                                     </span>
                                 </td>
                                 <td class=" text-center">
 
-                                    <a class="btn btn-sm btn-info" href="">
-                                        <i class="fas fa-eye"></i>
+                                    <a href="{{ route('order.show', ['order' => $order->id]) }}"
+                                        class="btn btn-sm btn-primary" title="show">
+                                        <i class="fa-regular fa-eye"></i>
                                     </a>
 
-                                    <a class="btn btn-sm btn-danger" href="">
-                                        <i class="fas fa-trash"></i>
+                                    <a href="{{ route('order.delete', ['order' => $order->id]) }}"
+                                        class="btn btn-sm btn-danger" title="delete">
+                                        <i class="fa-solid fa-delete-left"></i>
                                     </a>
                                 </td>
                                 <td class="text-center">
@@ -108,6 +114,10 @@
                             <?php endforeach; ?>
                         </tbody>
                     </table>
+
+                    <!-- /.card-body -->
+                    <!-- /.card -->
+
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
