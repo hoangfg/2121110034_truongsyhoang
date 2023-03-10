@@ -5,7 +5,6 @@
 @endsection
 @section('content')
     <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
@@ -30,14 +29,14 @@
                         <div class="row">
                             <div class="col-md-12 text-right">
                                 <div class="text-right">
-                                    <a class="btn btn-sm btn-info" href="{{ route('category.index') }}">
+                                    <a class="btn btn-sm btn-info" href="{{ route('topic.index') }}">
                                         <i class="fas fa-arrow-circle-left"></i> Quay về danh sách
                                     </a>
-                                    <a href="{{ route('category.edit', ['category' => $category->id]) }}"
-                                        class="btn btn-sm btn-info" title="edit">
+                                    <a href="{{ route('topic.edit', ['topic' => $topic->id]) }}" class="btn btn-sm btn-info"
+                                        title="edit">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
-                                    <a href="{{ route('category.delete', ['category' => $category->id]) }}"
+                                    <a href="{{ route('topic.delete', ['topic' => $topic->id]) }}"
                                         class="btn btn-sm btn-danger" title="delete">
                                         <i class="fa-solid fa-delete-left"></i>
                                     </a>
@@ -55,24 +54,19 @@
                                 <div class="card card-primary card-outline">
                                     <div class="card-body box-profile">
                                         <div class="text-center">
-                                            <img class="profile-user-img img-fluid img-circle"
-                                                src="{{ asset('images/category/' . $category->image) }}"
+                                            <img style="object-fit: cover;" class="profile-user-img img-fluid img-circle"
+                                                src="{{ asset('images/topic/' . $topic->image) }}"
                                                 alt="User profile picture">
                                         </div>
 
-                                        <h3 class="profile-username text-center">{{ $category->name }}</h3>
+                                        <h3 class="profile-username text-center">{{ $topic->name }}</h3>
 
-                                        <p class="text-muted text-center">id: {{ $category->id }}</p>
+                                        <p class="text-muted text-center">id: {{ $topic->id }}</p>
 
                                         <ul class="list-group list-group-unbordered mb-3">
                                             <li class="list-group-item">
-                                                <b>Số lượng sản phẩm</b> <a class="float-right">{{ $total }}</a>
+                                                <b>Số lượng bài viết</b> <a class="float-right">{{ $total }}</a>
                                             </li>
-                                            <li class="list-group-item">
-                                                <b>Số lượng sản phẩm khuyến mãi</b> <a
-                                                    class="float-right">{{ $total_sale }}</a>
-                                            </li>
-
                                         </ul>
                                     </div>
                                     <!-- /.card-body -->
@@ -94,8 +88,8 @@
                                             <li class="nav-item"><a class="nav-link" href="#timeline"
                                                     data-toggle="tab">Timeline</a>
                                             </li>
-                                            <li class="nav-item"><a class="nav-link" href="#product_category"
-                                                    data-toggle="tab">Sản phẩm theo danh mục</a>
+                                            <li class="nav-item"><a class="nav-link" href="#post_topic"
+                                                    data-toggle="tab">Sản phẩm</a>
                                             </li>
                                         </ul>
                                     </div><!-- /.card-header -->
@@ -107,14 +101,14 @@
                                                         <strong><i class="fas fa-pencil-alt mr-1"></i> Từ khóa tìm
                                                             kiếm</strong>
                                                         <p class="text-muted">
-                                                            <span class="tag tag-danger">{{ $category->metakey }}</span>
+                                                            <span class="tag tag-danger">{{ $topic->metakey }}</span>
                                                         </p>
                                                         <hr>
                                                         <strong><i class="far fa-file-alt mr-1"></i> Mô tả</strong>
-                                                        <p class="text-muted">{{ $category->metadesc }}</p>
+                                                        <p class="text-muted">{{ $topic->metadesc }}</p>
                                                         <hr>
-                                                        <strong><i class="fa-solid fa-sort"></i> Vị trí:
-                                                            {{ $category->sort_order }}</strong>
+                                                        <strong><i class="fa-solid fa-list-ol"></i> Vị trí:
+                                                            {{ $topic->sort_order }}</strong>
 
                                                     </div>
                                                     <!-- /.card-body -->
@@ -128,27 +122,26 @@
                                                         <strong>
                                                             <i class="fa-regular fa-calendar-plus"></i> Ngày tham gia:
                                                             <span class="text-muted">
-                                                                {{ $category->created_at }}
+                                                                {{ $topic->created_at }}
                                                             </span>
                                                         </strong>
 
                                                         <hr>
                                                         <strong>
-                                                            <i class="fa-brands fa-creative-commons-by"></i> Người đăng:
-                                                            <span class="text-muted">{{ $category->created_name }}</span>
+                                                            <i class="fa-topics fa-creative-commons-by"></i> Người đăng:
+                                                            <span class="text-muted">{{ $topic->created_name }}</span>
                                                         </strong>
 
                                                         <hr>
                                                         <strong>
                                                             <i class="fa-solid fa-calendar-check"></i> Ngay sửa cuối:
-                                                            <span class="text-muted">{{ $category->updated_at }}</span>
+                                                            <span class="text-muted">{{ $topic->updated_at }}</span>
                                                         </strong>
 
                                                         <hr>
                                                         <strong>
-                                                            <i class="fa-brands fa-creative-commons-by"></i> Người sửa
-                                                            cuối:
-                                                            <span class="text-muted">{{ $category->updated_name }}</span>
+                                                            <i class="fa-topics fa-creative-commons-by"></i> Người sửa cuối:
+                                                            <span class="text-muted">{{ $topic->updated_name }}</span>
                                                         </strong>
 
 
@@ -157,8 +150,7 @@
                                                     <!-- /.card-body -->
                                                 </div>
                                             </div>
-                                            {{-- product_category --}}
-                                            <div class="tab-pane" id="product_category">
+                                            <div class="tab-pane" id="post_topic">
                                                 <!-- The timeline -->
                                                 <div class="card card-primary">
                                                     <div class="card-body">
@@ -170,38 +162,34 @@
                                                                         class="col-md-1 col-sm-1 col-1 align-middle text-center">
                                                                         image</th>
                                                                     <th
-                                                                        class="col-md-8 col-sm-8 col-8 align-middle text-center">
-                                                                        Tên sản phẩm</th>
-                                                                    <th
-                                                                        class="col-md-2 col-sm-2 col-2 align-middle text-center">
-                                                                        Giá</th>
+                                                                        class="col-md-7 col-sm-7 col-7 align-middle text-center">
+                                                                        Tên bài viết</th>
+
                                                                     <th
                                                                         class="col-md-1 col-sm-1 col-1 align-middle text-center">
                                                                         id</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                @foreach ($product_category as $product)
+                                                                @foreach ($post_topic as $post)
                                                                     <tr>
                                                                         <td width="20%">
-                                                                            <img src="{{ asset('images/product/' . $product->image) }}"
+                                                                            <img src="{{ asset('images/post/' . $post->image) }}"
                                                                                 alt="" class="w-100">
                                                                         </td>
-                                                                        <td>{{ $product->product_name }}</td>
-                                                                        <td>{{ number_format($product->price) }}₫</td>
-                                                                        <td class="text-center">{{ $product->product_id }}
+                                                                        <td>{{ $post->post_name }}</td>
+
+                                                                        <td class="text-center">{{ $post->post_id }}
                                                                         </td>
                                                                     </tr>
                                                                 @endforeach
                                                             </tbody>
                                                         </table>
-
-
-
                                                     </div>
                                                     <!-- /.card-body -->
                                                 </div>
                                             </div>
+
                                         </div>
                                         <!-- /.tab-content -->
                                     </div><!-- /.card-body -->
@@ -222,10 +210,10 @@
 @section('footer')
     <script>
         $(document).ready(function() {
-            $('.product-image-thumb').on('click', function() {
+            $('.post-image-thumb').on('click', function() {
                 var $image_element = $(this).find('img')
-                $('.product-image').prop('src', $image_element.attr('src'))
-                $('.product-image-thumb.active').removeClass('active')
+                $('.post-image').prop('src', $image_element.attr('src'))
+                $('.post-image-thumb.active').removeClass('active')
                 $(this).addClass('active')
             })
         })

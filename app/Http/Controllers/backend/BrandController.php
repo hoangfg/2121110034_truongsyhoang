@@ -134,7 +134,7 @@ class BrandController extends Controller
     public function edit($id)
     {
         $brand = Brand::find($id);
-        $title = 'Sửathương hiệu';
+        $title = 'Sửa thương hiệu';
         $list_brand = Brand::where('status', '<>', '0')->orderBy('created_at', 'desc')->get();
        
         $html_sort_order = "";

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Topic;
 use App\Models\Link;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Http\Requests\StoreTopicRequest;
 use App\Http\Requests\UpdateTopicRequest;
@@ -79,7 +81,32 @@ class TopicController extends Controller
      */
     public function show($id)
     {
-        //
+        $title = 'Thông tin dề tài';
+        $total = Topic::join('post', 'post.topic_id', '=', 'topic.id')
+        ->where('topic.id', '=', $id)
+            ->distinct()
+            ->count();
+
+
+        $post_topic = Topic::join('post', 'post.topic_id', '=', 'topic.id')
+        ->select('post.*', 'post.title as post_name', 'post.id as post_id')
+        ->where('topic.id', '=', $id)
+            ->orderBy('created_at', 'desc')
+            ->distinct()
+            ->get();
+
+        $topic = Topic::where('topic.id', '=', $id)
+            ->select(
+                "*",
+                DB::raw("(" . User::select("name")->whereColumn("user.id", "=", "topic.updated_by")->toSql() . ") as updated_name"),
+                DB::raw("(" . User::select("name")->whereColumn("user.id", "=", "topic.created_by")->toSql() . ") as created_name")
+            )
+            ->first();
+        if ($topic == null) {
+            return redirect()->route('topic.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
+        } else {
+            return view('backend.topic.show', compact('topic', 'total',  'post_topic', 'title'));
+        }
     }
 
     /**

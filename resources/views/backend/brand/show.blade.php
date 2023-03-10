@@ -118,6 +118,7 @@
                                                     </div>
                                                     <!-- /.card-body -->
                                                 </div>
+
                                             </div>
                                             <!-- /.tab-pane -->
                                             <div class="tab-pane" id="timeline">
@@ -162,7 +163,7 @@
                                                         <table class="table table-bordered" id="myTable">
                                                             <thead>
                                                                 <tr class="text-center ">
-                                                                    
+
                                                                     <th
                                                                         class="col-md-1 col-sm-1 col-1 align-middle text-center">
                                                                         image</th>
@@ -180,13 +181,14 @@
                                                             <tbody>
                                                                 @foreach ($product_brand as $product)
                                                                     <tr>
-                                                                        <td>
-                                                                            <img src="{{ asset('images/product/' . $product->image) }}"
+                                                                        <td width="20%">
+                                                                            <img  src="{{ asset('images/product/' . $product->image) }}"
                                                                                 alt="" class="w-100">
                                                                         </td>
                                                                         <td>{{ $product->product_name }}</td>
                                                                         <td>{{ number_format($product->price) }}₫</td>
-                                                                        <td class="text-center">{{ $product->product_id }}</td>
+                                                                        <td class="text-center">{{ $product->product_id }}
+                                                                        </td>
                                                                     </tr>
                                                                 @endforeach
                                                             </tbody>
@@ -201,6 +203,7 @@
 
                                         </div>
                                         <!-- /.tab-content -->
+
                                     </div><!-- /.card-body -->
                                 </div>
                                 <!-- /.card -->

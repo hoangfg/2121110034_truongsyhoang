@@ -5,6 +5,8 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Slider;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class SliderController extends Controller
 {
@@ -15,7 +17,7 @@ class SliderController extends Controller
      */
     public function index()
     {
-        $title = 'Tất cả slider';
+        $title = 'Tất cả Slider';
         $list_slider = Slider::where('status', '<>', '0')->orderBy('created_at', 'desc')->get();
         return view("backend.slider.index", compact('list_slider', 'title'));
     }
@@ -49,7 +51,19 @@ class SliderController extends Controller
      */
     public function show($id)
     {
-        //
+        $title = 'Thông tin slider';
+        $slider = Slider::where('slider.id', '=', $id)
+            ->select(
+                "*",
+                DB::raw("(" . User::select("name")->whereColumn("user.id", "=", "slider.updated_by")->toSql() . ") as updated_name"),
+                DB::raw("(" . User::select("name")->whereColumn("user.id", "=", "slider.created_by")->toSql() . ") as created_name")
+            )
+            ->first();
+        if ($slider == null) {
+            return redirect()->route('slider.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
+        } else {
+            return view('backend.slider.show', compact('slider', 'title'));
+        }
     }
 
     /**
@@ -83,22 +97,22 @@ class SliderController extends Controller
      */
     public function destroy($id)
     {
-        $slider=Slider::find($id);
-        if($slider == null) {
-            return redirect()->route('slider.index')->with('message', ['type'=>'danger', 'msg'=> 'Mẫu tin không tồn tại']);
+        $slider = Slider::find($id);
+        if ($slider == null) {
+            return redirect()->route('slider.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
         } else {
-            $slider -> delete();
-            return redirect()->route('slider.trash')->with('message', ['type'=>'success', 'msg'=> 'Xóa sản phẩm thành công']);
+            $slider->delete();
+            return redirect()->route('slider.trash')->with('message', ['type' => 'success', 'msg' => 'Xóa sản phẩm thành công']);
         }
     }
     // delete
     public function delete($id, Request $request)
     {
-        $slider=Slider::find($id);
-        if($slider == null) {
-            return redirect()->route('slider.index')->with('message', ['type'=>'danger', 'msg'=> 'Mẫu tin không tồn tại']);
+        $slider = Slider::find($id);
+        if ($slider == null) {
+            return redirect()->route('slider.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
         } else {
-            $slider -> status = 0;
+            $slider->status = 0;
             $slider->updated_at = date('Y-m-d H:i:s');
             $slider->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
             $slider->save();

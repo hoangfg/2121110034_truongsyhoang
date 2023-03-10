@@ -82,7 +82,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-md-3">                               
+                            <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="sort_order">Vị trí</label>
                                     <select name="sort_order" id="sort_order" class="form-control">
@@ -92,7 +92,11 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="image">Hình ảnh</label>
-                                    <input name="image" id="image" type="file" class="form-control btn-sm">
+                                    <input name="image" id="image" type="file" onchange="previewFile(this);"
+                                        class="form-control btn-sm image-preview">
+                                    <img id="previewImg" class="mt-1" width="30%"
+                                        src="{{ asset('images/No-Image-Placeholder.svg.png') }}"
+                                        alt="">
                                     @if ($errors->has('image'))
                                         <div class="text-danger">
                                             {{ $errors->first('image') }}

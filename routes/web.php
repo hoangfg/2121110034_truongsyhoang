@@ -141,7 +141,7 @@ Route::prefix('admin')->group(function () {
         Route::get('status/{topic}', [TopicController::class, 'status'])->name('topic.status');
         Route::get('delete/{topic}', [TopicController::class, 'delete'])->name('topic.delete');
         Route::get('destroy/{topic}', [TopicController::class, 'destroy'])->name('topic.destroy');
-        // Route::get('show/{topic}', [TopicController::class, 'show'])->name('topic.show');
+        Route::get('show/{topic}', [TopicController::class, 'show'])->name('topic.show');
         Route::get('restore/{topic}', [TopicController::class, 'restore'])->name('topic.restore');
     });
     // user
