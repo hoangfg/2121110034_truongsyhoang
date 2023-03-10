@@ -118,7 +118,7 @@
                             <div class="tab-pane fade show active" id="product-desc" role="tabpanel"
                                 aria-labelledby="product-desc-tab">
                                 <p>
-                                    {{ $product->metadesc }}
+                                    {!! $product->metadesc !!}
                                 </p>
                             </div>
                             <div class="tab-pane fade" id="product-comments" role="tabpanel"

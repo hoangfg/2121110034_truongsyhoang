@@ -24,7 +24,7 @@ class StoreCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|min:5',
+            'name' => 'required|unique:category|max:255|min:5|string',
             'metakey' => 'required|min:5',
             'metadesc' => 'required|min:5',
             'image' => 'image|mimes:png,jpg,jpeg|max:2048'  // Max file size is 2MB (2048KB)
@@ -39,6 +39,8 @@ class StoreCategoryRequest extends FormRequest
         return [
             'name.required' => $messages['required'],
             'name.min' => 'Nhập ít nhất 5 ký tự',
+            'name.string' => 'Tên phải là chuỗi chỉ chứa các ký tự chữ cái và số',
+            'name.unique' => 'Tên đã được sử dụng, vui lòng sử dụng một tên khác',
             'metakey.required' => $messages['required'],
             'metakey.min' => 'Nhập ít nhất 5 ký tự',
             'metadesc.required' => $messages['required'],

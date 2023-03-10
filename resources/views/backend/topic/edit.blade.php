@@ -97,15 +97,7 @@
                                         {!! $html_sort_order !!}
                                     </select>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="image">Hình ảnh</label>
-                                    <input name="image" id="image" type="file" class="form-control btn-sm">
-                                    @if ($errors->has('image'))
-                                        <div class="text-danger">
-                                            {{ $errors->first('image') }}
-                                        </div>
-                                    @endif
-                                </div>
+                                
                                 <div class="mb-3">
                                     <label for="status">Trạng thái</label>
                                     <select name="status" id="status" class="form-control">

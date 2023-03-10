@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\backend;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Link;
+use App\Models\User;
 use App\Models\Brand;
 use App\Models\Product;
-use App\Models\User;
-use App\Models\Link;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use App\Http\Requests\StoreBrandRequest;
 use App\Http\Requests\UpdateBrandRequest;
-use Illuminate\Support\Facades\File;
 
 class BrandController extends Controller
 {
@@ -37,12 +37,12 @@ class BrandController extends Controller
     {
         $title = 'Thêm thương hiệu';
         $list_brand = Brand::where('status', '<>', '0')->orderBy('created_at', 'desc')->get();
-       
+
         $html_sort_order = "";
         foreach ($list_brand as $brand) {
-            $html_sort_order .= "<option value='" . ($brand->sort_order + 1) . "'>Sau: " . $brand->name . "</option>";
+            $html_sort_order .= "<option value='" . ($brand->sort_order + 1) . "'" . (($brand->sort_order + 1 == old('sort_order')) ? ' selected ' : ' ') . ">Sau: " . $brand->name . "</option>";
         }
-        return view('backend.brand.create', compact( 'html_sort_order', 'title'));
+        return view('backend.brand.create', compact('html_sort_order', 'title'));
     }
 
     /**
@@ -133,14 +133,15 @@ class BrandController extends Controller
      */
     public function edit($id)
     {
+        
         $brand = Brand::find($id);
         $title = 'Sửa thương hiệu';
         $list_brand = Brand::where('status', '<>', '0')->orderBy('created_at', 'desc')->get();
-       
+
         $html_sort_order = "";
         foreach ($list_brand as $item) {
-            
-            $html_sort_order .= "<option value='" . ($item->sort_order + 1) . "'>Sau: " . $item->name . "</option>";
+
+            $html_sort_order .= "<option value='" . ($item->sort_order + 1) . "'" . (($item->sort_order + 1 == old('sort_order', $brand->sort_order)) ? ' selected ' : ' ') . ">Sau: " . $item->name . "</option>";
         }
         return view('backend.brand.edit', compact('brand',  'html_sort_order', 'title'));
     }
@@ -154,14 +155,21 @@ class BrandController extends Controller
      */
     public function update(UpdateBrandRequest $request, $id)
     {
+        
         $brand = Brand::find($id);
+        $request->validate([
+            'name' => 'unique:brand,name,' . $id . ',id'
+        ], [
+            'name.unique' => 'Tên đã được sử dụng, vui lòng sử dụng một tên khác',
+        ]);
         $brand->name = $request->name;
+       
         $brand->slug = Str::slug($request->name, '-');
         $brand->metakey = $request->metakey;
         $brand->metadesc = $request->metadesc;
-       
+
         $brand->sort_order = $request->sort_order;
-        
+
         $brand->status = $request->status;
         $brand->updated_at = date('Y-m-d H:i:s');
 

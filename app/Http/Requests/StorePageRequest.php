@@ -24,7 +24,7 @@ class StorePageRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|string|min:5',
+            'title' => 'required|unique:post|string|min:5',
             'detail' => 'required|min:5',
             'metakey' => 'required|min:5',
             'metadesc' => 'required|min:5',
@@ -41,6 +41,8 @@ class StorePageRequest extends FormRequest
         return [
             'title.required' => $messages['required'],
             'title.min' => 'Nhập ít nhất 5 ký tự',
+            'title.string' => 'Tên phải là chuỗi chỉ chứa các ký tự chữ cái và số',
+            'title.unique' => 'Tên đã được sử dụng, vui lòng sử dụng một tên khác',
             'detail.required' => $messages['required'],
             'detail.min' => 'Nhập ít nhất 5 ký tự',
             'metakey.required' => $messages['required'],

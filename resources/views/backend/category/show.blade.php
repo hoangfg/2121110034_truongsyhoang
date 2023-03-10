@@ -55,9 +55,16 @@
                                 <div class="card card-primary card-outline">
                                     <div class="card-body box-profile">
                                         <div class="text-center">
-                                            <img class="profile-user-img img-fluid img-circle"
-                                                src="{{ asset('images/category/' . $category->image) }}"
-                                                alt="User profile picture">
+                                            @if ($category->image)
+                                                <img style="object-fit: cover; width: 100px; height: 100px;"
+                                                    class="profile-user-img img-fluid img-circle"
+                                                    src="{{ asset('images/category/' . $category->image) }}"
+                                                    alt="User profile picture">
+                                            @else
+                                                <img class="profile-user-img img-fluid img-circle"
+                                                    style="object-fit: cover; width: 100px; height: 100px;"
+                                                    src="{{ asset('images/No-Image-Placeholder.svg.png') }}" alt="">
+                                            @endif
                                         </div>
 
                                         <h3 class="profile-username text-center">{{ $category->name }}</h3>
@@ -111,7 +118,7 @@
                                                         </p>
                                                         <hr>
                                                         <strong><i class="far fa-file-alt mr-1"></i> Mô tả</strong>
-                                                        <p class="text-muted">{{ $category->metadesc }}</p>
+                                                        <p class="text-muted">{!! $category->metadesc !!}</p>
                                                         <hr>
                                                         <strong><i class="fa-solid fa-sort"></i> Vị trí:
                                                             {{ $category->sort_order }}</strong>

@@ -5,12 +5,13 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\User;
 use App\Models\Link;
 use App\Http\Requests\StorePageRequest;
 use App\Http\Requests\UpdatePageRequest;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
-
+use Illuminate\Support\Facades\DB;
 
 class PageController extends Controller
 {
@@ -84,7 +85,19 @@ class PageController extends Controller
      */
     public function show($id)
     {
-        //
+        $title = 'Thông tin giới thiệu';
+        $page = Post::where('post.id', '=', $id)
+        ->select(
+            "*",
+            DB::raw("(" . User::select("name")->whereColumn("user.id", "=", "post.updated_by")->toSql() . ") as updated_name"),
+            DB::raw("(" . User::select("name")->whereColumn("user.id", "=", "post.created_by")->toSql() . ") as created_name")
+        )
+            ->first();
+        if ($page == null) {
+            return redirect()->route('page.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
+        } else {
+            return view('backend.page.show', compact('page', 'title'));
+        }
     }
 
     /**
@@ -110,6 +123,11 @@ class PageController extends Controller
     public function update(UpdatePageRequest $request, $id)
     {
         $page = Post::find($id);
+        $request->validate([
+            'title' => 'unique:post,title,' . $id . ',id'
+        ], [
+            'title.unique' => 'Tên đã được sử dụng, vui lòng sử dụng một tên khác',
+        ]);
         $page->title = $request->title;
         $page->slug = Str::slug($request->title, '-');
         $page->detail = $request->detail;

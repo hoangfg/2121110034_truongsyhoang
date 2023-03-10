@@ -39,6 +39,8 @@ class UpdateTopicRequest extends FormRequest
         return [
             'name.required' => $messages['required'],
             'name.min' => 'Nhập ít nhất 5 ký tự',
+            'name.string' => 'Tên phải là chuỗi chỉ chứa các ký tự chữ cái và số',
+            'name.unique' => 'Tên đã được sử dụng, vui lòng sử dụng một tên khác',
             'metakey.required' => $messages['required'],
             'metakey.min' => 'Nhập ít nhất 5 ký tự',
             'metadesc.required' => $messages['required'],

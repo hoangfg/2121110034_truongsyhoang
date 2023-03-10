@@ -57,9 +57,9 @@
                                         <input type="checkbox" name="" id="">
                                     </th>
                                     <th class="col-md-1 col-sm-1 col-1 align-middle text-center">image</th>
-                                    <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Tiêu đề bài viết</th>
-                                    <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Mô tả</th>
-                                    <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Từ khóa</th>
+                                    <th class="col-md-3 col-sm-2 col-2 align-middle text-center">Tiêu đề bài viết</th>
+                                    
+                                    <th class="col-md-3 col-sm-2 col-2 align-middle text-center">Từ khóa</th>
                                     <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Chức năng</th>
                                     <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Ngày tạo</th>
                                     <th class="col-md-1 col-sm-1 col-1 align-middle text-center">id</th>
@@ -75,7 +75,7 @@
                                                 class="w-100">
                                         </td>
                                         <td class="">{{ $page->title }}</td>
-                                        <td>{{ $page->metadesc }}</td>
+                                        
                                         <td class="">
                                             {{ $page->metakey }}
                                         </td>

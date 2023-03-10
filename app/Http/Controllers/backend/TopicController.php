@@ -139,6 +139,12 @@ class TopicController extends Controller
     public function update(UpdateTopicRequest $request, $id)
     {
         $topic = Topic::find($id);
+        
+        $request->validate([
+            'name' => 'unique:topic,name,' . $id . ',id'
+        ], [
+            'name.unique' => 'Tên đã được sử dụng, vui lòng sử dụng một tên khác',
+        ]);
         $topic->name = $_POST['name'];
         $topic->slug = Str::slug($request->name, '-');
         $topic->metakey = $_POST['metakey'];

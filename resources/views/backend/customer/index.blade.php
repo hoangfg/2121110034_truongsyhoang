@@ -74,13 +74,18 @@
                                         @if ($customer->image == null)
                                             @if ($customer->gender == 0)
                                                 <img src="{{ asset('images/user/male.png') }}"
-                                                    class="card-img-top index-img" alt="male">
+                                                    style="width: 100px; height: 100px; object-fit: cover;
+                                                    class="card-img-top
+                                                    index-img" alt="male">
                                             @else
                                                 <img src="{{ asset('images/user/Female.png') }}"
-                                                    class="card-img-top index-img" alt="Female">
+                                                    style="width: 100px; height: 100px; object-fit: cover;
+                                                    class="card-img-top
+                                                    index-img" alt="Female">
                                             @endif
                                         @else
                                             <img src="{{ asset('images/user/' . $customer->image) }}" alt=""
+                                                style="width: 100px; height: 100px; object-fit: cover;
                                                 class="w-100">
                                         @endif
                                     </td>

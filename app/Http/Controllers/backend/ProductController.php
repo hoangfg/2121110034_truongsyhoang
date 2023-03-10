@@ -38,14 +38,18 @@ class ProductController extends Controller
     public function create()
     {
         $title = 'Thêm sản phẩm';
-        $list_category = Product::where('status', '<>', '0')->orderBy('created_at', 'desc')->get();
-        $html_parent_id = "";
-        $html_sort_order = "";
+        $list_category = Category::where('status', '<>', '0')->orderBy('created_at', 'desc')->get();
+        $list_brand = Brand::where('status', '<>', '0')->orderBy('created_at', 'desc')->get();
+        $html_category_id = "";
+        $html_brand_id = "";
+        
         foreach ($list_category as $item) {
-            $html_parent_id .= "<option value='" . $item->id . "'>" . $item->name . "</option>";
-            $html_sort_order .= "<option value='" . ($item->sort_order + 1) . "'>Sau: " . $item->name . "</option>";
+            $html_category_id .= "<option value='" . $item->id . "'>" . $item->name . "</option>";         
         }
-        return view('backend.product.create', compact('html_parent_id', 'html_sort_order', 'title'));
+        foreach ($list_brand as $item) {
+            $html_brand_id .= "<option value='" . $item->id . "'>" . $item->name . "</option>";         
+        }
+        return view('backend.product.create', compact('html_category_id', 'html_brand_id',  'title'));
     }
 
     /**

@@ -24,7 +24,7 @@ class StoreTopicRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|min:5',
+            'name' => 'required|unique:topic|string|min:5',
             'metakey' => 'required|min:5',
             'metadesc' => 'required|min:5',
             
@@ -39,6 +39,8 @@ class StoreTopicRequest extends FormRequest
         return [
             'name.required' => $messages['required'],
             'name.min' => 'Nhập ít nhất 5 ký tự',
+            'name.string' => 'Tiêu đề phải là chuỗi chỉ chứa các ký tự chữ cái và số',
+            'name.unique' => 'Tiêu đề này đã được sử dụng, vui lòng sử dụng một tiêu đề khác',
             'metakey.required' => $messages['required'],
             'metakey.min' => 'Nhập ít nhất 5 ký tự',
             'metadesc.required' => $messages['required'],

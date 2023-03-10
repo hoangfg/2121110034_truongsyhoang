@@ -54,9 +54,17 @@
                                 <div class="card card-primary card-outline">
                                     <div class="card-body box-profile">
                                         <div class="text-center">
-                                            <img style="object-fit: cover;" class="profile-user-img img-fluid img-circle"
-                                                src="{{ asset('images/brand/' . $brand->image) }}"
-                                                alt="User profile picture">
+
+                                            @if ($brand->image)
+                                                <img style="object-fit: cover; width: 100px; height: 100px;"
+                                                    class="profile-user-img img-fluid img-circle"
+                                                    src="{{ asset('images/brand/' . $brand->image) }}"
+                                                    alt="User profile picture">
+                                            @else
+                                                <img class="profile-user-img img-fluid img-circle"
+                                                    style="object-fit: cover; width: 100px; height: 100px;"
+                                                    src="{{ asset('images/No-Image-Placeholder.svg.png') }}" alt="">
+                                            @endif
                                         </div>
 
                                         <h3 class="profile-username text-center">{{ $brand->name }}</h3>
@@ -110,7 +118,7 @@
                                                         </p>
                                                         <hr>
                                                         <strong><i class="far fa-file-alt mr-1"></i> Mô tả</strong>
-                                                        <p class="text-muted">{{ $brand->metadesc }}</p>
+                                                        <p class="text-muted">{!! $brand->metadesc !!}</p>
                                                         <hr>
                                                         <strong><i class="fa-solid fa-list-ol"></i> Vị trí:
                                                             {{ $brand->sort_order }}</strong>
@@ -182,7 +190,7 @@
                                                                 @foreach ($product_brand as $product)
                                                                     <tr>
                                                                         <td width="20%">
-                                                                            <img  src="{{ asset('images/product/' . $product->image) }}"
+                                                                            <img src="{{ asset('images/product/' . $product->image) }}"
                                                                                 alt="" class="w-100">
                                                                         </td>
                                                                         <td>{{ $product->product_name }}</td>

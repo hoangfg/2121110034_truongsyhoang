@@ -6,11 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Topic;
+use App\Models\User;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
-
+use Illuminate\Support\Facades\DB;
 class PostController extends Controller
 {
     /**
@@ -93,7 +94,20 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        //
+        $title = 'Thông tin bài viết';
+        $post = Post::where('post.id', '=', $id)
+        ->select(
+            "*",
+            DB::raw("(" . Topic::select("name")->whereColumn("topic.id", "=", "post.topic_id")->toSql() . ") as topic_name"),
+            DB::raw("(" . User::select("name")->whereColumn("user.id", "=", "post.updated_by")->toSql() . ") as updated_name"),
+            DB::raw("(" . User::select("name")->whereColumn("user.id", "=", "post.created_by")->toSql() . ") as created_name")
+        )
+            ->first();
+        if ($post == null) {
+            return redirect()->route('post.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
+        } else {
+            return view('backend.post.show', compact('post', 'title'));
+        }
     }
 
     /**

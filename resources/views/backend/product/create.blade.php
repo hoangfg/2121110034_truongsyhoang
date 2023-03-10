@@ -86,15 +86,15 @@
                                 <div class="mb-3">
                                     <label for="parent_id">Chủ đề cha</label>
                                     <select name="parent_id" id="parent_id" class="form-control">
-                                        <option value="0">--chon chủ đề--</option>
-                                        {!! $html_parent_id !!}
+                                        <option value="0">--chon danh mục--</option>
+                                        {!! $html_category_id !!}
                                     </select>
                                 </div>
                                 <div class="mb-3">
                                     <label for="sort_order">Vị trí</label>
                                     <select name="sort_order" id="sort_order" class="form-control">
-                                        <option value="0">--chon vị trí--</option>
-                                        {!! $html_sort_order !!}
+                                        <option value="0">--chon thương hiệu--</option>
+                                        {!! $html_brand_id !!}
                                     </select>
                                 </div>
                                 <div class="mb-3">

@@ -53,11 +53,7 @@
                                 <!-- Profile Image -->
                                 <div class="card card-primary card-outline">
                                     <div class="card-body box-profile">
-                                        <div class="text-center">
-                                            <img style="object-fit: cover;" class="profile-user-img img-fluid img-circle"
-                                                src="{{ asset('images/topic/' . $topic->image) }}"
-                                                alt="User profile picture">
-                                        </div>
+                                        
 
                                         <h3 class="profile-username text-center">{{ $topic->name }}</h3>
 
@@ -105,7 +101,7 @@
                                                         </p>
                                                         <hr>
                                                         <strong><i class="far fa-file-alt mr-1"></i> Mô tả</strong>
-                                                        <p class="text-muted">{{ $topic->metadesc }}</p>
+                                                        <p class="text-muted">{!! $topic->metadesc !!}</p>
                                                         <hr>
                                                         <strong><i class="fa-solid fa-list-ol"></i> Vị trí:
                                                             {{ $topic->sort_order }}</strong>

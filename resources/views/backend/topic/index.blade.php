@@ -59,9 +59,9 @@
                                         <input type="checkbox" name="" id="">
                                     </th>
                                     <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Tên chủ đề</th>
-                                    <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Từ khóa</th>
-                                    <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Mô ta</th>
-                                    <th class="col-md-2 col-sm-1 col-2 align-middle text-center">Ngày tạo</th>
+                                    <th class="col-md-3 col-sm-2 col-2 align-middle text-center">Từ khóa</th>
+                                    
+                                    <th class="col-md-3 col-sm-1 col-2 align-middle text-center">Ngày tạo</th>
                                     <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Chức năng</th>
                                     <th class="col-md-1 col-sm-1 col-1 align-middle text-center">id</th>
                                 </tr>
@@ -73,7 +73,7 @@
 
                                         <td>{{ $topic->name }}</td>
                                         <td>{{ $topic->metakey }}</td>
-                                        <td>{{ $topic->metadesc }}</td>
+                                        
                                         <td class="text-center">
                                             {{ $topic->created_at }}
                                         </td>

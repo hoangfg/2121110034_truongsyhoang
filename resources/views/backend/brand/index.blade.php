@@ -65,8 +65,14 @@
                                 <tr>
                                     <td class="text-center"> <input type="checkbox" name="" id=""></td>
                                     <td>
-                                        <img src="{{ asset('images/brand/' . $brand->image) }}" alt=""
-                                            class="w-100">
+                                        @if ($brand->image)
+                                            <img class="img-fluid " style="width: 100px; height: 100px; object-fit: cover;"
+                                                src="{{ asset('images/brand/' . $brand->image) }}"
+                                                alt="User profile picture">
+                                        @else
+                                            <img class=" img-fluid " style="width: 100px; height: 100px; object-fit: cover;"
+                                                src="{{ asset('images/No-Image-Placeholder.svg.png') }}" alt="">
+                                        @endif
                                     </td>
                                     <td>{{ $brand->name }}</td>
                                     <td>{{ $brand->slug }}</td>

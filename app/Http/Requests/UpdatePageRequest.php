@@ -41,6 +41,8 @@ class UpdatePageRequest extends FormRequest
         return [
             'title.required' => $messages['required'],
             'title.min' => 'Nhập ít nhất 5 ký tự',
+            'title.string' => 'Tên phải là chuỗi chỉ chứa các ký tự chữ cái và số',
+            'title.unique' => 'Tên đã được sử dụng, vui lòng sử dụng một tên khác',
             'detail.required' => $messages['required'],
             'detail.min' => 'Nhập ít nhất 5 ký tự',
             'metakey.required' => $messages['required'],
