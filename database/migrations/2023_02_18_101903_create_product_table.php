@@ -13,16 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tsh_product', function (Blueprint $table) {
+        Schema::create('product', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('category_id');
             $table->unsignedInteger('brand_id');
             $table->string('name', 1000);
             $table->string('slug', 1000);
-            $table->string('image', 255);
-            $table->double('price', 8, 2);
-            $table->double('price_sale', 8, 2)->nullable();
-            $table->unsignedInteger('qty');
+            
+            $table->decimal('price_buy', 18, 2);
             $table->mediumText('detail');
             $table->string('metakey', 1000);
             $table->string('metadesc', 1000);
@@ -40,6 +38,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tsh_product');
+        Schema::dropIfExists('product');
     }
 };

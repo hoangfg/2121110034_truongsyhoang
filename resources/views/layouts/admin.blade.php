@@ -217,7 +217,7 @@
 
     <script>
         $(document).ready(function() {
-            $('#myTable').DataTable({
+            $('#dataTable').DataTable({
                 "pagingType": "full_numbers",
                 "lengthMenu": [
                     [7, 9, 11, -1],
@@ -243,6 +243,7 @@
             }
         }
     </script>
+
 
     <script>
         CKEDITOR.replace('metadesc')

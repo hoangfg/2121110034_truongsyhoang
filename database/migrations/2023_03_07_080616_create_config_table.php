@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tsh_config', function (Blueprint $table) {
+        Schema::create('config', function (Blueprint $table) {
             $table->id();
             $table->string('site_name', 255);
             $table->string('metakey', 1000);
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('twitter', 255)->nullable();
             $table->string('youtube', 255)->nullable();
             $table->string('googleplus', 255)->nullable();
-            
+
             $table->timestamps();
         });
     }
@@ -37,6 +37,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tsh_config');
+        Schema::dropIfExists('config');
     }
 };

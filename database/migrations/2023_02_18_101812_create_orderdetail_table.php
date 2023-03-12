@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tsh_orderdetail', function (Blueprint $table) {
+        Schema::create('orderdetail', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('order_id');
             $table->unsignedInteger('product_id');
-            $table->double('price', 8, 2);
+            $table->decimal('price', 18, 2);
             $table->unsignedInteger('qty');
             $table->double('amount', 8, 2);
             $table->timestamps();
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tsh_orderdetail');
+        Schema::dropIfExists('orderdetail');
     }
 };

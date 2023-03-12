@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tsh_category', function (Blueprint $table) {
+        Schema::create('category', function (Blueprint $table) {
             $table->id();
             $table->string('name', 1000);
             $table->string('slug', 1000);
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('image', 255)->nullable();
             $table->string('metakey', 1000);
             $table->string('metadesc', 1000);
-            $table->unsignedTinyInteger('level')->default(1)->unique();
+            $table->unsignedTinyInteger('level');
             $table->unsignedInteger('created_by')->default(1);
             $table->unsignedInteger('updated_by')->nullable();
             $table->unsignedTinyInteger('status')->default(2);
@@ -37,6 +37,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tsh_category');
+        Schema::dropIfExists('category');
     }
 };

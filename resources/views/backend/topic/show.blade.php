@@ -53,7 +53,7 @@
                                 <!-- Profile Image -->
                                 <div class="card card-primary card-outline">
                                     <div class="card-body box-profile">
-                                        
+
 
                                         <h3 class="profile-username text-center">{{ $topic->name }}</h3>
 
@@ -150,7 +150,7 @@
                                                 <!-- The timeline -->
                                                 <div class="card card-primary">
                                                     <div class="card-body">
-                                                        <table class="table table-bordered" id="myTable">
+                                                        <table class="table table-bordered" id="dataTable">
                                                             <thead>
                                                                 <tr class="text-center ">
 

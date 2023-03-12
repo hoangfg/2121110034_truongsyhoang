@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tsh_contact', function (Blueprint $table) {
+        Schema::create('contact', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('user_id');
             $table->string('name', 255);
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tsh_contact');
+        Schema::dropIfExists('contact');
     }
 };

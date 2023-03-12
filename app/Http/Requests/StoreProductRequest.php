@@ -24,15 +24,15 @@ class StoreProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:brand|max:255|min:5|string',
+            'name' => 'required|max:255|min:5|string',
             'category_id' => 'required',
             'brand_id' => 'required',
             'metakey' => 'required|min:5',
             'detail' => 'required|min:5',
             'metadesc' => 'required|min:5',
-            'image' => 'image|mimes:png,jpg,jpeg|max:2048',
-            'price' => 'required|numeric',
-            'price_sale' => 'required|numeric|lte:price|gte:0',
+            'image.*' => 'required|image|mimes:png,jpg,jpeg|max:2048',
+            'price_buy' => 'required|numeric',
+            'price_sale' => 'required|numeric|lte:price_buy|gte:0',
             'qty' => 'required|numeric|between:1,1000',
         ];
     }
@@ -45,7 +45,7 @@ class StoreProductRequest extends FormRequest
             'name.required' => $messages['required'],
             'name.min' => 'Nhập ít nhất 5 ký tự',
             'name.string' => 'Tên phải là chuỗi chỉ chứa các ký tự chữ cái và số',
-            'name.unique' => 'Tên đã được sử dụng, vui lòng sử dụng một tên khác',
+            
 
             'category_id.required'=> 'Vui lòng chọn một giá trị trong danh sách.',
             'brand_id.required'=> 'Vui lòng chọn một giá trị trong danh sách.',
@@ -59,12 +59,13 @@ class StoreProductRequest extends FormRequest
             'metadesc.required' => $messages['required'],
             'metadesc.min' => 'Nhập ít nhất 5 ký tự',
 
+            'image.required' => 'Vui lòng nhập thêm 1 hình ảnh.',
             'image.image' => 'Vui lòng tải lên một tệp hình ảnh.',
             'image.mimes' => 'Vui lòng tải lên một tệp hình ảnh có phần mở rộng hợp lệ (png,jpg,jpeg).',
             'image.max' => 'Kích thước tệp tải lên không được vượt quá 2048KB (2MB).',
 
-            'price.required' => 'Vui lòng nhập giá',
-            'price.numeric' => 'Vui lòng nhập giá hợp lệ',
+            'price_buy.required' => 'Vui lòng nhập giá',
+            'price_buy.numeric' => 'Vui lòng nhập giá hợp lệ',
             'price_sale.required' => 'Vui lòng nhập giá khuyến mãi',
             'price_sale.numeric' => 'Vui lòng nhập giá khuyến mãi hợp lệ',
             'price_sale.lte' => 'Giá khuyến mãi không được lớn hơn giá gốc',

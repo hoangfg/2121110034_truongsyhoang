@@ -93,7 +93,7 @@
                                 <div class="mb-3">
                                     <label for="image">Hình ảnh</label>
                                     <input name="image" id="image" type="file" onchange="previewFile(this);"
-                                        class="form-control btn-sm image-preview">
+                                        class="form-control btn-sm image-preview" value="{{ old('image') }}">
                                     <img id="previewImg" class="mt-1" width="30%"
                                         src="{{ asset('images/No-Image-Placeholder.svg.png') }}"
                                         alt="">

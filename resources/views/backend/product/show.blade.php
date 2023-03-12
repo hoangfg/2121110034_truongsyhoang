@@ -85,11 +85,11 @@
                                             class="text-success">{{ number_format($product->price_sale) }}₫</strong>
                                     </h2>
                                     <h4 class="mt-0">
-                                        Giá gốc: <small class="text-gray">{{ number_format($product->price) }}₫</small>
+                                        Giá gốc: <small class="text-gray">{{ number_format($product->price_buy) }}₫</small>
                                     </h4>
                                 @else
                                     <h2 class="mb-0">
-                                        Giá: <strong class="text-success">{{ number_format($product->price) }}₫</strong>
+                                        Giá: <strong class="text-success">{{ number_format($product->price_buy) }}₫</strong>
                                     </h2>
                                 @endif
 

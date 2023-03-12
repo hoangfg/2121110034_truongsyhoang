@@ -48,72 +48,67 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-9">
-                                <div class="mb-3">
-                                    <label for="name">Tên danh mục</label>
-                                    <input name="name" id="name" type="text" class="form-control "
-                                        value="{{ old('name') }}" placeholder="vd: Tiểu thuyết">
-                                    @if ($errors->has('name'))
-                                        <div class="text-danger">
-                                            {{ $errors->first('name') }}
-                                        </div>
-                                    @endif
-                                </div>
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="product_info-tab" data-toggle="tab"
+                                    data-target="#product_info" type="button" role="tab" aria-controls="product_info"
+                                    aria-selected="true">Thông tin sản phẩm</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link " id="product_detail-tab" data-toggle="tab"
+                                    data-target="#product_detail" type="button" role="tab" aria-controls="product_detail"
+                                    aria-selected="true">mô tả sản phẩm</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link " id="product_image-tab" data-toggle="tab"
+                                    data-target="#product_image" type="button" role="tab" aria-controls="product_image"
+                                    aria-selected="true">Hình ảnh</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link " id="product_atribute-tab" data-toggle="tab"
+                                    data-target="#product_atribute" type="button" role="tab"
+                                    aria-controls="product_atribute" aria-selected="true">Thuộc tính</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link " id="product_sale-tab" data-toggle="tab"
+                                    data-target="#product_sale" type="button" role="tab" aria-controls="product_sale"
+                                    aria-selected="true">Khuyến mãi</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link " id="product_store-tab" data-toggle="tab"
+                                    data-target="#product_store" type="button" role="tab" aria-controls="product_store"
+                                    aria-selected="true">Nhập sản phẩm</button>
+                            </li>
 
-                                <div class="mb-3">
-                                    <label for="metadesc">Mô tả</label>
-                                    <textarea name="metadesc" id="metadesc" cols="10" rows="2" class="form-control "
-                                        placeholder="vd: là một thể loại văn xuôi có hư cấu, thông qua nhân vật, hoàn cảnh, sự việc để phản ánh bức tranh xã hội">{{ old('metadesc') }}</textarea>
-                                    @if ($errors->has('metadesc'))
-                                        <div class="text-danger">
-                                            {{ $errors->first('metadesc') }}
-                                        </div>
-                                    @endif
-                                </div>
-                                <div class="mb-3">
-                                    <label for="metakey">Từ khóa</label>
-                                    <textarea name="metakey" id="metakey" cols="10" rows="2" class="form-control "
-                                        placeholder="vd: harry potter">{{ old('metakey') }}</textarea>
-                                    @if ($errors->has('metakey'))
-                                        <div class="text-danger">
-                                            {{ $errors->first('metakey') }}
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="parent_id">Chủ đề cha</label>
-                                    <select name="parent_id" id="parent_id" class="form-control">
-                                        <option value="0">--chon danh mục--</option>
-                                        {!! $html_category_id !!}
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="sort_order">Vị trí</label>
-                                    <select name="sort_order" id="sort_order" class="form-control">
-                                        <option value="0">--chon thương hiệu--</option>
-                                        {!! $html_brand_id !!}
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="image">Hình ảnh</label>
-                                    <input name="image" id="image" type="file" onchange="previewFile(this);"
-                                        class="form-control btn-sm image-preview">
-                                    <img id="previewImg" class="mt-1" width="30%"
-                                        src="{{ asset('images/No-Image-Placeholder.svg.png') }}"
-                                        alt="">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="status">Trạng thái</label>
-                                    <select name="status" id="status" class="form-control">
-                                        <option value="1">Xuất bản</option>
-                                        <option value="2">Chưa xuất bản</option>
 
-                                    </select>
-                                </div>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active border-right border-bottom border-left p-3 "
+                                id="product_info" role="tabpanel" aria-labelledby="product_info-tab">
+                                @includeIf('backend.product.tab_product_info', ['some' => 'data'])
                             </div>
+                            <div class="tab-pane fade show  border-right border-bottom border-left p-3 " id="product_detail"
+                                role="tabpanel" aria-labelledby="product_detail-tab">
+                                @includeIf('backend.product.tab_product_detail', ['some' => 'data'])
+                            </div>
+                            <div class="tab-pane fade show  border-right border-bottom border-left p-3 " id="product_image"
+                                role="tabpanel" aria-labelledby="product_image-tab">
+                                @includeIf('backend.product.tab_product_image', ['some' => 'data'])
+                            </div>
+                            <div class="tab-pane fade show  border-right border-bottom border-left p-3 "
+                                id="product_atribute" role="tabpanel" aria-labelledby="product_atribute-tab">
+                                @includeIf('backend.product.tab_product_atribute', ['some' => 'data'])
+                            </div>
+                            <div class="tab-pane fade show  border-right border-bottom border-left p-3 " id="product_sale"
+                                role="tabpanel" aria-labelledby="product_sale-tab">
+                                @includeIf('backend.product.tab_product_sale', ['some' => 'data'])
+                            </div>
+                            <div class="tab-pane fade show  border-right border-bottom border-left p-3 " id="product_store"
+                                role="tabpanel" aria-labelledby="product_store-tab">
+                                @includeIf('backend.product.tab_product_store', ['some' => 'data'])
+                            </div>
+
+
                         </div>
 
                     </div>
@@ -129,5 +124,7 @@
     </form>
 @endsection
 @section('footer')
-
+    <script>
+        CKEDITOR.replace('detail')
+    </script>
 @endsection

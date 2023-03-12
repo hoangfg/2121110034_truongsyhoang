@@ -3,6 +3,7 @@
 @section('header')
 
 @endsection
+
 @section('content')
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -169,7 +170,7 @@
                                                 <!-- The timeline -->
                                                 <div class="card card-primary">
                                                     <div class="card-body">
-                                                        <table class="table table-bordered" id="myTable">
+                                                        <table class="table table-bordered" id="dataTable">
                                                             <thead>
                                                                 <tr class="text-center ">
 
@@ -188,6 +189,7 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
+
                                                                 @foreach ($product_category as $product)
                                                                     <tr>
                                                                         <td width="20%">

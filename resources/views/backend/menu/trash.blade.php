@@ -56,7 +56,7 @@
                                 <div class="card-body">
                                     @includeIf('backend.messageAlert', ['some' => 'data'])
 
-                                    <table class="table table-bordered" id="myTable">
+                                    <table class="table table-bordered" id="dataTable">
                                         <thead>
                                             <tr>
                                                 <th class="text-center align-middle col-md-1">

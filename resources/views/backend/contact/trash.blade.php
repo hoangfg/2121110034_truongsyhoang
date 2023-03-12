@@ -5,14 +5,14 @@
 @endsection
 @section('content')
 
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <section class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 style="text-transform: uppercase;">{{ $title ?? 'trang quản lý' }}</h1>
-                        </div>
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 style="text-transform: uppercase;">{{ $title ?? 'trang quản lý' }}</h1>
+                    </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
@@ -48,7 +48,7 @@
                 <div class="card-body">
                     @includeIf('backend.messageAlert', ['some' => 'data'])
 
-                    <table class="table table-bordered" id="myTable">
+                    <table class="table table-bordered" id="dataTable">
                         <thead>
                             <tr class="text-center ">
                                 <th class="col-md-1 col-sm-1 col-1 align-middle text-center">

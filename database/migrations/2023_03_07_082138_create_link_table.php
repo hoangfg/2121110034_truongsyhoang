@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tsh_link', function (Blueprint $table) {
+        Schema::create('link', function (Blueprint $table) {
             $table->id();
             $table->string('link', 1000);
             $table->string('type', 1000);
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tsh_link');
+        Schema::dropIfExists('link');
     }
 };

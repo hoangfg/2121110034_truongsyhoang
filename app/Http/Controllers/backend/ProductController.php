@@ -5,10 +5,18 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\ProductImage;
+use App\Models\ProductSale;
+use App\Models\ProductStore;
 use App\Models\User;
 use App\Models\Brand;
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
+
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
@@ -42,12 +50,20 @@ class ProductController extends Controller
         $list_brand = Brand::where('status', '<>', '0')->orderBy('created_at', 'desc')->get();
         $html_category_id = "";
         $html_brand_id = "";
-        
+
         foreach ($list_category as $item) {
-            $html_category_id .= "<option value='" . $item->id . "'>" . $item->name . "</option>";         
+            if ($item->id == old('category_id')) {
+                $html_category_id .= "<option selected  value='" . $item->id . "'>" . $item->name . "</option>";
+            } else {
+                $html_category_id .= "<option value='" . $item->id . "'>" . $item->name . "</option>";
+            }
         }
         foreach ($list_brand as $item) {
-            $html_brand_id .= "<option value='" . $item->id . "'>" . $item->name . "</option>";         
+            if ($item->id == old('brand_id')) {
+                $html_brand_id .= "<option selected  value='" . $item->id . "'>" . $item->name . "</option>";
+            } else {
+                $html_brand_id .= "<option value='" . $item->id . "'>" . $item->name . "</option>";
+            }
         }
         return view('backend.product.create', compact('html_category_id', 'html_brand_id',  'title'));
     }
@@ -58,9 +74,60 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        //
+        $product = new Product();
+        $product->category_id = $request->category_id;
+        $product->brand_id = $request->brand_id;
+        $product->name = $request->name;
+        $product->slug = Str::slug($request->name, '-');
+        $product->price_buy = $request->price_buy;
+        $product->detail = $request->detail;
+        $product->metakey = $request->metakey;
+        $product->metadesc = $request->metadesc;
+        $product->status = $request->status;
+        $product->created_at = date('Y-m-d H:i:s');
+        $product->created_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+        // dd($product);
+        if ($product->save()) {
+            // // upload file
+            if ($request->has('image')) {
+                $count = 1;
+                $path_dir = "images/product/";
+                $array_file = $request->file('image');
+                foreach ($array_file as $file) {
+                    $extension = $file->getClientOriginalExtension();
+                    $filename = $product->slug . '_' . $count . '.' . $extension;
+                    $file->move($path_dir, $filename);
+                    $product_image = new ProductImage();
+                    $product_image->product_id = $product->id;
+                    $product_image->image = $filename;
+                    $product_image->save();
+                    $count++;
+                }
+            }
+            // sale
+            if (strlen($request->price_sale) && strlen($request->date_begin) && strlen($request->date_end)) {
+                $product_sale = new ProductSale();
+                $product_sale->product_id = $product->id;
+                $product_sale->price_sale = $request->price_sale;
+                $product_sale->date_begin = $request->date_begin;
+                $product_sale->date_end = $request->date_end;
+                $product_sale->save();
+            }
+            // store
+            if (strlen($request->price) && strlen($request->qty)) {
+                $product_store = new ProductStore();
+                $product_store->product_id = $product->id;
+                $product_store->price = $request->price;
+                $product_store->qty = $request->qty;
+                $product_store->created_at = date('Y-m-d H:i:s');
+                $product_store->created_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+                $product_store->save();
+            }
+        }
+        return redirect()->route('product.index')->with('message', ['type' => 'success', 'msg' => 'Thêm sản phẩm thành công']);
+
     }
 
     /**
@@ -115,7 +182,7 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateProductRequest $request, $id)
     {
         //
     }

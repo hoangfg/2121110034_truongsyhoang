@@ -37,38 +37,35 @@ Route::prefix('admin')->group(function () {
         Route::get('restore/{product}', [ProductController::class, 'restore'])->name('product.restore');
     });
     // brand
+    route::get('brand/trash', [BrandController::class, 'trash'])->name('brand.trash')->where('trash', '[A-Za-x]+');
     Route::resource('brand', BrandController::class);
-    route::get('brand_trash', [BrandController::class, 'trash'])->name('brand.trash');
     route::prefix('brand')->group(function () {
         route::get('status/{brand}', [BrandController::class, 'status'])->name('brand.status');
-        Route::get('show/{brand}', [BrandController::class, 'show'])->name('brand.show');
         route::get('delete/{brand}', [BrandController::class, 'delete'])->name('brand.delete');
         route::get('destroy/{brand}', [BrandController::class, 'destroy'])->name('brand.destroy');
         route::get('restore/{brand}', [BrandController::class, 'restore'])->name('brand.restore');
     });
     // category
+    route::get('category/trash', [CategoryController::class, 'trash'])->name('category.trash')->where('trash', '[A-Za-x]+');
     Route::resource('category', CategoryController::class);
-
-    route::get('category_trash', [CategoryController::class, 'trash'])->name('category.trash');
-    Route::prefix('category')->group(function () {
-        Route::get('status/{category}', [CategoryController::class, 'status'])->name('category.status');
-        Route::get('delete/{category}', [CategoryController::class, 'delete'])->name('category.delete');
-        Route::get('destroy/{category}', [CategoryController::class, 'destroy'])->name('category.destroy');
-        Route::get('show/{category}', [CategoryController::class, 'show'])->name('category.show');
-        Route::get('restore/{category}', [CategoryController::class, 'restore'])->name('category.restore');
-        Route::get('edit/{category}', [CategoryController::class, 'edit'])->name('category.edit');
+    route::prefix('category')->group(function () {
+        route::get('status/{category}', [CategoryController::class, 'status'])->name('category.status');
+        route::get('delete/{category}', [CategoryController::class, 'delete'])->name('category.delete');
+        route::get('destroy/{category}', [CategoryController::class, 'destroy'])->name('category.destroy');
+        route::get('restore/{category}', [CategoryController::class, 'restore'])->name('category.restore');
     });
+
 
 
     // contact
     Route::resource('contact', ContactController::class);
     route::get('contact_trash', [ContactController::class, 'trash'])->name('contact.trash');
     Route::prefix('contact')->group(function () {
-        Route::get('edit/{contact}', [ContactController::class, 'replay'])->name('contact.replay');       
-        Route::get('restore/{contact}', [ContactController::class, 'restore'])->name('contact.restore');       
-        Route::get('show/{contact}', [ContactController::class, 'show'])->name('contact.show');       
-        Route::get('delete/{contact}', [ContactController::class, 'delete'])->name('contact.delete');       
-        Route::get('destroy/{contact}', [ContactController::class, 'destroy'])->name('contact.destroy');       
+        Route::get('edit/{contact}', [ContactController::class, 'replay'])->name('contact.replay');
+        Route::get('restore/{contact}', [ContactController::class, 'restore'])->name('contact.restore');
+        Route::get('show/{contact}', [ContactController::class, 'show'])->name('contact.show');
+        Route::get('delete/{contact}', [ContactController::class, 'delete'])->name('contact.delete');
+        Route::get('destroy/{contact}', [ContactController::class, 'destroy'])->name('contact.destroy');
     });
     // customer
     Route::resource('customer', CustomerController::class);

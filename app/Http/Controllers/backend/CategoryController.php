@@ -41,11 +41,11 @@ class CategoryController extends Controller
         $html_parent_id = "";
         $html_sort_order = "";
         foreach ($list_category as $category) {
-            $html_sort_order .= "<option value='" . ($category->sort_order + 1) . "'" . (($category->sort_order + 1 == old('sort_order')) ? ' selected ' : ' ') . ">Sau: " . $category->name . "</option>";
-            $html_parent_id .= "<option value='" . ($category->id) . "'" . (($category->id == old('parent_id')) ? ' selected ' : ' ') . ">Sau: " . $category->name . "</option>";
+            // $html_sort_order .= "<option value='" . ($category->sort_order + 1) . "'" . (($category->sort_order + 1 == old('sort_order')) ? ' selected ' : ' ') . ">Sau: " . $category->name . "</option>";
+            // $html_parent_id .= "<option value='" . ($category->id) . "'" . (($category->id == old('parent_id')) ? ' selected ' : ' ') . ">Sau: " . $category->name . "</option>";
 
-            // $html_parent_id .= "<option value='" . $category->id . "'>" . $category->name . "</option>";
-            // $html_sort_order .= "<option value='" . ($category->sort_order + 1) . "'>" . $category->name . "</option>";
+            $html_parent_id .= "<option value='" . $category->id . "'>" . $category->name . "</option>";
+            $html_sort_order .= "<option value='" . ($category->sort_order + 1) . "'>" . $category->name . "</option>";
         }
         return view('backend.category.create', compact('html_parent_id', 'html_sort_order', 'title'));
     }
@@ -62,7 +62,7 @@ class CategoryController extends Controller
         $category->metadesc = $request->metadesc;
         $category->parent_id =  $request->parent_id;
         $category->sort_order = $request->sort_order;
-        $category->level = $request -> level +1;
+        $category->level = $category->level +  1;
         $category->status = $request->status;
         $category->created_at = date('Y-m-d H:i:s');
 
@@ -103,7 +103,7 @@ class CategoryController extends Controller
             ->where('category.id', '=', $id)
             ->count();
         $total_sale = category::join('product', 'product.category_id', '=', 'category.id')
-            ->where('product.price_sale', '>', '0')
+            // ->where('product.price_sale', '>', '0')
             ->where('category.id', '=', $id)
             ->count();
 
@@ -114,6 +114,7 @@ class CategoryController extends Controller
             ->distinct()
             ->get();
 
+        // dd($product_category);
         $category = category::where('category.id', '=', $id)
             ->select(
                 "*",
@@ -124,6 +125,7 @@ class CategoryController extends Controller
         if ($category == null) {
             return redirect()->route('category.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
         } else {
+
             return view('backend.category.show', compact('category', 'total', 'total_sale', 'product_category', 'title'));
         }
     }
@@ -148,8 +150,8 @@ class CategoryController extends Controller
                 } else {
                     $html_parent_id .= "<option value='" . $item->id . "'>" . $item->name . "</option>";
                 }
-                if ($category->sort_order   == $item->sort_order + 1) {
-                    $html_sort_order .= "<option selected value='" . ($item->sort_order ) . "'>Sau: " . $item->name . "</option>";
+                if ($category->sort_order - 1  == $item->sort_order) {
+                    $html_sort_order .= "<option selected value='" . ($item->sort_order) . "'>Sau: " . $item->name . "</option>";
                 } else {
                     $html_sort_order .= "<option value='" . ($item->sort_order) . "'>Sau: " . $item->name . "</option>";
                 }
