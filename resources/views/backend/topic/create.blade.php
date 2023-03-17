@@ -97,12 +97,13 @@
                                         {!! $html_sort_order !!}
                                     </select>
                                 </div>
-                                
+
                                 <div class="mb-3">
                                     <label for="status">Trạng thái</label>
                                     <select name="status" id="status" class="form-control">
-                                        <option value="1">Xuất bản</option>
-                                        <option value="2">Chưa xuất bản</option>
+                                        <option value="1" {{ old('status') == 1 ? 'selected' : '' }}>Xuất bản</option>
+                                        <option value="2" {{ old('status') == 2 ? 'selected' : '' }}>Chưa xuất bản
+                                        </option>
 
                                     </select>
                                 </div>

@@ -95,8 +95,7 @@
                                     <input name="image" id="image" type="file" onchange="previewFile(this);"
                                         class="form-control btn-sm image-preview" value="{{ old('image') }}">
                                     <img id="previewImg" class="mt-1" width="30%"
-                                        src="{{ asset('images/No-Image-Placeholder.svg.png') }}"
-                                        alt="">
+                                        src="{{ asset('images/No-Image-Placeholder.svg.png') }}" alt="">
                                     @if ($errors->has('image'))
                                         <div class="text-danger">
                                             {{ $errors->first('image') }}
@@ -106,8 +105,9 @@
                                 <div class="mb-3">
                                     <label for="status">Trạng thái</label>
                                     <select name="status" id="status" class="form-control">
-                                        <option value="1">Xuất bản</option>
-                                        <option value="2">Chưa xuất bản</option>
+                                        <option value="1" {{ old('status') == 1 ? 'selected' : '' }}>Xuất bản</option>
+                                        <option value="2" {{ old('status') == 2 ? 'selected' : '' }}>Chưa xuất bản
+                                        </option>
 
                                     </select>
                                 </div>

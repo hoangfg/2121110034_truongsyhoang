@@ -8,15 +8,26 @@ body {
     /* width: 100vw;
     height: 100vh;
     position: relative; */
-    background-position: center;
+   
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://cdn.pixabay.com/photo/2023/01/19/15/34/art-7729434_960_720.jpg);
     background-size: cover;
-    background-image: linear-gradient(
+    background-position: center center;
+    background-repeat: no-repeat;
+    /* background-image: linear-gradient(
             rgba(186, 139, 2, 0.7),
             rgba(24, 24, 24, 0.4)
         ),
-        url(https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=928&q=80);
+        url(https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=928&q=80); */
 }
-
+body::before {
+  position: absolute;
+  top: 60%;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  content: "";
+  background-image: linear-gradient(to top, #10121c, transparent);
+}
 a {
     text-decoration: none;
 }
@@ -42,7 +53,8 @@ a {
 .card {
     width: 350px;
     height: 560px;
-    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.3);
     box-shadow: 0 0 40px 20px rgba(0, 0, 0, 0.26);
     perspective: 1000px;
     font-weight: 400;

@@ -1,0 +1,118 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    box-sizing: border-box;
+}
+a {
+    text-decoration: none;
+}
+ul {
+    list-style: none;
+}
+
+.product {
+    display: flex;
+    justify-content: space-between;
+}
+
+.product__name {
+    font-weight: bold;
+    font-size: 48px;
+    color: red;
+    text-align: center;
+    font-variant: small-caps;
+    word-break: break-word;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.product__lists {
+    font-size: 20px;
+}
+.product__lists ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+}
+.product__lists ul {
+    margin: 0;
+}
+
+.product__lists ul li a {
+    margin-left: 20px;
+    display: inline-block;
+    color: red;
+}
+.product__lists--list span {
+    margin: 0 10px;
+}
+
+.tables {
+    font-size: 20px;
+}
+.table_label {
+    color: gray;
+    font-weight: 200;
+}
+.tables tbody tr {
+    padding: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+
+Người chuyển khoản                    Ngân hàng chuyển khoản             Ngân hàng nhận khoản                    Người nhận khoản
+        |                                          |                                              |                                                  |
+        |    Gửi yêu cầu chuyển khoản      |                                              |                                                  |
+        |--------------------------------->|                                              |                                                  |
+        |                                          |   Xác thực thông tin                 |                                                  |
+        |                                          |<----------------------------------|                                                  |
+        |    Gửi thông tin giao dịch        |                                              |                                                  |
+        |--------------------------------->|                                              |                                                  |
+        |                                          |    Kiểm tra thông tin               |                                                  |
+        |                                          |--------------------------------->|                                                  |
+        |                                          |                                              |   Xác thực thông tin                           |
+        |                                          |                                              |<----------------------------------|
+        |                                          |    Thực hiện chuyển khoản       |                                                  |
+        |                                          |--------------------------------->|                                                  |
+        |                                          |                                              |   Cập nhật số dư tài khoản                  |
+        |                                          |                                              |--------------------------------->|
+        |                                          |    Gửi thông báo kết quả           |                                                  |
+        |                                          |<----------------------------------|                                                  |
+        |    Nhận thông báo kết quả         |                                              |                                                  |
+        |<----------------------------------|                                              |                                                  |
+
+
+/*
+
+Người chuyển khoản                    Ứng dụng di động                    Ngân hàng chuyển khoản             Ngân hàng nhận khoản                    Người nhận khoản
+        |                                              |                                                      |                                              |                                                  |
+        |    Mở ứng dụng                            |                                                      |                                                  |
+        |--------------------------------->|                                                      |                                                  |
+        |    Đăng nhập                                   |                                                      |                                                  |
+        |--------------------------------->|                                                      |                                                  |
+        |                                               |    Hiển thị thông tin tài khoản  |                                                  |
+        |                                               |<----------------------------------|                                                  |
+        |    Nhập thông tin giao dịch         |                                                      |                                                  |
+        |--------------------------------->|                                                      |                                                  |
+        |                                               |   Xác thực thông tin                 |                                                  |
+        |                                               |--------------------------------->|                                                  |
+        |                                               |                                                      |    Kiểm tra thông tin                           |
+        |                                               |                                                      |--------------------------------->|
+        |                                               |    Thực hiện chuyển khoản       |                                                  |
+        |                                               |--------------------------------->|                                                  |
+        |                                               |                                                      |   Cập nhật số dư tài khoản                  |
+        |                                               |                                                      |--------------------------------->|
+        |                                               |    Gửi thông báo kết quả           |                                                  |
+        |                                               |<----------------------------------|                                                  |
+        |    Nhận thông báo kết quả         |                                                      |                                                  |
+        |<----------------------------------|                                                      |                                                  |
+
+
+*/

@@ -1,10 +1,12 @@
-@extends('layouts.admin') 
+@extends('layouts.admin')
 {{-- kế thừa từ layouts/admin --}}
-@section('title','trang quản lý')
+@section('title', 'trang quản lý')
 @section('header')
 
 @endsection
+
 @section('content')
+
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
@@ -58,4 +60,3 @@
 @section('footer')
 
 @endsection
-

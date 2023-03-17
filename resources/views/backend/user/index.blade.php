@@ -80,7 +80,7 @@
                                                     class="card-img-top
                                                         index-img" alt="male">
                                                 @else
-                                                    <img src="{{ asset('images/user/Female.png') }}"
+                                                    <img src="{{ asset('images/user/female.png') }}"
                                                         style="width: 100px; height: 100px; object-fit: cover;
                                                     class="card-img-top
                                                         index-img" alt="Female">

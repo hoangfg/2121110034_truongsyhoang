@@ -27,8 +27,8 @@ Route::get('/', [SiteController::class, 'index'])->name('site.index');
 Route::prefix('admin')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
     //product
+    Route::get('product/trash', [ProductController::class, 'trash'])->name('product.trash')->where('trash', '[A-Za-x]+');
     Route::resource('product', ProductController::class);
-    Route::get('product_trash', [ProductController::class, 'trash'])->name('product.trash');
     Route::prefix('product')->group(function () {
         Route::get('status/{product}', [ProductController::class, 'status'])->name('product.status');
         Route::get('delete/{product}', [ProductController::class, 'delete'])->name('product.delete');

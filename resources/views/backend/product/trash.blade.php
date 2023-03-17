@@ -60,11 +60,11 @@
                                     <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Danh mục</th>
                                     <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Thương hiệu</th>
 
-                                    <th class="col-md-1 col-sm-1 col-1 align-middle text-center">Giá</th>
+                                    <th class="align-middle text-center">Giá bán</th>
 
-                                    <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Chức năng</th>
+                                    <th class="align-middle text-center">Chức năng</th>
 
-                                    <th class="col-md-1 col-sm-1 col-1 align-middle text-center">id</th>
+                                    <th class="align-middle text-center">id</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -80,11 +80,11 @@
                                             <img src="{{ asset('images/product/' . $product->image) }}" alt=""
                                                 class="w-100">
                                         </td>
-                                        <td>{{ $product->name }}</td>
+                                       <td style="word-break: break-word;">{{ $product->name }}</td>
 
                                         <td>{{ $product->category_name }}</td>
                                         <td>{{ $product->brand_name }}</td>
-                                        <td>{{ number_format($product->price) }}₫</td>
+                                        <td>{{ number_format($product->price_buy) }}₫</td>
                                         <td class="text-center">
 
                                             <a href="{{ route('product.show', ['product' => $product->id]) }}"

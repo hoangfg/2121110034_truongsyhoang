@@ -1,20 +1,45 @@
 @extends('layouts.admin')
 @section('title', $title ?? 'trang quản lý')
 @section('header')
+    <link rel="stylesheet" href="{{ asset('css/flexslider.css') }}" type="text/css" media="screen" />
+    <style>
+        .parent-div {
 
+            display: flex;
+            align-items: center;
+        }
+
+        .parent-div img {
+            margin: auto 0px;
+            
+            /* căn giữa ảnh theo chiều ngang */
+        }
+
+        .carousel-item {
+            opacity: 0.3;
+            border: 2px solid transparent;
+            border-color: #28a745;
+            transition: border-color 0.2s ease-in-out;
+        }
+
+        
+        .flex-active-slide .carousel-item  {
+            border-color: #28a745;;
+            opacity: 1;
+            transition:opacity 1s  ;
+        }
+        
+    </style>
+    <link rel="stylesheet" href="{{ asset('css/product.css') }}">
 @endsection
 @section('content')
-    <form action="{{ route('product.store') }}" method="post" enctype="multipart/form-data">
-        @csrf
-
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <section class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 style="text-transform: uppercase;">{{ $title ?? 'trang quản lý' }}</h1>
-                        </div>
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 style="text-transform: uppercase;">{{ $title ?? 'trang quản lý' }}</h1>
+                    </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
@@ -27,149 +52,240 @@
         <section class="content">
 
             <!-- Default box -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="row">
-
-                        <div class="col-md-12 text-right">
-                            <div class="text-right">
-                                <a class="btn btn-sm btn-info" href="{{ route('product.index') }}">
-                                    <i class="fas fa-arrow-circle-left"></i> Quay về danh sách
-                                </a>
-                                <a href="{{ route('product.edit', ['product' => $product->id]) }}"
-                                    class="btn btn-sm btn-info" title="edit">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </a>
-                                <a href="{{ route('product.delete', ['product' => $product->id]) }}"
-                                    class="btn btn-sm btn-danger" title="delete">
-                                    <i class="fa-solid fa-delete-left"></i>
-                                </a>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12 col-sm-6 col-md-6">
-
-                            <div class="col-12 col-md-12">
-                                <img src="{{ asset('images/product/' . $product->image) }}" class="product-image border"
-                                    alt="Product Image">
-                            </div>
-                            <div class="col-12 product-image-thumbs">
-                                <div class="product-image-thumb active"><img
-                                        src="{{ asset('images/product/' . $product->image) }}" alt="Product Image"></div>
-
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-6">
-                            <h3 class="my-3">{{ $product->name }}</h3>
-                            <br />
-                            <div class="d-flex">
-                                <div class="mr-3">
-                                    <h5>Danh mục: <span class="text-success">{{ $product->category_name }}</span></h5>
+            <div class="container-fluid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-12 text-right">
+                                <div class="text-right">
+                                    <a class="btn btn-sm btn-info" href="{{ route('product.index') }}">
+                                        <i class="fas fa-arrow-circle-left"></i> Quay về danh sách
+                                    </a>
+                                    <a href="{{ route('product.edit', ['product' => $product->id]) }}"
+                                        class="btn btn-sm btn-info" title="edit">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                    <a href="{{ route('product.delete', ['product' => $product->id]) }}"
+                                        class="btn btn-sm btn-danger" title="delete">
+                                        <i class="fa-solid fa-delete-left"></i>
+                                    </a>
                                 </div>
-                                <span>|</span>
-                                <div class="ml-3">
-                                    <h5> Nhà xuất bản:<span class="text-success"> {{ $product->brand_name }}</span></h5>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-body">
+
+                        <div class="row product">
+                            <div class="col-md-5">
+                                <div id="main" role="main">
+                                    <section class="slider">
+                                        <div id="slider" class="flexslider border border-1 border-success ">
+                                            <ul class="slides parent-div">
+                                                @foreach ($list_image as $item)
+                                                    <li>
+                                                        <img src="{{ asset('images/product/' . $item->image) }}"
+                                                            alt="">
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                        <div id="carousel" class="flexslider">
+                                            <ul class="slides">
+
+                                                @foreach ($list_image as $item)
+                                                    <li>
+                                                        <img src="{{ asset('images/product/' . $item->image) }}"
+                                                            alt="" class="carousel-item">
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    </section>
+
                                 </div>
-                            </div>
-                            <br />
-
-
-                            <div>
-                                @if ($product->price_sale > 0)
-                                    <h2 class="mb-0">
-                                        Giá khuyến mãi: <strong
-                                            class="text-success">{{ number_format($product->price_sale) }}₫</strong>
-                                    </h2>
-                                    <h4 class="mt-0">
-                                        Giá gốc: <small class="text-gray">{{ number_format($product->price_buy) }}₫</small>
-                                    </h4>
-                                @else
-                                    <h2 class="mb-0">
-                                        Giá: <strong class="text-success">{{ number_format($product->price_buy) }}₫</strong>
-                                    </h2>
-                                @endif
 
                             </div>
-                            <br>
-                            <h4 class="mb-0">số lượng sản phẩm: <small class="text-success">{{ $product->qty }}</small>
-                            </h4>
+                            <!-- /.col -->
+                            <div class="col-md-7">
+                                <div class="cards">
+                                    <div class="card-header p-2">
+                                        <ul class="nav nav-pills">
+                                            <li class="nav-item"><a class="nav-link active" href="#activity"
+                                                    data-toggle="tab">Thông
+                                                    tin cơ bản</a></li>
+                                            <li class="nav-item"><a class="nav-link" href="#sale" data-toggle="tab">Khuyến
+                                                    mãi</a>
+                                            </li>
+                                            <li class="nav-item"><a class="nav-link" href="#store" data-toggle="tab">Kho
+                                                    hàng</a>
+                                            </li>
+                                            <li class="nav-item"><a class="nav-link" href="#detail-tab"
+                                                    data-toggle="tab">Thông
+                                                    tin chi tiết</a>
+                                            </li>
+                                            <li class="nav-item"><a class="nav-link" href="#metadesc-tab"
+                                                    data-toggle="tab">Mô Tả
+                                                    Sản Phẩm</a>
+                                            </li>
+                                        </ul>
+
+                                    </div><!-- /.card-header -->
+                                    <div class="card-bodys">
+                                        <div class="tab-content">
+                                            <h2 class="product__name">{{ $product->name }}</h2>
+                                            <div class="active tab-pane" id="activity">
+                                                <div class="card card-primary">
+                                                    <div class="card-body">
+
+                                                        <ul class="list-group list-group-unbordered mb-3">
+                                                            <li class="list-group-item">
+                                                                <b>mã sản phẩm</b> <a
+                                                                    class="float-right">{{ $product->id }}</a>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <b>Danh mục</b> <a
+                                                                    class="float-right">{{ $product->category_name }}</a>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <b>thương hiệu</b> <a
+                                                                    class="float-right">{{ $product->brand_name }}</a>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <b>Giá bán</b> <a
+                                                                    class="float-right">{{ $product->price_buy }}</a>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <b>Ngày nhập</b> <a class="float-right">
+                                                                    {{ $product->created_at }}</a>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <b>Người nhập</b> <a class="float-right">
+                                                                    {{ $product->created_name }}</a>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <b>Ngày cập nhật cuối</b> <a class="float-right">
+                                                                    {{ $product->updated_at }}</a>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <b>Người cập nhật</b> <a class="float-right">
+                                                                    {{ $product->created_name }}</a>
+                                                            </li>
+
+
+                                                        </ul>
+
+                                                    </div>
+                                                    <!-- /.card-body -->
+                                                </div>
+
+                                            </div>
+                                            <!-- /.tab-pane -->
+                                            <div class="tab-pane" id="sale">
+                                                <!-- The sale -->
+                                                <div class="card card-primary">
+                                                    <div class="card-body">
+                                                        <ul class="list-group list-group-unbordered mb-3">
+
+                                                            <li class="list-group-item">
+                                                                <b>Giá Khuyến mãi</b> <a
+                                                                    class="float-right">{{ $product->price_sale }}</a>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <b>Ngày bắt đầu khuyến mãi</b> <a class="float-right">
+                                                                    {{ $product->date_begin }}</a>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <b>Ngày kết thúc khuyến mãi</b> <a class="float-right">
+                                                                    {{ $product->date_end }}</a>
+                                                            </li>
+
+                                                        </ul>
+
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <!-- /.The sale -->
+                                            <div class="tab-pane" id="store">
+                                                <!-- The sale -->
+                                                <div class="card card-primary">
+                                                    <div class="card-body">
+                                                        <ul class="list-group list-group-unbordered mb-3">
+
+                                                            <li class="list-group-item">
+                                                                <b>Giá gốc</b> <a
+                                                                    class="float-right">{{ $product->price }}</a>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <b>Số lượng</b> <a class="float-right">
+                                                                    {{ $product->qty }}</a>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <b>Người nhập</b> <a class="float-right">
+                                                                    {{ $product->created_name_ps }}</a>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <b>Ngày nhập</b> <a class="float-right">
+                                                                    {{-- {{ $product_store->created_at }} --}}
+                                                                    {{ $product->created_at_ps }}</a>
+                                                                </a>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <b>Người cập nhật</b> <a class="float-right">
+                                                                    {{ $product->updated_name_ps }}</a>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <b>Ngày cập nhật</b> <a class="float-right">
+                                                                    {{ $product->updated_category_ps }}</a>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <!-- /.The sale -->
+                                            <!-- /.detail-tab -->
+                                            <div class="tab-pane" id="detail-tab">
+                                                <!-- The sale -->
+                                                <div class="card card-primary">
+                                                    <div class="card-body">
+                                                        {!! $product->detail !!}
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <!-- /.detail-tab -->
+                                            <!-- /.detail-tab -->
+                                            <div class="tab-pane" id="metadesc-tab">
+                                                <!-- The sale -->
+                                                <div class="card card-primary">
+                                                    <div class="card-body">
+                                                        {!! $product->metadesc !!}
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <!-- /.detail-tab -->
+
+                                        </div>
+                                        <!-- /.tab-content -->
+
+                                    </div><!-- /.card-body -->
+                                </div>
+                                <!-- /.card -->
+                            </div>
+                            <!-- /.col -->
                         </div>
-                    </div>
-                    <div class="row mt-4">
-                        <nav class="w-100">
-                            <div class="nav nav-tabs" id="product-tab" role="tablist">
-                                <a class="nav-item nav-link active" id="product-desc-tab" data-toggle="tab"
-                                    href="#product-desc" role="tab" aria-controls="product-desc" aria-selected="true">Mô
-                                    tả</a>
-                                <a class="nav-item nav-link" id="product-comments-tab" data-toggle="tab"
-                                    href="#product-comments" role="tab" aria-controls="product-comments"
-                                    aria-selected="false">Chi tiết</a>
-                                <a class="nav-item nav-link" id="product-rating-tab" data-toggle="tab"
-                                    href="#product-rating" role="tab" aria-controls="product-rating"
-                                    aria-selected="false">Thông tin khác</a>
-                            </div>
-                        </nav>
 
-                        <div class="tab-content p-3" id="nav-tabContent">
-                            <div class="tab-pane fade show active" id="product-desc" role="tabpanel"
-                                aria-labelledby="product-desc-tab">
-                                <p>
-                                    {!! $product->metadesc !!}
-                                </p>
-                            </div>
-                            <div class="tab-pane fade" id="product-comments" role="tabpanel"
-                                aria-labelledby="product-comments-tab">
-
-                                {!! $product->detail !!}
-                            </div>
-                            <div class="tab-pane fade" id="product-rating" role="tabpanel"
-                                aria-labelledby="product-rating-tab">
-                                <table class="table table-bordered">
-                                    <tr>
-                                        <th>Từ khóa</th>
-                                        <td>{{ $product->metakey }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Ngày đăng</th>
-                                        <td>{{ $product->created_at }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Người đăng</th>
-                                        <td>{{ $product->created_name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Ngày sửa cuối</th>
-                                        <td>{{ $product->updated_at }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Người sửa cuối</th>
-                                        <td>{{ $product->updated_name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Trạng thái</th>
-                                        <td>
-                                            @if ($product->status == 1)
-                                                Xuất bản
-                                            @else
-                                                Chưa xuất bản
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
                     </div>
                 </div>
-                <!-- /.card-body -->
-                <div class="card-footer">
-                    Footer
-                </div>
-                <!-- /.card-footer-->
+                <!-- /.row -->
             </div>
             <!-- /.card -->
 
@@ -177,15 +293,51 @@
     </div>
 @endsection
 @section('footer')
+    <!-- jQuery -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('.product-image-thumb').on('click', function() {
-                var $image_element = $(this).find('img')
-                $('.product-image').prop('src', $image_element.attr('src'))
-                $('.product-image-thumb.active').removeClass('active')
-                $(this).addClass('active')
-            })
-        })
+        window.jQuery ||
+            document.write('<script src="js/libs/jquery-1.7.min.js">\x3C/script>');
+    </script>
+
+    <!-- FlexSlider ẩn hiện -->
+
+    <script defer src="{{ asset('js/jquery.flexslider.js') }}"></script>
+    <script type="text/javascript">
+        $(function() {
+            SyntaxHighlighter.all();
+        });
+        $(window).load(function() {
+            $("#carousel").flexslider({
+                animation: "slide",
+                controlNav: false,
+                animationLoop: false,
+                slideshow: false,
+                itemWidth: 100,
+
+                itemMargin: 5,
+                asNavFor: "#slider",
+
+            });
+
+            $("#slider").flexslider({
+                animation: "slide",
+                controlNav: false,
+                animationLoop: false,
+                slideshow: false,
+                sync: "#carousel",
+                start: function(slider) {
+                    $("body").removeClass("loading");
+
+                    $("#carousel img").css({
+                        "padding": "2px",
+                        "height": "100px",
+                        "width": "100px",
+                        "object-fit": "cover"
+                    });
+                },
+            });
+        });
     </script>
 
 @endsection

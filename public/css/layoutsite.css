@@ -61,7 +61,6 @@ ul {
     background-color: black;
 }
 
-
 /* menu */
 
 .header .cart .cart-item {
@@ -664,4 +663,16 @@ ul {
 }
 .owl-carousel-parent .owl-carousel-parent__btn > button:hover.next-btn > i {
     transform: translateX(3px);
+}
+
+.menu-wrapper {
+    position: fixed;
+    top: -150px;
+    transition: top 0.75s;
+}
+section.sticky {
+    top: 0;
+    background-color: white;
+    width: 100%;
+    z-index: 1000000000;
 }

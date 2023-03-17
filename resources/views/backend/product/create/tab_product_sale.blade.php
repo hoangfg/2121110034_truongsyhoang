@@ -13,7 +13,7 @@
 
                                 <div class="mb-3">
                                     <label for="date_begin">Ngày bắt đầu</label>
-                                    <input name="date_begin" id="date_begin"type="date" class="form-control  "
+                                    <input name="date_begin" id="date_begin" type="date" class="form-control  "
                                         value="{{ old('date_begin') }}" />
 
                                     @if ($errors->has('date_begin'))

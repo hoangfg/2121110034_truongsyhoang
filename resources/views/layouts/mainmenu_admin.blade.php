@@ -1,17 +1,10 @@
    <div class="sidebar">
+
        <!-- Sidebar user (optional) -->
        <div class=" user-panel  mt-3 pb-3 mb-3 d-flex">
            <div class="image avatar">
-               @if (session('image') == null)
-                   @if (session('gender') == 0)
-                       <img src="{{ asset('images/user/male.png') }}" class="img-circle elevation-2" alt="male">
-                   @else
-                       <img src="{{ asset('images/user/Female.png') }}" class="img-circle elevation-2" alt="Female">
-                   @endif
-               @else
-                   <img src="{{ asset('images/user/' . session('image')) }}" class="img-circle elevation-2"
-                       alt="User Image">
-               @endif
+
+               <img src="{{ asset('images/user/' . session('image')) }}" class="img-circle elevation-2" alt="User Image">
 
            </div>
            <div class="info info__user">

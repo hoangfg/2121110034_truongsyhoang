@@ -64,11 +64,7 @@
                                     data-target="#product_image" type="button" role="tab" aria-controls="product_image"
                                     aria-selected="true">Hình ảnh</button>
                             </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link " id="product_atribute-tab" data-toggle="tab"
-                                    data-target="#product_atribute" type="button" role="tab"
-                                    aria-controls="product_atribute" aria-selected="true">Thuộc tính</button>
-                            </li>
+                            
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link " id="product_sale-tab" data-toggle="tab"
                                     data-target="#product_sale" type="button" role="tab" aria-controls="product_sale"
@@ -85,27 +81,27 @@
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active border-right border-bottom border-left p-3 "
                                 id="product_info" role="tabpanel" aria-labelledby="product_info-tab">
-                                @includeIf('backend.product.tab_product_info', ['some' => 'data'])
+                                @includeIf('backend.product.create.tab_product_info', ['some' => 'data'])
                             </div>
                             <div class="tab-pane fade show  border-right border-bottom border-left p-3 " id="product_detail"
                                 role="tabpanel" aria-labelledby="product_detail-tab">
-                                @includeIf('backend.product.tab_product_detail', ['some' => 'data'])
+                                @includeIf('backend.product.create.tab_product_detail', ['some' => 'data'])
                             </div>
                             <div class="tab-pane fade show  border-right border-bottom border-left p-3 " id="product_image"
                                 role="tabpanel" aria-labelledby="product_image-tab">
-                                @includeIf('backend.product.tab_product_image', ['some' => 'data'])
+                                @includeIf('backend.product.create.tab_product_image', ['some' => 'data'])
                             </div>
                             <div class="tab-pane fade show  border-right border-bottom border-left p-3 "
                                 id="product_atribute" role="tabpanel" aria-labelledby="product_atribute-tab">
-                                @includeIf('backend.product.tab_product_atribute', ['some' => 'data'])
+                                @includeIf('backend.product.create.tab_product_atribute', ['some' => 'data'])
                             </div>
                             <div class="tab-pane fade show  border-right border-bottom border-left p-3 " id="product_sale"
                                 role="tabpanel" aria-labelledby="product_sale-tab">
-                                @includeIf('backend.product.tab_product_sale', ['some' => 'data'])
+                                @includeIf('backend.product.create.tab_product_sale', ['some' => 'data'])
                             </div>
                             <div class="tab-pane fade show  border-right border-bottom border-left p-3 " id="product_store"
                                 role="tabpanel" aria-labelledby="product_store-tab">
-                                @includeIf('backend.product.tab_product_store', ['some' => 'data'])
+                                @includeIf('backend.product.create.tab_product_store', ['some' => 'data'])
                             </div>
 
 
