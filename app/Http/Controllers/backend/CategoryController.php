@@ -108,6 +108,7 @@ class CategoryController extends Controller
             ->count();
 
         $product_category = Category::join('product', 'product.category_id', '=', 'category.id')
+            ->join('product_sale', 'product_sale.product_id', '=', 'product.id')
             ->select('product.*', 'product.name as product_name', 'product.id as product_id')
             ->where('category.id', '=', $id)
             ->orderBy('created_at', 'desc')

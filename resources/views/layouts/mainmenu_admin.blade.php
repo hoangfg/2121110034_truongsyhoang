@@ -4,11 +4,12 @@
        <div class=" user-panel  mt-3 pb-3 mb-3 d-flex">
            <div class="image avatar">
 
-               <img src="{{ asset('images/user/' . session('image')) }}" class="img-circle elevation-2" alt="User Image">
+               <img src="{{ asset('images/user/' . Auth::user()->image) }}" class="img-circle elevation-2"
+                   alt="User Image">
 
            </div>
            <div class="info info__user">
-               <a href="#" class="d-block">{{ session('name') }}</a>
+               <a href="#" class="d-block">{{ Auth::user()->name }}</a>
            </div>
        </div>
 
@@ -189,7 +190,7 @@
                </li>
                <li class="nav-header">LABELS</li>
                <li class="nav-item">
-                   <a href="{{ route('logout') }}" class="nav-link">
+                   <a href="{{ route('admin.logout') }}" class="nav-link">
                        <i class="nav-icon fa-solid fa-arrow-right-from-bracket text-danger"></i>
                        <p class="text">Logout</p>
                    </a>

@@ -18,12 +18,15 @@ use App\Http\Controllers\backend\ProductController;
 use App\Http\Controllers\backend\SliderController;
 use App\Http\Controllers\backend\TopicController;
 use App\Http\Controllers\backend\UserController;
-use App\Http\Controllers\backend\LoginController;
+use App\Http\Controllers\backend\AuthController;
 
 // trang người dùng
 Route::get('/', [SiteController::class, 'index'])->name('site.index');
 
 // trang admin
+Route::get('admin/login', [AuthController::class, 'getlogin'])->name('admin.getlogin');
+Route::post('admin/login', [AuthController::class, 'postlogin'])->name('admin.postlogin');
+Route::get('admin/logout', [AuthController::class, 'logout'])->name('admin.logout');
 Route::prefix('admin')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
     //product
@@ -151,7 +154,5 @@ Route::prefix('admin')->group(function () {
         // Route::get('show/{user}', [UserController::class, 'show'])->name('user.show');
         Route::get('restore/{user}', [UserController::class, 'restore'])->name('user.restore');
     });
-    // login - res...
-    Route::post('login', [LoginController::class, 'login'])->name('login');
-    Route::get('logout', [LoginController::class, 'logout'])->name('logout');
+   
 });

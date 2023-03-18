@@ -32,7 +32,7 @@
             <div class="inner-box" id="card">
                 <div class="card-front">
                     <h2>LOGIN</h2>
-                    <form action="{{ route('login') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('admin.postlogin') }}" method="post" >
                         @csrf
                         <div class="group">
                             <input type="text" name="username" class="input-box" placeholder="Username" required />
@@ -48,10 +48,10 @@
                         <div>
                             <input type="checkbox" name="" id="" /><span>Remember Me</span>
                         </div>
-                        @if (isset($error_login))
+                        @if (isset($error))
                             <div class="mt-3">
                                 <div class="text-danger text-center ">
-                                    {{ $error_login }}
+                                    {{ $error }}
                                 </div>
                             </div>
                         @endif

@@ -98,6 +98,7 @@ class BrandController extends Controller
             ->count();
 
         $total_sale = Brand::join('product', 'product.brand_id', '=', 'brand.id')
+            ->join('product_sale', 'product_sale.product_id', '=', 'product.id')
             ->where('product.price_sale', '>', '0')
             ->where('brand.id', '=', $id)
             ->distinct()
