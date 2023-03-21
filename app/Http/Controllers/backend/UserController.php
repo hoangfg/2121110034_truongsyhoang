@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+
+use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     /**
@@ -43,7 +45,7 @@ class UserController extends Controller
         $user = new User();
         $user->name = $request->name;
         $user->username = $request->username;
-        $user->password = sha1($request->password);
+        $user->password = Hash::make($request->password);
         $user->email = $request->email;
         $user->gender = $request->gender;
         $user->phone = $request->phone;
@@ -116,7 +118,7 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->username = $request->username;
         if ($request->password != null) {
-            $user->password = sha1($request->password);
+            $user->password = Hash::make($request->password);
         }
         $user->email = $request->email;
         $user->gender = $request->gender;

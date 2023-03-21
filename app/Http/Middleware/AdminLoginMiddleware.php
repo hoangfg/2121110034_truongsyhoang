@@ -25,13 +25,5 @@ class AdminLoginMiddleware
         }
         return $next($request);
     }
-    public function profile()
-    {
-        $user = Auth::user();
-        if (Auth::check()) {
-            if ($user->roles == 1) {
-                return view('layouts.admin');
-            }
-        }
-    }
+
 }

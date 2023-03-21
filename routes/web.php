@@ -27,7 +27,7 @@ Route::get('/', [SiteController::class, 'index'])->name('site.index');
 Route::get('admin/login', [AuthController::class, 'getlogin'])->name('admin.getlogin');
 Route::post('admin/login', [AuthController::class, 'postlogin'])->name('admin.postlogin');
 Route::get('admin/logout', [AuthController::class, 'logout'])->name('admin.logout');
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware('login')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
     //product
     Route::get('product/trash', [ProductController::class, 'trash'])->name('product.trash')->where('trash', '[A-Za-x]+');
