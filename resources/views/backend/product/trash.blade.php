@@ -52,7 +52,7 @@
                                 <tr class="text-center ">
                                     <th class="col-md-1 col-sm-1 col-1 align-middle text-center">
                                         <div class="form-group select-all">
-                                            <input type="checkbox">
+                                            <input type="checkbox" class=""  name="checkAll" id="checkAll">
                                         </div>
                                     </th>
                                     <th class="col-md-1 col-sm-1 col-1 align-middle text-center">image</th>
@@ -72,8 +72,8 @@
                                     <tr>
                                         <td class="text-center">
                                             <div class="form-group">
-                                                <input type="checkbox" name="checkId[]" value="{{ $product->id }}"
-                                                    id="productCheck{{ $product->id }}">
+                                                <input type="checkbox" name="checkId[{{ $product->id }}]" value="{{ $product->id }}"
+                                                    id="productCheck{{ $product->id }}" class="CheckItem">
                                             </div>
                                         </td>
                                         <td>

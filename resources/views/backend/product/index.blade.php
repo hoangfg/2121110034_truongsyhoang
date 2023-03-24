@@ -2,9 +2,10 @@
 @section('title', $title ?? 'trang quản lý')
 @section('header')
 
+
 @endsection
 @section('content')
-    <form action="{{ route('product.store') }}" method="post" enctype="multipart/form-data">
+    <form action="{{ route('product.deleteAll') }}" method="post" enctype="multipart/form-data">
         @csrf
 
         <div class="content-wrapper">
@@ -55,7 +56,7 @@
                                 <tr class="text-center ">
                                     <th class="col-md-1 col-sm-1 col-1 align-middle text-center">
                                         <div class="form-group select-all">
-                                            <input type="checkbox">
+                                            <input type="checkbox" class=""  name="checkAll" id="checkAll">
                                         </div>
                                     </th>
                                     <th class="col-md-1 col-sm-1 col-1 align-middle text-center">image</th>
@@ -76,7 +77,7 @@
                                         <td class="text-center">
                                             <div class="form-group">
                                                 <input type="checkbox" name="checkId[]" value="{{ $product->id }}"
-                                                    id="productCheck{{ $product->id }}">
+                                                    id="productCheck{{ $product->id }}" class="CheckItem">
                                             </div>
                                         </td>
                                         <td>
@@ -106,6 +107,10 @@
                                             <a href="{{ route('product.edit', ['product' => $product->id]) }}"
                                                 class="btn btn-sm btn-info" title="edit">
                                                 <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                            <a href="{{ route('product.edit', ['product' => $product->id]) }}"
+                                                class="btn btn-sm border" title="image">
+                                                <i class="fa-solid fa-image"></i>
                                             </a>
                                             <a href="{{ route('product.show', ['product' => $product->id]) }}"
                                                 class="btn btn-sm btn-primary" title="view">

@@ -120,6 +120,7 @@
     </form>
 @endsection
 @section('footer')
+ <script src="{{ asset('js/images.js') }}"></script>
     <script>
         CKEDITOR.replace('detail')
     </script>

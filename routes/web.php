@@ -19,9 +19,18 @@ use App\Http\Controllers\backend\SliderController;
 use App\Http\Controllers\backend\TopicController;
 use App\Http\Controllers\backend\UserController;
 use App\Http\Controllers\backend\AuthController;
+use App\Models\Contact;
 
 // trang người dùng
 Route::get('/', [SiteController::class, 'index'])->name('site.index');
+Route::get('san-pham', [SiteController::class, 'product'])->name('site.product');
+Route::get('bai-viet', [SiteController::class, 'post'])->name('site.post');
+Route::get('lien-he', [SiteContactController::class, 'index'])->name('site.contact'); //tao controller
+Route::get('tim-kiem/{keyword}', [SearchController::class, 'index'])->name('site.search'); //tao controller
+Route::get('gio-hang', [CartController::class, 'index'])->name('site.cart'); //tao controller
+Route::get('gio-hang/addcart/{id}', [CartController::class, 'index'])->name('site.cart'); //tao controller
+
+
 
 // trang admin
 Route::get('admin/login', [AuthController::class, 'getlogin'])->name('admin.getlogin');
@@ -38,6 +47,7 @@ Route::prefix('admin')->middleware('login')->group(function () {
         Route::get('destroy/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
         Route::get('show/{product}', [ProductController::class, 'show'])->name('product.show');
         Route::get('restore/{product}', [ProductController::class, 'restore'])->name('product.restore');
+        Route::post('deleteAll', [ProductController::class, 'deleteAll'])->name('product.deleteAll');
     });
     // brand
     route::get('brand/trash', [BrandController::class, 'trash'])->name('brand.trash')->where('trash', '[A-Za-x]+');
@@ -156,3 +166,6 @@ Route::prefix('admin')->middleware('login')->group(function () {
     });
    
 });
+
+// site - end
+Route::get('{slug}', [SiteController::class, 'index'])->name('site.index');

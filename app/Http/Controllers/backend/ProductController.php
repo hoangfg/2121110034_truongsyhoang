@@ -11,7 +11,7 @@ use App\Models\ProductStore;
 use App\Models\User;
 use App\Models\Brand;
 use App\Models\Category;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
@@ -114,24 +114,23 @@ class ProductController extends Controller
                 }
             }
             // sale
-            if (strlen($request->price_sale) && strlen($request->date_begin) && strlen($request->date_end)) {
-                $product_sale = new ProductSale();
-                $product_sale->product_id = $product->id;
+            $product_sale = new ProductSale();
+            if ($request->filled('price_sale')) {
                 $product_sale->price_sale = $request->price_sale;
                 $product_sale->date_begin = $request->date_begin;
                 $product_sale->date_end = $request->date_end;
-                $product_sale->save();
             }
+            $product->sale()->save($product_sale);
             // store
             if (strlen($request->price) && strlen($request->qty)) {
                 $product_store = new ProductStore();
-                $product_store->product_id = $product->id;
+
                 $product_store->price = $request->price;
                 $product_store->qty = $request->qty;
                 $product_store->created_at = date('Y-m-d H:i:s');
                 $product_store->created_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
-                $product_store->save();
             }
+            $product->sale()->save($product_store);
         }
         return redirect()->route('product.index')->with('message', ['type' => 'success', 'msg' => 'Thêm sản phẩm thành công']);
     }
@@ -226,7 +225,7 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, $id)
     {
-        
+
         $product = Product::find($id);
         $product->category_id = $request->category_id;
         $product->brand_id = $request->brand_id;
@@ -239,7 +238,7 @@ class ProductController extends Controller
         $product->status = $request->status;
         $product->updated_at = date('Y-m-d H:i:s');
         $product->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
-        
+
         if ($product->save()) {
             // // upload file
             if ($request->has('image')) {
@@ -253,10 +252,9 @@ class ProductController extends Controller
                     if (File::exists(public_path($path_dir . $list_images->image))) {
                         File::delete(public_path($path_dir . $list_images->image));
                     }
-                   
                 }
 
-                foreach ($array_file as $file) {                  
+                foreach ($array_file as $file) {
                     $extension = $file->getClientOriginalExtension();
                     $filename = $product->slug . '_' . $count . '.' . $extension;
                     $file->move($path_dir, $filename);
@@ -270,7 +268,7 @@ class ProductController extends Controller
             }
             // sale
             if (strlen($request->price_sale) && strlen($request->date_begin) && strlen($request->date_end)) {
-                $product_sale = ProductSale::where('product_id', '=', $id)->first();            
+                $product_sale = ProductSale::where('product_id', '=', $id)->first();
                 $product_sale->price_sale = $request->price_sale;
                 $product_sale->date_begin = $request->date_begin;
                 $product_sale->date_end = $request->date_end;
@@ -278,14 +276,14 @@ class ProductController extends Controller
             }
             // store
             if (strlen($request->price) && strlen($request->qty)) {
-                $product_store = ProductStore::where('product_id', '=', $id)->first();  
+                $product_store = ProductStore::where('product_id', '=', $id)->first();
 
                 $product_store->price = $request->price;
                 $product_store->qty = $request->qty;
                 $product_store->updated_at = date('Y-m-d H:i:s');
                 $product_store->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
                 $product_store->save();
-            } 
+            }
         }
         return redirect()->route('product.index')->with('message', ['type' => 'success', 'msg' => 'Sửa sản phẩm thành công']);
     }
@@ -388,5 +386,20 @@ class ProductController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
         return view("backend.product.trash", compact('list_product', 'title'));
+    }
+    public function deleteAll(Request $request)
+    {
+        $list = $request->checkId;
+        if ($list == null) {
+            return redirect()->route('product.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
+        } else {
+            foreach ($list as $list) {
+                $list->status = 0;
+                $list->updated_at = date('Y-m-d H:i:m');
+                $list->updated_by = Auth::user()->id;
+                $list->save();
+                return redirect()->route('product.index')->with('message', ['type' => 'success', 'msg' => 'Xóa sản phẩm thành công thành công']);
+            }
+        }
     }
 }

@@ -217,6 +217,20 @@
 
     <script>
         $(document).ready(function() {
+            $('#checkAll').click(function() {
+                if ($(this).is(":checked")) {
+                    $(".CheckItem").prop('checked', true);
+                    
+                } else {
+                   
+                     $(".CheckItem").prop('checked', false);
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
             $('#dataTable').DataTable({
                 "pagingType": "full_numbers",
                 "lengthMenu": [
@@ -243,7 +257,6 @@
             }
         }
     </script>
-
 
     <script>
         CKEDITOR.replace('metadesc')

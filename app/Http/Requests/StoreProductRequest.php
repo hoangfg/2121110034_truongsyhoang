@@ -30,21 +30,20 @@ class StoreProductRequest extends FormRequest
             'metakey' => 'required|min:5',
             'detail' => 'required|min:5|max:10000',
             'metadesc' => 'required|min:5|max:10000',
-            'image' => 'required|array|max:5',
+            'image' => 'required|max:5',
             'image.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'price_buy' => 'required|numeric|digits_between:1,10',
-            'price_sale' => 'required|numeric|lte:price_buy|gte:0|digits_between:1,10',
             'price' => 'required|numeric|digits_between:1,10',
             'qty' => 'required|numeric|between:1,1000',
-            "date_begin"=> "required|date|before:date_end",
-            "date_end"=> "required|date|after:date_begin"
+            'price_sale' => 'nullable|required_with:date_begin,date_end|numeric|min:1000|lt:price',
+            'date_begin' => 'nullable|required_with:price_sale|date',
+            'date_end' => 'nullable|required_with:price_sale,date_begin|date|after:date_begin',
         ];
     }
     public function messages()
     {
         $messages = [
-            'required' => 'Bạn chưa điền vào đây'
-            
+            'required' => 'Bạn chưa điền vào đây'          
         ];
         return [
             'name.required' => $messages['required'],
@@ -81,23 +80,15 @@ class StoreProductRequest extends FormRequest
             'price.digits_between' => 'Giá sản phẩm phải có độ dài từ :min đến :max chữ số',
 
 
-            'price_sale.required' => 'Vui lòng nhập giá',
-            'price_sale.numeric' => 'Vui lòng nhập giá hợp lệ',
-            'price_sale.lte' => 'Giá khuyến mãi không được lớn hơn giá gốc',
-            'price_sale.gte' => 'Giá khuyến mãi không được âm',
-            'price_sale.digits_between' => 'Giá sản phẩm phải có độ dài từ :min đến :max chữ số',
-
-
             'qty.required' => 'Vui lòng nhập số lượng sản phẩm',
             'qty.numeric' => 'Vui lòng nhập số lượng sản phẩm hợp lệ',
             'qty.between' => 'Số lượng sản phẩm phải nằm trong khoảng từ 1 đến 1000',
 
-            'date_begin.required' => 'Vui lòng nhập ngày bắt đầu.',
-            'date_begin.date' => 'Ngày bắt đầu không hợp lệ.',
-            'date_begin.before' => 'Ngày bắt đầu phải trước ngày kết thúc.',
-            'date_end.required' => 'Vui lòng nhập ngày kết thúc.',
-            'date_end.date' => 'Ngày kết thúc không hợp lệ.',
-            'date_end.after' => 'Ngày kết thúc phải sau ngày bắt đầu.',
+            'price_sale.lt' => 'Phải nhỏ hơn giá gốc',
+            'price_sale.required_with' => $messages['required'],
+            'date_begin.required_with' => $messages['required'],
+            'date_end.required_with' => $messages['required'],
+            'date_end.after' => 'Ngày kết thúc phải nhỏ hơn ngày bắt đầu',
         ];
     }
 }

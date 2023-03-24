@@ -186,8 +186,8 @@ ul {
 }
 
 .product-action {
-    bottom: 0px;
-    left: 0;
+    
+    top: 0;
     opacity: 0;
     position: absolute;
     right: 0;
@@ -204,8 +204,7 @@ ul {
     padding: 16px 2px 12px;
 }
 .product-action-style > a {
-    color: black;
-    background-color: #eee;
+    color: red;
     border-radius: 50%;
     line-height: 1;
     padding: 1.3rem 1.3rem;
@@ -217,11 +216,11 @@ ul {
     background-color: #04aa6d;
 }
 .product-wrapper:hover {
-    background-color: gray;
+    
     height: 100%;
 }
 .product-wrapper:hover .product-action {
-    bottom: 20px;
+    
     opacity: 1;
 }
 /* sale icon */

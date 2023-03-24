@@ -31,9 +31,9 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-6">
-                            <button class="btn btn-sm btn-danger" type="submit" name="DELETE_ALL">
-                                <i class="fa-solid fa-trash-can"></i></i> Xóa đã chọn
-                            </button>
+                            <a class="btn btn-sm btn-danger" href="{{ route('deleteAll', ['id'=>1]) }}" type="submit" name="DELETE_ALL">
+                                <i class="fa-solid fa-trash-can"></i>Xóa đã chọn
+                            </a>
                         </div>
                         <div class="col-md-6 text-right">
                             <div class="text-right">
