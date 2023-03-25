@@ -338,7 +338,7 @@
                 <div class="product py-5">
 
                     <div class="row">
-                        <div class="col-md-6 col-12 product_flash owl-carousel-parent">
+                        <div class="col-md-12 col-12 product_flash owl-carousel-parent">
                             <div class="row title border-1 border-dark border-bottom mb-5">
 
                                 <div class="col-md-10 col-8  ">
@@ -356,138 +356,195 @@
 
                             </div>
                             <div class="row">
-                                <div class="col-md-12 col-12 mx-auto">
-                                    <div class="large-12 columns">
-                                        <div class="owl-carousel owl-carousel_flash_sale  owl-theme ">
-                                            <div class="item  p-0 bg-none">
-                                                <div class="card ">
-                                                    <div class="row g-0">
-                                                        <div class="col-md-6 col-6 item-img ">
-                                                            <a href="./product-detail.html">
-                                                                <img src="{{ asset('image/harry-potter/Bìa_sách_Harry_Potter_phần_4.jpg') }}"
-                                                                    class="card-img-top img-product_flash img-fluid py-auto"
-                                                                    alt="...">
-                                                            </a>
-                                                            <div class="product-sale">
-                                                                <div class="sale-off ">-40%</div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6 col-6">
-                                                            <div class="card-body ">
-                                                                <h5 class="card-title mt-0 text-line-2">Harry Potter Và
-                                                                    Chiếc Cốc Lửa - Tập 4</h5>
-                                                                <div class="row item-price">
-                                                                    <div class="col-md-6 col-6 ">
-                                                                        <h3 class="m-0 amount ">243.000₫</h3>
-                                                                    </div>
-                                                                    <div class="col-md-6 col-6 ">
-                                                                        <h3 class="m-0  sale">
-                                                                            270.000₫
-                                                                        </h3>
-                                                                    </div>
-                                                                </div>
-
-                                                                <p class="card-text text-line-5">Khi giải Quidditch Thế
-                                                                    giới bị cắt ngang bởi những kẻ ủng
-                                                                    hộ Chúa tể
-                                                                    Voldemort và sự trở lại của Dấu hiệu hắc ám khủng
-                                                                    khiếp,
-                                                                    Harry ý thức được ...
-                                                                </p>
-                                                                <div class="card-item">
-                                                                    <div class="row ">
-                                                                        <div class="col-md-6 col-12">
-                                                                            <a class="cart-item__style">Buy product</a>
-                                                                        </div>
-                                                                        <div class="col-md-6 col-12">
-                                                                            <a class="cart-item__action"
-                                                                                title="Xem" href="#"
-                                                                                data-abc="true">
-                                                                                <i class="fa-regular fa-eye"></i>
-                                                                            </a>
-                                                                            <a class="cart-item__action"
-                                                                                title="Thêm vào giỏ" href="#"
-                                                                                data-abc="true">
-                                                                                <i class="fa fa-shopping-cart"></i>
-                                                                            </a>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
+                                <div class="large-12 columns">
+                                    <div class="owl-carousel owl-carousel_flash_sale  owl-theme ">
+                                        <div class="item  p-0 bg-none">
+                                            <div class="card ">
+                                                <div class="row g-0">
+                                                    <div class="col-md-6 col-12 item-img ">
+                                                        <a href="./product-detail.html">
+                                                            <img src="{{ asset('image/harry-potter/Bìa_sách_Harry_Potter_phần_4.jpg') }}"
+                                                                class="card-img-top img-product_flash img-fluid py-auto"
+                                                                alt="...">
+                                                        </a>
+                                                        <div class="product-sale">
+                                                            <div class="sale-off ">-40%</div>
                                                         </div>
                                                     </div>
+                                                    <div class="col-md-6 col-12">
+                                                        <div class="card-body ">
+                                                            <h5 class="card-title mt-0 text-line-2">Harry Potter Và
+                                                                Chiếc Cốc Lửa - Tập 4</h5>
+                                                            <div class="row item-price">
+                                                                <div class="col-md-6 col-6 ">
+                                                                    <h3 class="m-0 amount ">243.000₫</h3>
+                                                                </div>
+                                                                <div class="col-md-6 col-6 ">
+                                                                    <h3 class="m-0  sale">
+                                                                        270.000₫
+                                                                    </h3>
+                                                                </div>
+                                                            </div>
 
+                                                            <p class="card-text text-line-5">Khi giải Quidditch Thế
+                                                                giới bị cắt ngang bởi những kẻ ủng
+                                                                hộ Chúa tể
+                                                                Voldemort và sự trở lại của Dấu hiệu hắc ám khủng
+                                                                khiếp,
+                                                                Harry ý thức được ...
+                                                            </p>
+                                                            <div class="card-item">
+                                                                <div class="row ">
+                                                                    <div class="col-md-6 col-12">
+                                                                        <a class="cart-item__style">Buy product</a>
+                                                                    </div>
+                                                                    <div class="col-md-6 col-12">
+                                                                        <a class="cart-item__action" title="Xem"
+                                                                            href="#" data-abc="true">
+                                                                            <i class="fa-regular fa-eye"></i>
+                                                                        </a>
+                                                                        <a class="cart-item__action"
+                                                                            title="Thêm vào giỏ" href="#"
+                                                                            data-abc="true">
+                                                                            <i class="fa fa-shopping-cart"></i>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
                                                 </div>
+
                                             </div>
-
-                                            <div class="item  p-0 bg-none">
-                                                <div class="card ">
-                                                    <div class="row g-0 ">
-                                                        <div class="col-md-6 col-6 item-img">
-                                                            <a href="./product-detail.html">
-                                                                <img src="{{ asset('image/harry-potter/Bìa_sách_Harry_Potter_phần_4.jpg') }}"
-                                                                    class="card-img-top img-product_flash img-fluid py-auto"
-                                                                    alt="...">
-                                                            </a>
-                                                            <div class="product-sale">
-                                                                <div class="sale-off ">-40%</div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6 col-6">
-                                                            <div class="card-body ">
-                                                                <h5 class="card-title mt-0 text-line-2">Harry Potter Và
-                                                                    Chiếc Cốc Lửa - Tập 4</h5>
-                                                                <div class="row item-price">
-                                                                    <div class="col-md-6 col-6 ">
-                                                                        <h3 class="m-0 amount ">243.000₫</h3>
-                                                                    </div>
-                                                                    <div class="col-md-6 col-6 ">
-                                                                        <h3 class="m-0  sale">
-                                                                            270.000₫
-                                                                        </h3>
-                                                                    </div>
-                                                                </div>
-
-                                                                <p class="card-text text-line-5">Khi giải Quidditch Thế
-                                                                    giới bị cắt ngang bởi những kẻ ủng
-                                                                    hộ Chúa tể
-                                                                    Voldemort và sự trở lại của Dấu hiệu hắc ám khủng
-                                                                    khiếp,
-                                                                    Harry ý thức được ...
-                                                                </p>
-                                                                <div class="card-item">
-                                                                    <div class="row ">
-                                                                        <div class="col-md-6 col-12">
-                                                                            <a class="cart-item__style">Buy product</a>
-                                                                        </div>
-                                                                        <div class="col-md-6 col-12">
-                                                                            <a class="cart-item__action"
-                                                                                title="Xem" href="#"
-                                                                                data-abc="true">
-                                                                                <i class="fa-regular fa-eye"></i>
-                                                                            </a>
-                                                                            <a class="cart-item__action"
-                                                                                title="Thêm vào giỏ" href="#"
-                                                                                data-abc="true">
-                                                                                <i class="fa fa-shopping-cart"></i>
-                                                                            </a>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
+                                        </div>
+                                        <div class="item  p-0 bg-none">
+                                            <div class="card ">
+                                                <div class="row g-0">
+                                                    <div class="col-md-6 col-12 item-img ">
+                                                        <a href="./product-detail.html">
+                                                            <img src="{{ asset('image/harry-potter/Bìa_sách_Harry_Potter_phần_4.jpg') }}"
+                                                                class="card-img-top img-product_flash img-fluid py-auto"
+                                                                alt="...">
+                                                        </a>
+                                                        <div class="product-sale">
+                                                            <div class="sale-off ">-40%</div>
                                                         </div>
                                                     </div>
+                                                    <div class="col-md-6 col-12">
+                                                        <div class="card-body ">
+                                                            <h5 class="card-title mt-0 text-line-2">Harry Potter Và
+                                                                Chiếc Cốc Lửa - Tập 4</h5>
+                                                            <div class="row item-price">
+                                                                <div class="col-md-6 col-6 ">
+                                                                    <h3 class="m-0 amount ">243.000₫</h3>
+                                                                </div>
+                                                                <div class="col-md-6 col-6 ">
+                                                                    <h3 class="m-0  sale">
+                                                                        270.000₫
+                                                                    </h3>
+                                                                </div>
+                                                            </div>
 
+                                                            <p class="card-text text-line-5">Khi giải Quidditch Thế
+                                                                giới bị cắt ngang bởi những kẻ ủng
+                                                                hộ Chúa tể
+                                                                Voldemort và sự trở lại của Dấu hiệu hắc ám khủng
+                                                                khiếp,
+                                                                Harry ý thức được ...
+                                                            </p>
+                                                            <div class="card-item">
+                                                                <div class="row ">
+                                                                    <div class="col-md-6 col-12">
+                                                                        <a class="cart-item__style">Buy product</a>
+                                                                    </div>
+                                                                    <div class="col-md-6 col-12">
+                                                                        <a class="cart-item__action" title="Xem"
+                                                                            href="#" data-abc="true">
+                                                                            <i class="fa-regular fa-eye"></i>
+                                                                        </a>
+                                                                        <a class="cart-item__action"
+                                                                            title="Thêm vào giỏ" href="#"
+                                                                            data-abc="true">
+                                                                            <i class="fa fa-shopping-cart"></i>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
+                                                    </div>
                                                 </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="item  p-0 bg-none">
+                                            <div class="card ">
+                                                <div class="row g-0">
+                                                    <div class="col-md-6 col-12 item-img ">
+                                                        <a href="./product-detail.html">
+                                                            <img src="{{ asset('image/harry-potter/Bìa_sách_Harry_Potter_phần_4.jpg') }}"
+                                                                class="card-img-top img-product_flash img-fluid py-auto"
+                                                                alt="...">
+                                                        </a>
+                                                        <div class="product-sale">
+                                                            <div class="sale-off ">-40%</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 col-12">
+                                                        <div class="card-body ">
+                                                            <h5 class="card-title mt-0 text-line-2">Harry Potter Và
+                                                                Chiếc Cốc Lửa - Tập 4</h5>
+                                                            <div class="row item-price">
+                                                                <div class="col-md-6 col-6 ">
+                                                                    <h3 class="m-0 amount ">243.000₫</h3>
+                                                                </div>
+                                                                <div class="col-md-6 col-6 ">
+                                                                    <h3 class="m-0  sale">
+                                                                        270.000₫
+                                                                    </h3>
+                                                                </div>
+                                                            </div>
+
+                                                            <p class="card-text text-line-5">Khi giải Quidditch Thế
+                                                                giới bị cắt ngang bởi những kẻ ủng
+                                                                hộ Chúa tể
+                                                                Voldemort và sự trở lại của Dấu hiệu hắc ám khủng
+                                                                khiếp,
+                                                                Harry ý thức được ...
+                                                            </p>
+                                                            <div class="card-item">
+                                                                <div class="row ">
+                                                                    <div class="col-md-6 col-12">
+                                                                        <a class="cart-item__style">Buy product</a>
+                                                                    </div>
+                                                                    <div class="col-md-6 col-12">
+                                                                        <a class="cart-item__action" title="Xem"
+                                                                            href="#" data-abc="true">
+                                                                            <i class="fa-regular fa-eye"></i>
+                                                                        </a>
+                                                                        <a class="cart-item__action"
+                                                                            title="Thêm vào giỏ" href="#"
+                                                                            data-abc="true">
+                                                                            <i class="fa fa-shopping-cart"></i>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
                                             </div>
                                         </div>
 
-                                    </div>
 
+
+
+                                    </div>
                                 </div>
+
                             </div>
                             <div class="row py-3 flash_banner">
                                 <img src="https://demo.wpthemego.com/themes/sw_coruja/wp-content/uploads/2019/09/banner-countdown.png"
@@ -1604,12 +1661,12 @@
                         loop: false
                     },
                     600: {
-                        items: 3,
+                        items: 2,
                         nav: false,
                         loop: false
                     },
                     1000: {
-                        items: 1,
+                        items: 2,
                         nav: false,
                         loop: false
                     }

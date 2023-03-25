@@ -55,7 +55,9 @@
                             <thead>
                                 <tr>
                                     <th class="col-md-1 col-sm-1 col-1 align-middle text-center">
-                                        <input type="checkbox" name="" id="">
+                                        <div class="form-group select-all">
+                                            <input type="checkbox" class="" name="checkAll" id="checkAll">
+                                        </div>
                                     </th>
                                     <th class="col-md-1 col-sm-1 col-1 align-middle text-center">image</th>
                                     <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Tên</th>

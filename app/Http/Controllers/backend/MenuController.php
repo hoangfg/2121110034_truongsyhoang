@@ -3,164 +3,392 @@
 namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Menu;
-use App\Models\Category;
+use App\Http\Requests\UpdateMenuRequest;
 use App\Models\Brand;
-use App\Models\Topic;
+use App\Models\Category;
+use App\Models\Menu;
 use App\Models\Post;
+use App\Models\Topic;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class MenuController extends Controller
 {
+    protected $list_type;
+    public function __construct()
+    {
+        $this->list_type = [
+            'category' => 'Danh mục',
+            'brand' => 'Thương hiệu',
+            'topic' => 'Chủ đề',
+            'page' => 'Trang đơn',
+            'custom' => 'Tùy biến',
+
+        ]; // Gán giá trị ban đầu cho thuộc tính
+    }
+
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $title = 'Tất cả danh mục menu';
-        $list_menu = Menu::where('status', '<>', '0')
+        $list_menu = Menu::where('status', '!=', '0')
             ->orderBy('position', 'asc')
-            ->orderBy('sort_order', 'desc')
+            ->orderBy('sort_order', 'asc')
             ->get();
-        $list_category = Category::where('status', '<>', '0')
+        $list_category = Category::where('status', '=', '1')
             ->orderBy('created_at', 'desc')
             ->get();
-        $list_brand = Brand::where('status', '<>', '0')
+        $list_brand = Brand::where('status', '=', '1')
             ->orderBy('created_at', 'desc')
             ->get();
-        $list_topic = Topic::where('status', '<>', '0')
+        $list_topic = Topic::where('status', '=', '1')
             ->orderBy('created_at', 'desc')
             ->get();
-        $list_page = Post::where([['status', '<>', '0'], ['type', '=', 'page']])
+        $list_page = Post::where([['status', '=', '1'], ['type', '=', 'page']])
             ->orderBy('created_at', 'desc')
             ->get();
+        $list_type = [
+            'category' => 'Danh mục',
+            'brand' => 'Thương hiệu',
+            'topic' => 'Chủ đề',
+            'page' => 'Trang đơn',
+            'custom' => 'Tùy biến',
 
-        return view("backend.menu.index", compact('list_menu', 'list_category', 'list_brand', 'list_topic', 'list_page', 'title'));
+        ];
+        $title = 'Tất Cả Menu';
+        return view("backend.menu.index", compact('list_menu', 'title', 'list_category', 'list_brand', 'list_topic', 'list_page', 'list_type'));
     }
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
-    }
 
+        if (isset($request->DELETE_ALL)) {
+
+            if (isset($request->checkId)) {
+                $list_id = $request->input('checkId');
+                $count_max = sizeof($list_id);
+                $count = 0;
+                foreach ($list_id as $id) {
+                    $menu = Menu::find($id);
+                    if ($menu == null) {
+                        return redirect()->route('menu.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
+                    }
+                    $menu->status = 0;
+                    $menu->updated_at = date('Y-m-d H:i:s');
+                    $menu->updated_by = Auth::user()->id;
+                    $menu->save();
+                    $count++;
+                }
+                return redirect()->route('menu.index')->with('message', ['type' => 'success', 'msg' => "Xóa thành công $count/$count_max !&& Vào thùng rác để xem!!!"]);
+            } else {
+                return redirect()->route('menu.index')->with('message', ['type' => 'danger', 'msg' => "Chưa chọn mẫu tin!!"]);
+            }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        if (isset($request->AddCategory)) {
+            if (isset($request->categoryId)) {
+                $list_id = $request->categoryId;
+                foreach ($list_id as $id) {
+                    $category = Category::find($id);
+                    $menu = new Menu();
+                    $menu->name = $category->name;
+                    $menu->link = $category->slug;
+                    $menu->type = 'category';
+                    $menu->table_id = $id;
+                    $menu->sort_order = 1;
+                    $menu->position = $request->position;
+                    $menu->parent_id = 0;
+                    $menu->level = 1;
+                    $menu->created_at = date('Y-m-d H:i:s');
+                    $menu->created_by = Auth::user()->id;
+                    $menu->status = 2;
+                    $menu->save();
+                }
+                return redirect()->route('menu.index')->with('message', ['type' => 'success', 'msg' => 'Thêm thành công!']);
+            } else {
+                return redirect()->route('menu.index')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+            }
+        }
+        if (isset($request->AddBrand)) {
+            if (isset($request->brandId)) {
+                $list_id = $request->brandId;
+                foreach ($list_id as $id) {
+                    $brand = Brand::find($id);
+                    $menu = new Menu();
+                    $menu->name = $brand->name;
+                    $menu->link = $brand->slug;
+                    $menu->type = 'brand';
+                    $menu->table_id = $id;
+                    $menu->sort_order = 1;
+                    $menu->position = $request->position;
+                    $menu->parent_id = 0;
+                    $menu->level = 1;
+                    $menu->created_at = date('Y-m-d H:i:s');
+                    $menu->created_by = Auth::user()->id;
+                    $menu->status = 2;
+                    $menu->save();
+                }
+                return redirect()->route('menu.index')->with('message', ['type' => 'success', 'msg' => 'Thêm thành công!']);
+            } else {
+                return redirect()->route('menu.index')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+            }
+        }
+        if (isset($request->AddTopic)) {
+            if (isset($request->topicId)) {
+                $list_id = $request->topicId;
+                foreach ($list_id as $id) {
+                    $topic = Topic::find($id);
+                    $menu = new Menu();
+                    $menu->name = $topic->name;
+                    $menu->link = $topic->slug;
+                    $menu->type = 'topic';
+                    $menu->table_id = $id;
+                    $menu->sort_order = 1;
+                    $menu->position = $request->position;
+                    $menu->parent_id = 0;
+                    $menu->level = 1;
+                    $menu->created_at = date('Y-m-d H:i:s');
+                    $menu->created_by = Auth::user()->id;
+                    $menu->status = 2;
+                    $menu->save();
+                }
+                return redirect()->route('menu.index')->with('message', ['type' => 'success', 'msg' => 'Thêm thành công!']);
+            } else {
+                return redirect()->route('menu.index')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+            }
+        }
+        if (isset($request->AddPage)) {
+            if (isset($request->pageId)) {
+                $list_id = $request->pageId;
+                foreach ($list_id as $id) {
+                    $page = Post::find($id);
+                    $menu = new Menu();
+                    $menu->name = $page->title;
+                    $menu->link = $page->slug;
+                    $menu->type = 'page';
+                    $menu->table_id = $id;
+                    $menu->sort_order = 1;
+                    $menu->position = $request->position;
+                    $menu->parent_id = 0;
+                    $menu->level = 1;
+                    $menu->created_at = date('Y-m-d H:i:s');
+                    $menu->created_by = Auth::user()->id;
+                    $menu->status = 2;
+                    $menu->save();
+                }
+                return redirect()->route('menu.index')->with('message', ['type' => 'success', 'msg' => 'Thêm thành công!']);
+            } else {
+                return redirect()->route('menu.index')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+            }
+        }
+        if (isset($request->AddCustom)) {
+
+            $menu = new Menu();
+            $menu->name = $request->name;
+            $menu->link = $request->link;
+            $menu->type = 'custom';
+            $menu->sort_order = 1;
+            $menu->position = $request->position;
+            $menu->parent_id = 0;
+            $menu->level = 1;
+            $menu->created_at = date('Y-m-d H:i:s');
+            $menu->created_by = Auth::user()->id;
+            $menu->status = 2;
+            $menu->save();
+            return redirect()->route('menu.index')->with('message', ['type' => 'success', 'msg' => 'Thêm thành công!']);
+        }
+    }
     /**
      * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        $menu = Menu::find($id);
+        if ($menu == null) {
+            return redirect()->route('menu.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
+        }
+        $title = 'Chi Tiết Menu';
+        return view("backend.menu.show", compact('title', 'menu'));
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        //
+        $menu = Menu::where([['status', '!=', '0'], ['id', '=', $id]])->first();
+        if ($menu == null) {
+            return redirect()->route('menu.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
+        }
+        $title = 'Sửa Menu';
+        $list = Menu::where([['status', '!=', '0'], ['id', '!=', $id]])
+            ->orderBy('created_at', 'desc')->get();
+
+        $html_sort_order = "";
+        $html_parent_id = "";
+        foreach ($list as $item) {
+
+            $html_sort_order .= "<option value='" . ($item->sort_order + 1) . "'" . (($item->sort_order + 1 == old('sort_order', $menu->sort_order)) ? ' selected ' : ' ') . ">Sau: " . $item->name . "</option>";
+            $html_parent_id .= "<option value='" . $item->id . "'" . (($item->id == old('parent_id', $menu->parent_id)) ? ' selected ' : ' ') . ">" . $item->name . "</option>";
+        }
+        return view("backend.menu.edit", compact('title', 'html_sort_order', 'menu', 'html_parent_id'));
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateMenuRequest $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'unique:menu,name,' . $id . ',id',
+
+        ], [
+            'name.unique' => 'Tên đã được sử dụng. Vui lòng chọn tên khác.'
+        ]);
+        $menu = Menu::find($id);
+        $menu->name = $request->name;
+        $menu->link = $request->link;
+        $menu->sort_order = $request->sort_order;
+        $menu->position = $request->position;
+        $menu->parent_id = $request->parent_id;
+        $menu->level = 1;
+        $menu->updated_at = date('Y-m-d H:i:s');
+        $menu->updated_by = Auth::user()->id;
+        $menu->status = $request->status;
+
+        if ($menu->save()) {
+            return redirect()->route('menu.index')->with('message', ['type' => 'success', 'msg' => 'Cập nhật thành công!']);
+        }
+        return redirect()->route('menu.edit')->with('message', ['type' => 'danger', 'msg' => 'Cập nhật thất bại!!']);
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $menu = Menu::find($id);
+        $menu = menu::find($id);
         if ($menu == null) {
-            return redirect()->route('menu.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
-        } else {
-            $menu->delete();
-            return redirect()->route('menu.trash')->with('message', ['type' => 'success', 'msg' => 'Xóa tin nhắn thành công']);
+            return redirect()->route('menu.trash')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại!']);
         }
+        if ($menu->delete()) {
+            return redirect()->route('menu.trash')->with('message', ['type' => 'success', 'msg' => 'Xóa vĩnh viễn thành công!']);
+        }
+        return redirect()->route('menu.trash')->with('message', ['type' => 'danger', 'msg' => 'Xóa thất bại!']);
     }
-    // delete
-    public function delete($id, Request $request)
+
+    public function delete($id)
     {
         $menu = Menu::find($id);
         if ($menu == null) {
-            return redirect()->route('menu.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
-        } else {
-            $menu->status = 0;
-            $menu->updated_at = date('Y-m-d H:i:s');
-            $menu->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
-            $menu->save();
-            return redirect()->route('menu.index')->with('message', ['type' => 'success', 'msg' => 'Xóa tin nhắn thành công']);
+            return redirect()->route('menu.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại!']);
         }
+        $menu->status = 0;
+        $menu->updated_at = date('Y-m-d H:i:s');
+        $menu->updated_by = Auth::user()->id;
+        $menu->save();
+        return redirect()->route('menu.index')->with('message', ['type' => 'success', 'msg' => 'Xóa thành công!&& vào thùng rác để xem!!!']);
     }
-    // restore
-    public function restore($id, Request $request)
-    {
-        $menu = Menu::find($id);
-        if ($menu == null) {
-            return redirect()->route('menu.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
-        } else {
-            $menu->status = 2;
-            $menu->updated_at = date('Y-m-d H:i:s');
-            $menu->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
-            $menu->save();
-            return redirect()->route('menu.trash')->with('message', ['type' => 'success', 'msg' => 'Khôi phục sản phẩm thành công']);
-        }
-    }
-    // trash
     public function trash()
     {
+        $list_type = $this->list_type;
+        //$list=Product::all();//try van tat ca
+        $menu = Menu::where('status', '=', 0)->Orderby('updated_at', 'asc')->get();
         $title = 'Thùng rác menu';
-        $list_menu = Menu::where('status', '=', '0')
-            ->orderBy('position', 'asc')
-            ->orderBy('sort_order', 'asc')
-            ->get();
-        return view("backend.menu.trash", compact('list_menu', 'title'));
+        return view("backend.menu.trash", compact('menu', 'title', 'list_type'));
     }
-    #status
-    public function status($id, Request $request)
+
+    public function trash_multi(Request $request)
     {
+
+        if (isset($request['DELETE_ALL'])) {
+            if (isset($request->checkId)) {
+                $list_id = $request->input('checkId');
+
+                $count_max = sizeof($list_id);
+                $count = 0;
+                foreach ($list_id as $id) {
+                    $menu = Menu::find($id);
+                    if ($menu == null) {
+                        return redirect()->route('menu.trash')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!&&Đã xóa $count/$count_max !"]);
+                    }
+                    if ($menu->delete()) {
+                        $count++;
+                    }
+                }
+                return redirect()->route('menu.trash')->with('message', ['type' => 'success', 'msg' => "Xóa vĩnh viễn thành công $count/$count_max !"]);
+            } else {
+                return redirect()->route('menu.trash')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+            }
+        }
+        if (isset($request['RESTORE_ALL'])) {
+            if (isset($request->checkId)) {
+                $list_id = $request->input('checkId');
+
+                $count_max = sizeof($list_id);
+                $count = 0;
+                foreach ($list_id as $id) {
+                    $menu = Menu::find($id);
+                    if ($menu == null) {
+                        return redirect()->route('menu.trash')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!&&Đã phục hồi $count/$count_max !"]);
+                    }
+
+                    $menu->status = 2;
+                    $menu->updated_at = date('Y-m-d H:i:s');
+                    $menu->updated_by = Auth::user()->id;
+                    $menu->save();
+                    $count++;
+                }
+                return redirect()->route('menu.index')->with('message', ['type' => 'success', 'msg' => "Phục hồi thành công $count/$count_max !"]);
+            } else {
+                return redirect()->route('menu.trash')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+            }
+        }
+    }
+    public function restore($id)
+    {
+
         $menu = Menu::find($id);
         if ($menu == null) {
-            return redirect()->route('menu.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
-        } else {
-            $menu->status = ($menu->status == 1) ? 2 : 1;
-            $menu->updated_at = date('Y-m-d H:i:s');
-            $menu->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
-            $menu->save();
-            return redirect()->route('menu.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công']);
+            return redirect()->route('menu.trash')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại!']);
         }
+
+        $menu->status = 2;
+        $menu->updated_at = date('Y-m-d H:i:s');
+        $menu->updated_by = Auth::user()->id;
+        $menu->save();
+        return redirect()->route('menu.index')->with('message', ['type' => 'success', 'msg' => 'Phục hồi thành công!']);
+    }
+    public function status($id)
+    {
+
+        $menu = Menu::find($id);
+        if ($menu == null) {
+            return redirect()->route('menu.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại!']);
+        }
+        $list_type = $this->list_type;
+        $list_type = $list_type[$menu->type];
+        $typeTable = Str::studly($menu->type); // Chuyển đổi tên bảng sang dạng StudlyCase
+        $type = DB::table($typeTable)->where('id', $menu->table_id)->first();
+        if ($type->status == 1) {
+            $menu->status = ($menu->status == 1) ? 2 : 1;
+        } else {
+            return redirect()->route('menu.index')->with('message', ['type' => 'success', 'msg' => "Bạn cần thay đổi trạng thái $list_type  trước!!!"]);
+        }
+        $menu->updated_at = date('Y-m-d H:i:s');
+        $menu->updated_by = Auth::user()->id;
+        $menu->save();
+        return redirect()->route('menu.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công!']);
     }
 }

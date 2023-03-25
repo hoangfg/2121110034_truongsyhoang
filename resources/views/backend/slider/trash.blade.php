@@ -4,7 +4,7 @@
 
 @endsection
 @section('content')
-    <form action="{{ route('slider.store') }}" method="post" enctype="multipart/form-data">
+    <form action="{{ route('slider.trashAll') }}" method="post" enctype="multipart/form-data">
         @csrf
 
         <div class="content-wrapper">
@@ -34,8 +34,11 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-md-6">
+                                    <button class="btn btn-sm btn-primary" type="submit" name="RESTORE_ALL">
+                                        <i class="fa-solid fa-rotate-left"></i> Khôi phục đã chọn đã chọn
+                                    </button>
                                     <button class="btn btn-sm btn-danger" type="submit" name="DELETE_ALL">
-                                        <i class="fas fa-trash"></i> Xóa đã chọn
+                                        <i class="fa-solid fa-trash-can"></i></i> Xóa đã chọn
                                     </button>
                                 </div>
                                 <div class="col-md-6 text-right">
@@ -54,9 +57,9 @@
                             <table class="table table-bordered" id="dataTable">
                                 <thead>
                                     <tr>
-                                        <th class="text-center col-md-1">
+                                         <th class="col-md-1 col-sm-1 col-1 align-middle text-center">
                                             <div class="form-group select-all">
-                                                <input type="checkbox">
+                                                <input type="checkbox" class="" name="checkAll" id="checkAll">
                                             </div>
                                         </th>
                                         <th class="text-center col-md-1">Hình</th>
@@ -72,7 +75,8 @@
                                         <tr>
                                             <td class="text-center">
                                                 <div class="form-group">
-                                                    <input type="checkbox" name="checkId[]" value="{{ $slider->id }}">
+                                                    <input type="checkbox" name="checkId[]" value="{{ $slider->id }}"
+                                                        id="sliderCheck{{ $slider->id }}" class="CheckItem">
                                                 </div>
                                             </td>
                                             <td class="index-img">

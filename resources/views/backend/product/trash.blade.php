@@ -4,7 +4,7 @@
 
 @endsection
 @section('content')
-    <form action="{{ route('category.store') }}" method="post" enctype="multipart/form-data">
+    <form action="{{ route('product.trashAll') }}" method="post" enctype="multipart/form-data">
         @csrf
 
         <div class="content-wrapper">
@@ -31,6 +31,9 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-md-6">
+                               <button class="btn btn-sm btn-primary" type="submit" name="RESTORE_ALL">
+                                    <i class="fa-solid fa-rotate-left"></i> Khôi phục đã chọn đã chọn
+                                </button>
                                 <button class="btn btn-sm btn-danger" type="submit" name="DELETE_ALL">
                                     <i class="fa-solid fa-trash-can"></i></i> Xóa đã chọn
                                 </button>

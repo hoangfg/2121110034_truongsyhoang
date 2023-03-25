@@ -9,4 +9,6 @@ class Menu extends Model
 {
     use HasFactory;
     protected $table = 'menu';
+
+    
 }

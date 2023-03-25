@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Http\Requests\StoreTopicRequest;
 use App\Http\Requests\UpdateTopicRequest;
+use Illuminate\Support\Facades\Auth;
+
 class TopicController extends Controller
 {
     /**
@@ -37,8 +39,17 @@ class TopicController extends Controller
         $html_parent_id = "";
         $html_sort_order = "";
         foreach ($list_topic as $topic) {
-            $html_parent_id .= "<option value='" . $topic->id . "'>" . $topic->name . "</option>";
-            $html_sort_order .= "<option value='" . ($topic->sort_order + 1) . "'>Sau: " . $topic->name . "</option>";
+            
+            if ($topic->id == old('parent_id')) {
+                $html_parent_id .= "<option selected value='" . $topic->id . "'>" . $topic->name . "</option>";
+            } else {
+                $html_parent_id .= "<option  value='" . $topic->id . "'>" . $topic->name . "</option>";
+            }
+            if ($topic->sort_order == old('sort_order - 1')) {
+                $html_sort_order .= "<option selected value='" . ($topic->sort_order + 1) . "'>Sau: " . $topic->name . "</option>";
+            } else {
+                $html_sort_order .= "<option value='" . ($topic->sort_order + 1) . "'>Sau: " . $topic->name . "</option>";
+            }
         }
         return view('backend.topic.create', compact('html_parent_id', 'html_sort_order', 'title'));
     }
@@ -52,15 +63,15 @@ class TopicController extends Controller
     public function store(StoreTopicRequest $request)
     {
         $topic = new Topic();
-        $topic->name = $_POST['name'];
+        $topic->name = $request->name;
         $topic->slug = Str::slug($request->name, '-');
-        $topic->metakey = $_POST['metakey'];
-        $topic->metadesc = $_POST['metadesc'];
-        $topic->parent_id = $_POST['parent_id'];
-        $topic->sort_order = $_POST['sort_order'];
-        $topic->status = $_POST['status'];
+        $topic->metakey = $request->metakey;
+        $topic->metadesc = $request->metadesc;
+        $topic->parent_id = $request->parent_id;
+        $topic->sort_order = $request->sort_order;
+        $topic->status = $request->status;
         $topic->created_at = date('Y-m-d H:i:s');
-        $topic->created_by = (isset($_SESSION['user_id'])) ? $_SESSION['user_id'] : 1;
+        $topic->created_by =Auth::user()->id;
         if ($topic->save()) {
             $link = new Link();
             $link->link = $topic->slug;
@@ -83,14 +94,14 @@ class TopicController extends Controller
     {
         $title = 'Thông tin dề tài';
         $total = Topic::join('post', 'post.topic_id', '=', 'topic.id')
-        ->where('topic.id', '=', $id)
+            ->where('topic.id', '=', $id)
             ->distinct()
             ->count();
 
 
         $post_topic = Topic::join('post', 'post.topic_id', '=', 'topic.id')
-        ->select('post.*', 'post.title as post_name', 'post.id as post_id')
-        ->where('topic.id', '=', $id)
+            ->select('post.*', 'post.title as post_name', 'post.id as post_id')
+            ->where('topic.id', '=', $id)
             ->orderBy('created_at', 'desc')
             ->distinct()
             ->get();
@@ -123,8 +134,18 @@ class TopicController extends Controller
         $html_parent_id = "";
         $html_sort_order = "";
         foreach ($list_topic as $item) {
-            $html_parent_id .= "<option value='" . $item->id . "'>" . $item->name . "</option>";
-            $html_sort_order .= "<option value='" . ($item->sort_order + 1) . "'>" . $item->name . "</option>";
+           if($topic->id != $item->id) {
+                if ($topic->parent_id == $item->id) {
+                    $html_parent_id .= "<option selected value='" . $item->id . "'>" . $item->name . "</option>";
+                } else {
+                    $html_parent_id .= "<option  value='" . $topic->id . "'>" . $topic->name . "</option>";
+                }
+                if ($topic->sort_order - 1 == $item->sort_order) {
+                    $html_sort_order .= "<option selected value='" . ($topic->sort_order + 1) . "'>Sau: " . $topic->name . "</option>";
+                } else {
+                    $html_sort_order .= "<option value='" . ($topic->sort_order + 1) . "'>Sau: " . $topic->name . "</option>";
+                }
+           }
         }
         return view('backend.topic.edit', compact('topic', 'html_parent_id', 'html_sort_order', 'title'));
     }
@@ -139,22 +160,27 @@ class TopicController extends Controller
     public function update(UpdateTopicRequest $request, $id)
     {
         $topic = Topic::find($id);
-        
+
         $request->validate([
             'name' => 'unique:topic,name,' . $id . ',id'
         ], [
             'name.unique' => 'Tên đã được sử dụng, vui lòng sử dụng một tên khác',
         ]);
-        $topic->name = $_POST['name'];
+        $topic->name = $request->name;
         $topic->slug = Str::slug($request->name, '-');
-        $topic->metakey = $_POST['metakey'];
-        $topic->metadesc = $_POST['metadesc'];
-        $topic->parent_id = $_POST['parent_id'];
-        $topic->sort_order = $_POST['sort_order'];
-        $topic->status = $_POST['status'];
+        $topic->metakey = $request->metakey;
+        $topic->metadesc = $request->metadesc;
+        $topic->parent_id = $request->parent_id;
+        $topic->sort_order = $request->sort_order;
+        $topic->status = $request->status;
         $topic->updated_at = date('Y-m-d H:i:s');
-
-        $topic->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+        if ($topic->status = 2) {
+            $topic->posts()->update([
+                'status' => 2,
+                'updated_by' => Auth::user()->id
+            ]);
+        }
+        $topic->updated_by =  Auth::user()->id;
         if ($topic->save()) {
             $link = Link::where([['type', '=', 'topic'], ['table_id', '=', $id]])->first();
             $link->link = $topic->slug;
@@ -189,8 +215,12 @@ class TopicController extends Controller
             return redirect()->route('topic.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
         } else {
             $topic->status = 0;
+            $topic->posts()->update([
+                'status' => 2,
+                'updated_by' => Auth::user()->id
+            ]);
             $topic->updated_at = date('Y-m-d H:i:s');
-            $topic->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+            $topic->updated_by =  Auth::user()->id;
             $topic->save();
             return redirect()->route('topic.index')->with('message', ['type' => 'success', 'msg' => 'Chuyển vào thùng rác thành công']);
         }
@@ -204,7 +234,7 @@ class TopicController extends Controller
         } else {
             $topic->status = 2;
             $topic->updated_at = date('Y-m-d H:i:s');
-            $topic->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+            $topic->updated_by =  Auth::user()->id;
             $topic->save();
             return redirect()->route('topic.trash')->with('message', ['type' => 'success', 'msg' => 'Khôi phục sản phẩm thành công']);
         }
@@ -224,10 +254,100 @@ class TopicController extends Controller
             return redirect()->route('topic.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
         } else {
             $topic->status = ($topic->status == 1) ? 2 : 1;
+            if($topic->status = 2) {
+                $topic->posts()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
+            }
             $topic->updated_at = date('Y-m-d H:i:s');
-            $topic->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+            $topic->updated_by =  Auth::user()->id;
             $topic->save();
             return redirect()->route('topic.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công']);
+        }
+    }
+    public function deleteAll(Request $request)
+    {
+
+        if (isset($request->checkId)) {
+            $list_id = $request->input('checkId');
+
+            $count_max = sizeof($list_id);
+            $count = 0;
+            foreach ($list_id as $id) {
+                $topic = Topic::find($id);
+                if ($topic == null) {
+                    return redirect()->route('topic.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
+                }
+                $topic->status = 0;
+                $topic->posts()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
+                $topic->updated_at = date('Y-m-d H:i:s');
+                $topic->updated_by = Auth::user()->id;
+                $topic->save();
+                if ($topic->status == 0) {
+                    $topic->posts()->update(['status' => 2]);
+                }
+                $count++;
+            }
+            return redirect()->route('topic.index')->with('message', ['type' => 'success', 'msg' => "Xóa thành công $count/$count_max !&& Vào thùng rác để xem!!!"]);
+        } else {
+            return redirect()->route('topic.index')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+        }
+    }
+    // destroy-multi
+    public function TrashAll(Request $request)
+    {
+        if (isset($request['DELETE_ALL'])) {
+            if (isset($request->checkId)) {
+                $list_id = $request->input('checkId');
+                $count_max = sizeof($list_id);
+                $count = 0;
+                foreach ($list_id as $list) {
+                    $topic = Topic::find($list);
+                    if ($topic == null) {
+                        return redirect()->route('topic.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
+                    }           
+                    $topic->posts()->update([
+                        'status' => 0,
+                        'updated_by' => Auth::user()->id
+                    ]);
+                    if ($topic->delete()) {                     
+                        $link = Link::where(
+                            [['type', '=', 'topic'], ['table_id', '=', $list]]
+                        )->first();
+                        $link->delete();
+                    }
+                    $count++;
+                }
+                return redirect()->route('topic.trash')->with('message', ['type' => 'success', 'msg' => "Xóa thành công $count/$count_max !&& sản phẩm!!!"]);
+            } else {
+                return redirect()->route('topic.trash')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+            }
+        }
+        if (isset($request['RESTORE_ALL'])) {
+            if (isset($request->checkId)) {
+                $list_id = $request->input('checkId');
+                $count_max = sizeof($list_id);
+                $count = 0;
+
+                foreach ($list_id as $id) {
+                    $topic = Topic::find($id);
+                    if ($topic == null) {
+                        return redirect()->route('topic.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
+                    }
+                    $topic->status = 2;
+                    $topic->updated_at = date('Y-m-d H:i:s');
+                    $topic->updated_by = Auth::user()->id;
+                    $topic->save();
+                    $count++;
+                }
+                return redirect()->route('topic.trash')->with('message', ['type' => 'success', 'msg' => "Khôi phục thành công $count/$count_max !&& sản phẩm!!!"]);
+            } else {
+                return redirect()->route('topic.trash')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+            }
         }
     }
 }

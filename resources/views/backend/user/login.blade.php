@@ -34,11 +34,11 @@
                     <h2>LOGIN</h2>
                     <form action="{{ route('admin.postlogin') }}" method="post" >
                         @csrf
-                        <div class="group">
+                        <div class="group mt-1">
                             <input type="text" name="username" class="input-box" placeholder="Username" required />
                             <i class="fa-regular fa-user"></i>
                         </div>
-                        <div class="group">
+                        <div class="group mt-1">
                             <input type="password" name="password" class="input-box" placeholder="Password" required />
                             <i class="far fa-eye btn" onclick="togglePassword(this)"></i>
                         </div>

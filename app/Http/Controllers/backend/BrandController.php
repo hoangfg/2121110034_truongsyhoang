@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use App\Http\Requests\StoreBrandRequest;
 use App\Http\Requests\UpdateBrandRequest;
+use Illuminate\Support\Facades\Auth;
 
 class BrandController extends Controller
 {
@@ -60,7 +61,7 @@ class BrandController extends Controller
         $brand->sort_order = $request->sort_order;
         $brand->status = $request->status;
         $brand->created_at = date('Y-m-d H:i:s');
-        $brand->created_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+        $brand->created_by = Auth::user()->id;
         // upload file
         if ($request->has('image')) {
             $path_dir = "images/brand/";
@@ -99,16 +100,16 @@ class BrandController extends Controller
 
         $total_sale = Brand::join('product', 'product.brand_id', '=', 'brand.id')
             ->join('product_sale', 'product_sale.product_id', '=', 'product.id')
-            ->where('product.price_sale', '>', '0')
+            ->where('product_sale.price_sale', '>', '0')
             ->where('brand.id', '=', $id)
             ->distinct()
             ->count();
-
-
         $product_brand = Brand::join('product', 'product.brand_id', '=', 'brand.id')
+            ->join('product_image', 'product_image.product_id', '=', 'product.id')
             ->select('product.*', 'product.name as product_name', 'product.id as product_id')
+            ->select('product_image.*', 'product_image.image as image')
             ->where('brand.id', '=', $id)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('product.created_at', 'desc')
             ->distinct()
             ->get();
 
@@ -126,15 +127,10 @@ class BrandController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit($id)
     {
-        
+
         $brand = Brand::find($id);
         $title = 'Sửa thương hiệu';
         $list_brand = Brand::where('status', '<>', '0')->orderBy('created_at', 'desc')->get();
@@ -147,16 +143,10 @@ class BrandController extends Controller
         return view('backend.brand.edit', compact('brand',  'html_sort_order', 'title'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(UpdateBrandRequest $request, $id)
     {
-        
+
         $brand = Brand::find($id);
         $request->validate([
             'name' => 'unique:brand,name,' . $id . ',id'
@@ -164,7 +154,7 @@ class BrandController extends Controller
             'name.unique' => 'Tên đã được sử dụng, vui lòng sử dụng một tên khác',
         ]);
         $brand->name = $request->name;
-       
+
         $brand->slug = Str::slug($request->name, '-');
         $brand->metakey = $request->metakey;
         $brand->metadesc = $request->metadesc;
@@ -174,10 +164,17 @@ class BrandController extends Controller
         $brand->status = $request->status;
         $brand->updated_at = date('Y-m-d H:i:s');
 
-        $brand->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+        $brand->updated_by = Auth::user()->id;
 
-        // dd($brand);
+        
         // upload file
+       if($brand->status == 2) {
+            $brand->products()->update([
+                'status' => 2,
+                'updated_by' => Auth::user()->id
+            ]);
+       }
+
         if ($request->has('image')) {
             $path_dir = "images/brand/";
             if (File::exists(public_path($path_dir . $brand->image))) {
@@ -201,12 +198,6 @@ class BrandController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $brand = Brand::find($id);
@@ -215,6 +206,10 @@ class BrandController extends Controller
         if ($brand == null) {
             return redirect()->route('brand.trash')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
         }
+        $brand->products()->update([
+            'status' => 0,
+            'updated_by' => Auth::user()->id
+        ]);
         if ($brand->delete()) {
             if (File::exists($path_image_delete)) {
                 File::delete($path_image_delete);
@@ -222,6 +217,7 @@ class BrandController extends Controller
             $link = Link::where(
                 [['type', '=', 'brand'], ['table_id', '=', $id]]
             )->first();
+            
             $link->delete();
             return redirect()->route('brand.trash')->with('message', ['type' => 'success', 'msg' => 'Xóa sản phẩm thành công']);
         } else {
@@ -237,8 +233,14 @@ class BrandController extends Controller
         } else {
             $brand->status = 0;
             $brand->updated_at = date('Y-m-d H:i:m');
-            $brand->updated_by = 1;
+            $brand->updated_by = Auth::user()->id;
             $brand->save();
+            if ($brand->status == 0) {
+                $brand->products()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
+            }
             return redirect()->route('brand.index')->with('message', ['type' => 'success', 'msg' => 'Xóa sản phẩm thành công']);
         }
     }
@@ -258,8 +260,14 @@ class BrandController extends Controller
         } else {
             $brand->status = ($brand->status == 1) ? 2 : 1;
             $brand->updated_at = date('Y-m-d H:i:m');
-            $brand->updated_by = 1;
+            $brand->updated_by = Auth::user()->id;;
             $brand->save();
+            if ($brand->status == 2) {
+                $brand->products()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
+            }
             return redirect()->route('brand.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công']);
         }
     }
@@ -272,9 +280,99 @@ class BrandController extends Controller
         } else {
             $brand->status = 2;
             $brand->updated_at = date('Y-m-d H:i:m');
-            $brand->updated_by = 1;
+            $brand->updated_by = Auth::user()->id;;
             $brand->save();
             return redirect()->route('brand.trash')->with('message', ['type' => 'success', 'msg' => 'Khôi phục sản phâm thành công']);
+        }
+    }
+    // delete-multi
+    public function deleteAll(Request $request)
+    {
+
+        if (isset($request->checkId)) {
+            $list_id = $request->input('checkId');
+
+            $count_max = sizeof($list_id);
+            $count = 0;
+            foreach ($list_id as $id) {
+                $brand = Brand::find($id);
+                if ($brand == null) {
+                    return redirect()->route('brand.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
+                }
+                $brand->status = 0;
+                $brand->products()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
+                $brand->updated_at = date('Y-m-d H:i:s');
+                $brand->updated_by = Auth::user()->id;
+                $brand->save();
+                if ($brand->status == 0) {
+                    $brand->products()->update(['status' => 2]);
+                }
+                $count++;
+            }
+            return redirect()->route('brand.index')->with('message', ['type' => 'success', 'msg' => "Xóa thành công $count/$count_max !&& Vào thùng rác để xem!!!"]);
+        } else {
+            return redirect()->route('brand.index')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+        }
+    }
+    // destroy-multi
+    public function TrashAll(Request $request)
+    {
+        if (isset($request['DELETE_ALL'])) {
+            if (isset($request->checkId)) {
+                $list_id = $request->input('checkId');
+                $count_max = sizeof($list_id);
+                $count = 0;
+                foreach ($list_id as $list) {
+                    $brand = Brand::find($list);
+                    if ($brand == null) {
+                        return redirect()->route('brand.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
+                    }
+                    $path_dir = "images/brand/";
+                    $path_image_delete = public_path($path_dir . $brand->image);
+                    $brand->products()->update([
+                        'status' => 0,
+                        'updated_by' => Auth::user()->id
+                    ]);
+                    if ($brand->delete()) {
+                        if (File::exists($path_image_delete)) {
+                            File::delete($path_image_delete);
+                        }
+                        $link = Link::where(
+                            [['type', '=', 'brand'], ['table_id', '=', $list]]
+                        )->first();
+                        $link->delete();
+                    }
+                    $count++;
+                }
+                return redirect()->route('brand.trash')->with('message', ['type' => 'success', 'msg' => "Xóa thành công $count/$count_max !&& sản phẩm!!!"]);
+            } else {
+                return redirect()->route('brand.trash')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+            }
+        }
+        if (isset($request['RESTORE_ALL'])) {
+            if (isset($request->checkId)) {
+                $list_id = $request->input('checkId');
+                $count_max = sizeof($list_id);
+                $count = 0;
+
+                foreach ($list_id as $id) {
+                    $brand = Brand::find($id);
+                    if ($brand == null) {
+                        return redirect()->route('brand.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
+                    }
+                    $brand->status = 2;
+                    $brand->updated_at = date('Y-m-d H:i:s');
+                    $brand->updated_by = Auth::user()->id;
+                    $brand->save();
+                    $count++;
+                }
+                return redirect()->route('brand.trash')->with('message', ['type' => 'success', 'msg' => "Khôi phục thành công $count/$count_max !&& sản phẩm!!!"]);
+            } else {
+                return redirect()->route('brand.trash')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+            }
         }
     }
 }

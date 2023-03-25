@@ -18,4 +18,23 @@ class Product extends Model
     {
         return $this->hasOne(ProductStore::class);
     }
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($product) {
+            foreach ($product->images as $image) {
+                $imagePath = public_path("images/product/" . $image->image);
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+                $image->delete();
+            }
+        });
+    }
 }

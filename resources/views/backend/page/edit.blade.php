@@ -98,9 +98,16 @@
                                     <label for="image">Hình ảnh</label>
                                     <input name="image" id="image" type="file" onchange="previewFile(this);"
                                         class="form-control btn-sm image-preview">
-                                    <img id="previewImg" class="mt-1" width="30%"
-                                        src="{{ asset('images/post/' . $page->image) }}"
-                                        alt="">
+                                    @if ($page->image)
+                                        <img id="previewImg" class="mt-1" width="30%"
+                                            src="{{ asset('images/page/' . $page->image) }}" alt="">
+                                    @else
+                                        <img id="previewImg" class="mt-1" width="30%"
+                                            src="{{ asset('images/No-Image-Placeholder.svg.png') }}" alt="">
+                                    @endif
+
+
+
                                     @if ($errors->has('image'))
                                         <div class="text-danger">
                                             {{ $errors->first('image') }}

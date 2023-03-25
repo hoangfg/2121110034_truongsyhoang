@@ -4,7 +4,7 @@
 
 @endsection
 @section('content')
-    <form action="{{ route('page.store') }}" method="post" enctype="multipart/form-data">
+    <form action="{{ route('page.deleteAll') }}" method="post" enctype="multipart/form-data">
         @csrf
 
         <div class="content-wrapper">
@@ -56,7 +56,9 @@
                             <thead>
                                 <tr class="text-center">
                                     <th class="col-md-1 col-sm-1 col-1 align-middle text-center">
-                                        <input type="checkbox" name="" id="">
+                                        <div class="form-group select-all">
+                                            <input type="checkbox" class="" name="checkAll" id="checkAll">
+                                        </div>
                                     </th>
                                     <th class="col-md-1 col-sm-1 col-1 align-middle text-center">image</th>
                                     <th class="col-md-3 col-sm-2 col-2 align-middle text-center">Tiêu đề bài viết</th>
@@ -70,7 +72,12 @@
                             <tbody>
                                 @foreach ($list_page as $page)
                                     <tr>
-                                        <td class="text-center"> <input type="checkbox" name="" id=""></td>
+                                        <td class="text-center">
+                                            <div class="form-group">
+                                                <input type="checkbox" name="checkId[]" value="{{ $page->id }}"
+                                                    id="pageCheck{{ $page->id }}" class="CheckItem">
+                                            </div>
+                                        </td>
                                         <td>
 
                                             <img src="{{ asset('images/post/' . $page->image) }}" alt=""

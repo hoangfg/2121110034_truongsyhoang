@@ -4,7 +4,7 @@
 
 @endsection
 @section('content')
-    <form action="{{ route('topic.store') }}" method="post" enctype="multipart/form-data">
+    <form action="{{ route('topic.deleteAll') }}" method="post" enctype="multipart/form-data">
         @csrf
 
         <div class="content-wrapper">
@@ -56,7 +56,9 @@
                             <thead>
                                 <tr>
                                     <th class="col-md-1 col-sm-1 col-1 align-middle text-center">
-                                        <input type="checkbox" name="" id="">
+                                        <div class="form-group select-all">
+                                            <input type="checkbox" class=""  name="checkAll" id="checkAll">
+                                        </div>
                                     </th>
                                     <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Tên chủ đề</th>
                                     <th class="col-md-3 col-sm-2 col-2 align-middle text-center">Từ khóa</th>
@@ -69,7 +71,12 @@
                             <tbody>
                                 @foreach ($list_topic as $topic)
                                     <tr>
-                                        <td class="text-center"> <input type="checkbox" name="" id=""></td>
+                                        <td class="text-center">
+                                            <div class="form-group">
+                                                <input type="checkbox" name="checkId[]" value="{{ $topic->id }}"
+                                                    id="topicCheck{{ $topic->id }}" class="CheckItem">
+                                            </div>
+                                        </td>
 
                                         <td>{{ $topic->name }}</td>
                                         <td>{{ $topic->metakey }}</td>

@@ -42,7 +42,8 @@ class SiteController extends Controller
                     if ($post != null) {
                         return $this->PostDetail($post);
                     } else {
-                        return $this->error_404($slug);
+                        return
+                         $this->error_404($slug);
                     }
                 }
             }

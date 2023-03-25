@@ -31,16 +31,17 @@ class ProductController extends Controller
     {
         $title = 'Tất cả sản phẩm';
 
-        $list_product = Product::leftJoin('product_image', function ($join) {
-            $join->on('product.id', '=', 'product_image.product_id')
-                ->where('product_image.ordinal_number', '=', 1);
-        })
+        $list_product = Product::with('images')
             ->join('category', 'product.category_id', '=', 'category.id')
             ->join('brand', 'product.brand_id', '=', 'brand.id')
-            ->select('product.*', 'category.name as category_name', 'brand.name as brand_name', 'product_image.image as image')
-            ->where('product.status',  '<>', '0')
+            ->select('product.*', 'category.name as category_name', 'brand.name as brand_name')
+            ->where('product.status', '<>', '0')
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->get()
+            ->map(function ($product) {
+                $product->image = $product->images->first()->image;
+                return $product;
+            });
         return view("backend.product.index", compact('list_product', 'title',));
     }
 
@@ -93,7 +94,7 @@ class ProductController extends Controller
         $product->metadesc = $request->metadesc;
         $product->status = $request->status;
         $product->created_at = date('Y-m-d H:i:s');
-        $product->created_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+        $product->created_by =  Auth::user()->id;
         // dd($product);
         if ($product->save()) {
             // // upload file
@@ -128,7 +129,7 @@ class ProductController extends Controller
                 $product_store->price = $request->price;
                 $product_store->qty = $request->qty;
                 $product_store->created_at = date('Y-m-d H:i:s');
-                $product_store->created_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+                $product_store->created_by =  Auth::user()->id;
             }
             $product->sale()->save($product_store);
         }
@@ -237,7 +238,7 @@ class ProductController extends Controller
         $product->metadesc = $request->metadesc;
         $product->status = $request->status;
         $product->updated_at = date('Y-m-d H:i:s');
-        $product->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+        $product->updated_by =  Auth::user()->id;
 
         if ($product->save()) {
             // // upload file
@@ -281,7 +282,7 @@ class ProductController extends Controller
                 $product_store->price = $request->price;
                 $product_store->qty = $request->qty;
                 $product_store->updated_at = date('Y-m-d H:i:s');
-                $product_store->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+                $product_store->updated_by =  Auth::user()->id;
                 $product_store->save();
             }
         }
@@ -303,16 +304,16 @@ class ProductController extends Controller
         }
         if ($product->delete()) {
             // image
-            $product_images = ProductImage::where('product_id', $id)->get();
-            $path_dir = "images/product/";
-            foreach ($product_images as $product_image) {
-                $path_image_delete = public_path($path_dir . $product_image->image);
-                if (File::exists($path_image_delete)) {
-                    File::delete($path_image_delete);
-                }
-                $product_image->delete();
-            }
-            // dale
+            // $product_images = ProductImage::where('product_id', $id)->get();
+            // $path_dir = "images/product/";
+            // foreach ($product_images as $product_image) {
+            //     $path_image_delete = public_path($path_dir . $product_image->image);
+            //     if (File::exists($path_image_delete)) {
+            //         File::delete($path_image_delete);
+            //     }
+            //     $product_image->delete();
+            // }
+            // sale
             $product_sale = ProductSale::where('product_id', $id)->first();
             if ($product_sale) {
                 $product_sale->delete();
@@ -374,31 +375,94 @@ class ProductController extends Controller
     public function trash()
     {
         $title = 'Thùng rác sản phẩm';
-        $list_product = DB::table('product')
-            ->leftJoin('product_image', function ($join) {
-                $join->on('product.id', '=', 'product_image.product_id')
-                    ->where('product_image.ordinal_number', '=', 1);
-            })
+        $list_product = Product::with('images')
             ->join('category', 'product.category_id', '=', 'category.id')
             ->join('brand', 'product.brand_id', '=', 'brand.id')
-            ->select('product.*', 'category.name as category_name', 'brand.name as brand_name', 'product_image.image as image')
-            ->where('product.status',  '=', '0')
+            ->select('product.*', 'category.name as category_name', 'brand.name as brand_name')
+            ->where('product.status', '=', '0')
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->get()
+            ->map(function ($product) {
+                $product->image = $product->images->first()->image;
+                return $product;
+            });
         return view("backend.product.trash", compact('list_product', 'title'));
     }
     public function deleteAll(Request $request)
     {
-        $list = $request->checkId;
-        if ($list == null) {
-            return redirect()->route('product.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
+        if (isset($request->checkId)) {
+            $list_id = $request->input('checkId');
+            $count_max = sizeof($list_id);
+            $count = 0;
+            foreach ($list_id as $list) {
+                $product = Product::find($list);
+                if ($product == null) {
+                    return redirect()->route('product.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
+                }
+                $product->status = 0;
+                $product->updated_at = date('Y-m-d H:i:s');
+                $product->updated_by = Auth::user()->id;
+                $product->save();
+                $count++;
+            }
+            return redirect()->route('product.index')->with('message', ['type' => 'success', 'msg' => "Xóa thành công $count/$count_max !&& Vào thùng rác để xem!!!"]);
         } else {
-            foreach ($list as $list) {
-                $list->status = 0;
-                $list->updated_at = date('Y-m-d H:i:m');
-                $list->updated_by = Auth::user()->id;
-                $list->save();
-                return redirect()->route('product.index')->with('message', ['type' => 'success', 'msg' => 'Xóa sản phẩm thành công thành công']);
+            return redirect()->route('product.index')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+        }
+    }
+    public function trashAll(Request $request)
+    {
+        $path = 'images/product/';
+
+        if (isset($request['DELETE_ALL'])) {
+            if (isset($request->checkId)) {
+                $list_id = $request->input('checkId');
+                $count_max = sizeof($list_id);
+                $count = 0;
+                foreach ($list_id as $list) {
+                    $product = Product::find($list);
+                    if ($product == null) {
+                        return redirect()->route('product.trash')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!&&Đã xóa $count/$count_max !"]);
+                    }
+                    if ($product->delete()) {
+                        // sale
+                        $product_sale = ProductSale::where('product_id', $list)->first();
+                        if ($product_sale) {
+                            $product_sale->delete();
+                        }
+                        // store
+                        $product_store = ProductStore::where('product_id', $list)->first();
+                        if ($product_store) {
+                            $product_store->delete();
+                        }
+                        $count++;
+                    }
+                }
+                return redirect()->route('product.trash')->with('message', ['type' => 'success', 'msg' => "Xóa vĩnh viễn thành công $count/$count_max !"]);
+            } else {
+                return redirect()->route('product.trash')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+            }
+        }
+        if (isset($request['RESTORE_ALL'])) {
+            if (isset($request->checkId)) {
+                $list_id = $request->input('checkId');
+                $count_max = sizeof($list_id);
+                $count = 0;
+                foreach ($list_id as $list) {
+                    $product = Product::find($list);
+                    if ($product == null) {
+                        return redirect()->route('product.trash')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!&&Đã phục hồi $count/$count_max !"]);
+                    }
+
+                    $product->status = 2;
+                    $product->updated_at = date('Y-m-d H:i:s');
+                    $product->updated_by = Auth::user()->id;
+                    $product->save();
+                    $count++;
+                }
+                return redirect()->route('product.index')->with('message', ['type' => 'success', 'msg' => "Phục hồi thành công $count/$count_max !"]);
+            } else {
+                return redirect()->route('product.trash')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
             }
         }
     }

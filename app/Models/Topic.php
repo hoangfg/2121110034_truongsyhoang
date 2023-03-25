@@ -9,4 +9,8 @@ class Topic extends Model
 {
     use HasFactory;
     protected $table = 'topic';
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
 }

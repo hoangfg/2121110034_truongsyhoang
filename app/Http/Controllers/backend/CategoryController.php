@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Link;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use Illuminate\Support\Str;
@@ -66,7 +67,7 @@ class CategoryController extends Controller
         $category->status = $request->status;
         $category->created_at = date('Y-m-d H:i:s');
 
-        $category->created_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+        $category->created_by =  Auth::user()->id;
 
         // upload file
         if ($request->has('image')) {
@@ -185,8 +186,13 @@ class CategoryController extends Controller
         $category->status = $request->status;
         $category->updated_at = date('Y-m-d H:i:s');
 
-        $category->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
-
+        $category->updated_by =  Auth::user()->id;
+        if ($category->status == 2) {
+            $category->products()->update([
+                'status' => 2,
+                'updated_by' => Auth::user()->id
+            ]);
+        }
         // dd($category);
         // upload file
         if ($request->has('image')) {
@@ -226,6 +232,10 @@ class CategoryController extends Controller
         if ($category == null) {
             return redirect()->route('category.trash')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
         }
+        $category->products()->update([
+            'status' => 0,
+            'updated_by' => Auth::user()->id
+        ]);
         if ($category->delete()) {
             if (File::exists($path_image_delete)) {
                 File::delete($path_image_delete);
@@ -249,8 +259,12 @@ class CategoryController extends Controller
             return redirect()->route('category.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
         } else {
             $category->status = 0;
+            $category->products()->update([
+                'status' => 2,
+                'updated_by' => Auth::user()->id
+            ]);
             $category->updated_at = date('Y-m-d H:i:s');
-            $category->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+            $category->updated_by =  Auth::user()->id;
             $category->save();
             return redirect()->route('category.index')->with('message', ['type' => 'success', 'msg' => 'Chuyển vào thùng rác thành công']);
         }
@@ -264,7 +278,7 @@ class CategoryController extends Controller
         } else {
             $category->status = 2;
             $category->updated_at = date('Y-m-d H:i:s');
-            $category->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+            $category->updated_by =  Auth::user()->id;
             $category->save();
             return redirect()->route('category.trash')->with('message', ['type' => 'success', 'msg' => 'Khôi phục sản phẩm thành công']);
         }
@@ -277,8 +291,14 @@ class CategoryController extends Controller
             return redirect()->route('category.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
         } else {
             $category->status = ($category->status == 1) ? 2 : 1;
+            if ($category->status == 2) {
+                $category->products()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
+            }
             $category->updated_at = date('Y-m-d H:i:s');
-            $category->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+            $category->updated_by =  Auth::user()->id;
             $category->save();
             return redirect()->route('category.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công']);
         }
@@ -289,5 +309,95 @@ class CategoryController extends Controller
         $title = 'Thùng rác danh mục';
         $list_category = Category::where('status',  '=', '0')->orderBy('created_at', 'desc')->get();
         return view("backend.category.trash", compact('list_category', 'title'));
+    }
+    // delete-multi
+    public function deleteAll(Request $request)
+    {
+
+        if (isset($request->checkId)) {
+            $list_id = $request->input('checkId');
+
+            $count_max = sizeof($list_id);
+            $count = 0;
+            foreach ($list_id as $id) {
+                $category = Category::find($id);
+                if ($category == null) {
+                    return redirect()->route('category.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
+                }
+                $category->status = 0;
+                $category->products()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
+                $category->updated_at = date('Y-m-d H:i:s');
+                $category->updated_by = Auth::user()->id;
+                $category->save();
+                if ($category->status == 0) {
+                    $category->products()->update(['status' => 2]);
+                }
+                $count++;
+            }
+            return redirect()->route('category.index')->with('message', ['type' => 'success', 'msg' => "Xóa thành công $count/$count_max !&& Vào thùng rác để xem!!!"]);
+        } else {
+            return redirect()->route('category.index')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+        }
+    }
+    // destroy-multi
+    public function TrashAll(Request $request)
+    {
+        if (isset($request['DELETE_ALL'])) {
+            if (isset($request->checkId)) {
+                $list_id = $request->input('checkId');
+                $count_max = sizeof($list_id);
+                $count = 0;
+                foreach ($list_id as $list) {
+                    $category = Category::find($list);
+                    if ($category == null) {
+                        return redirect()->route('category.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
+                    }
+                    $path_dir = "images/category/";
+                    $path_image_delete = public_path($path_dir . $category->image);
+                    $category->products()->update([
+                        'status' => 0,
+                        'updated_by' => Auth::user()->id
+                    ]);
+                    if ($category->delete()) {
+                        if (File::exists($path_image_delete)) {
+                            File::delete($path_image_delete);
+                        }
+                        $link = Link::where(
+                            [['type', '=', 'category'], ['table_id', '=', $list]]
+                        )->first();
+                        $link->delete();
+                    }
+                    $count++;
+                }
+                return redirect()->route('category.trash')->with('message', ['type' => 'success', 'msg' => "Xóa thành công $count/$count_max !&& sản phẩm!!!"]);
+            } else {
+                return redirect()->route('category.trash')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+            }
+        }
+        if (isset($request['RESTORE_ALL'])) {
+            if (isset($request->checkId)) {
+                $list_id = $request->input('checkId');
+                $count_max = sizeof($list_id);
+                $count = 0;
+
+                foreach ($list_id as $id) {
+                    $category = Category::find($id);
+                    if ($category == null) {
+                        return redirect()->route('category.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
+                    }
+                    $category->status = 2;
+                    $category->updated_at = date('Y-m-d H:i:s');
+                    $category->updated_by = Auth::user()->id;
+                    $category->save();
+                    $count++;
+                }
+                return redirect()->route('category.trash')->with('message', ['type' => 'success', 'msg' => "Khôi phục thành công $count/$count_max !&& sản phẩm!!!"]);
+            } else {
+                return redirect()->route('category.trash')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+            }
+        }
     }
 }

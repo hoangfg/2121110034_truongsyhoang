@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\Slider;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 
 class SliderController extends Controller
 {
@@ -29,7 +32,17 @@ class SliderController extends Controller
      */
     public function create()
     {
-        //
+        $title = 'Thêm sản phẩm';
+        $html_sort_order = "";
+        $list_slider = Slider::where('status', '<>', '0')->get();
+        foreach ($list_slider as $slider) {
+            if ($slider->sort_order == old('sort_order - 1')) {
+                $html_sort_order .= "<option selected value='" . ($slider->sort_order + 1) . "'>Sau: " . $slider->name . "</option>";
+            } else {
+                $html_sort_order .= "<option value='" . ($slider->sort_order + 1) . "'>Sau: " . $slider->name . "</option>";
+            }
+        }
+        return view("backend.slider.create", compact('title', 'html_sort_order'));
     }
 
     /**
@@ -40,7 +53,30 @@ class SliderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $slider = new Slider();
+        $slider->name = $request->name;
+        $slider->slug = Str::slug($request->name, '-');
+        $slider->link = $request->link;
+        $slider->position = $request->position;
+        $slider->sort_order = $request->sort_order;
+        // $slider->level = 1;
+        $slider->status = $request->status;
+        $slider->created_at = date('Y-m-d H:i:s');
+        $slider->created_by = Auth::user()->id;
+        // upload file
+        if ($request->has('image')) {
+            $path_dir = "images/slider/";
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = $slider->slug . '.' . $extension;
+            $file->move($path_dir, $filename);
+            $slider->image = $filename;
+            $slider->save();
+            return redirect()->route('slider.index')->with('message', ['type' => 'success', 'msg' => 'Thêm sản phẩm thành công']);
+        } else {
+            return redirect()->route('slider.index')->with('message', ['type' => 'danger', 'msg' => 'Thêm sản phẩm không thành công']);
+        }
+        // end
     }
 
     /**
@@ -74,7 +110,20 @@ class SliderController extends Controller
      */
     public function edit($id)
     {
-        //
+        $slider = Slider::find($id);
+        $title = 'Sửa thương hiệu';
+        $list_slider = Slider::where('status', '<>', '0')->orderBy('created_at', 'desc')->get();
+
+        $html_sort_order = "";
+        foreach ($list_slider as $item) {
+            if ($item->sort_order - 1 == $slider->sort_order) {
+                $html_sort_order .= "<option selected value='" . ($slider->sort_order + 1) . "'>Sau: " . $slider->name . "</option>";
+            } else {
+                $html_sort_order .= "<option  value='" . ($slider->sort_order + 1) . "'>Sau: " . $slider->name . "</option>";
+            }
+        }
+
+        return view('backend.slider.edit', compact('slider',  'html_sort_order', 'title'));
     }
 
     /**
@@ -86,7 +135,30 @@ class SliderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $slider = Slider::find($id);
+        $slider->name = $request->name;
+        $slider->slug = Str::slug($request->name, '-');
+        $slider->link = $request->link;
+        $slider->position = $request->position;
+        $slider->sort_order = $request->sort_order;
+        // $slider->level = 1;
+        $slider->status = $request->status;
+        $slider->created_at = date('Y-m-d H:i:s');
+        $slider->created_by = Auth::user()->id;
+        // upload file
+        if ($request->has('image')) {
+            $path_dir = "images/slider/";
+            if (File::exists(public_path($path_dir . $slider->image))) {
+                File::delete(public_path($path_dir . $slider->image));
+            }
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = $slider->slug . '.' . $extension;
+            $file->move($path_dir, $filename);
+            $slider->image = $filename;
+        }
+        $slider->save();
+        return redirect()->route('slider.index')->with('message', ['type' => 'success', 'msg' => 'Thêm sản phẩm thành công']);
     }
 
     /**
@@ -114,7 +186,7 @@ class SliderController extends Controller
         } else {
             $slider->status = 0;
             $slider->updated_at = date('Y-m-d H:i:s');
-            $slider->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+            $slider->updated_by =  Auth::user()->id;
             $slider->save();
             return redirect()->route('slider.index')->with('message', ['type' => 'success', 'msg' => 'Chuyển vào thùng rác thành công']);
         }
@@ -135,7 +207,7 @@ class SliderController extends Controller
         } else {
             $slider->status = ($slider->status == 1) ? 2 : 1;
             $slider->updated_at = date('Y-m-d H:i:s');
-            $slider->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+            $slider->updated_by =  Auth::user()->id;
             $slider->save();
             return redirect()->route('slider.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công']);
         }
@@ -149,9 +221,87 @@ class SliderController extends Controller
         } else {
             $slider->status = 2;
             $slider->updated_at = date('Y-m-d H:i:s');
-            $slider->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+            $slider->updated_by =  Auth::user()->id;
             $slider->save();
             return redirect()->route('slider.trash')->with('message', ['type' => 'success', 'msg' => 'Khôi phục sản phẩm thành công']);
+        }
+    }
+    // delete-multi
+    public function deleteAll(Request $request)
+    {
+
+        if (isset($request->checkId)) {
+            $list_id = $request->input('checkId');
+
+            $count_max = sizeof($list_id);
+            $count = 0;
+            foreach ($list_id as $id) {
+                $slider = Slider::find($id);
+                if ($slider == null) {
+                    return redirect()->route('slider.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
+                }
+                $slider->status = 0;
+
+                $slider->updated_at = date('Y-m-d H:i:s');
+                $slider->updated_by = Auth::user()->id;
+                $slider->save();
+
+                $count++;
+            }
+            return redirect()->route('slider.index')->with('message', ['type' => 'success', 'msg' => "Xóa thành công $count/$count_max !&& Vào thùng rác để xem!!!"]);
+        } else {
+            return redirect()->route('slider.index')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+        }
+    }
+    // destroy-multi
+    public function TrashAll(Request $request)
+    {
+        if (isset($request['DELETE_ALL'])) {
+            if (isset($request->checkId)) {
+                $list_id = $request->input('checkId');
+                $count_max = sizeof($list_id);
+                $count = 0;
+                foreach ($list_id as $list) {
+                    $slider = Slider::find($list);
+                    if ($slider == null) {
+                        return redirect()->route('slider.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
+                    }
+                    $path_dir = "images/slider/";
+                    $path_image_delete = public_path($path_dir . $slider->image);
+
+                    if ($slider->delete()) {
+                        if (File::exists($path_image_delete)) {
+                            File::delete($path_image_delete);
+                        }
+                    }
+                    $count++;
+                }
+                return redirect()->route('slider.trash')->with('message', ['type' => 'success', 'msg' => "Xóa thành công $count/$count_max !&& sản phẩm!!!"]);
+            } else {
+                return redirect()->route('slider.trash')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+            }
+        }
+        if (isset($request['RESTORE_ALL'])) {
+            if (isset($request->checkId)) {
+                $list_id = $request->input('checkId');
+                $count_max = sizeof($list_id);
+                $count = 0;
+
+                foreach ($list_id as $id) {
+                    $slider = Slider::find($id);
+                    if ($slider == null) {
+                        return redirect()->route('slider.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
+                    }
+                    $slider->status = 2;
+                    $slider->updated_at = date('Y-m-d H:i:s');
+                    $slider->updated_by = Auth::user()->id;
+                    $slider->save();
+                    $count++;
+                }
+                return redirect()->route('slider.trash')->with('message', ['type' => 'success', 'msg' => "Khôi phục thành công $count/$count_max !&& sản phẩm!!!"]);
+            } else {
+                return redirect()->route('slider.trash')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+            }
         }
     }
 }

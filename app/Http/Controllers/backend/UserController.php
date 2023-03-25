@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\Hash;
+
 class UserController extends Controller
 {
     /**
@@ -18,7 +20,7 @@ class UserController extends Controller
     public function index()
     {
         $title = 'Tất cả tài khoản ';
-        $list_user=User::where([['status', '<>', '0'], ['roles', '!=', '0']])->orderBy('created_at', 'desc')->get();
+        $list_user = User::where([['status', '<>', '0'], ['roles', '!=', '0']])->orderBy('created_at', 'desc')->get();
         return view("backend.user.index", compact('list_user', 'title'));
     }
 
@@ -170,7 +172,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user =User::find($id);
+        $user = User::find($id);
         if ($user == null) {
             return redirect()->route('user.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
         } else {
@@ -181,13 +183,13 @@ class UserController extends Controller
     // delete
     public function delete($id, Request $request)
     {
-        $user =User::find($id);
+        $user = User::find($id);
         if ($user == null) {
             return redirect()->route('user.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
         } else {
             $user->status = 0;
             $user->updated_at = date('Y-m-d H:i:s');
-            $user->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+            $user->updated_by =  Auth::user()->id;
             $user->save();
             return redirect()->route('user.index')->with('message', ['type' => 'success', 'msg' => 'Chuyển vào thùng rác thành công']);
         }
@@ -196,19 +198,19 @@ class UserController extends Controller
     public function trash()
     {
         $title = 'Tất cả tài khoản không còn sử dụng';
-        $list_user =User::where('status', '=', '0')->orderBy('created_at', 'desc')->get();
+        $list_user = User::where('status', '=', '0')->orderBy('created_at', 'desc')->get();
         return view("backend.user.trash", compact('list_user', 'title'));
     }
     // status
     public function status($id, Request $request)
     {
-        $user =User::find($id);
+        $user = User::find($id);
         if ($user == null) {
             return redirect()->route('user.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
         } else {
             $user->status = ($user->status == 1) ? 2 : 1;
             $user->updated_at = date('Y-m-d H:i:s');
-            $user->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+            $user->updated_by =  Auth::user()->id;
             $user->save();
             return redirect()->route('user.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công']);
         }
@@ -216,13 +218,13 @@ class UserController extends Controller
     // restore
     public function restore($id, Request $request)
     {
-        $user =User::find($id);
+        $user = User::find($id);
         if ($user == null) {
             return redirect()->route('user.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
         } else {
             $user->status = 2;
             $user->updated_at = date('Y-m-d H:i:s');
-            $user->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+            $user->updated_by =  Auth::user()->id;
             $user->save();
             return redirect()->route('user.trash')->with('message', ['type' => 'success', 'msg' => 'Khôi phục sản phẩm thành công']);
         }

@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('title', $title ?? 'trang quản lý')
 @section('header')
-
+<link rel="stylesheet" href="{{asset('css/images.css')  }}">
 @endsection
 @section('content')
     <form action="{{ route('product.store') }}" method="post" enctype="multipart/form-data">

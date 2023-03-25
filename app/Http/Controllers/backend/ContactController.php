@@ -5,6 +5,7 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Contact;
+use Illuminate\Support\Facades\Auth;
 
 class ContactController extends Controller
 {
@@ -49,7 +50,7 @@ class ContactController extends Controller
      */
     public function show($id)
     {
-        
+
         //
     }
 
@@ -101,7 +102,7 @@ class ContactController extends Controller
         } else {
             $contact->status = 0;
             $contact->updated_at = date('Y-m-d H:i:s');
-            $contact->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+            $contact->updated_by =  Auth::user()->id;
             $contact->save();
             return redirect()->route('contact.index')->with('message', ['type' => 'success', 'msg' => 'Xóa tin nhắn thành công']);
         }
@@ -110,15 +111,14 @@ class ContactController extends Controller
     public function restore($id, Request $request)
     {
         $contact = Contact::find($id);
-        if($contact == null) {
-            return redirect()->route('contact.index')->with('message', ['type'=>'danger', 'msg'=> 'Mẫu tin không tồn tại']);
+        if ($contact == null) {
+            return redirect()->route('contact.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
         } else {
             $contact->status = 2;
             $contact->updated_at = date('Y-m-d H:i:s');
-            $contact->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+            $contact->updated_by =  Auth::user()->id;
             $contact->save();
             return redirect()->route('contact.trash')->with('message', ['type' => 'success', 'msg' => 'Khôi phục sản phẩm thành công']);
-
         }
     }
     // trash

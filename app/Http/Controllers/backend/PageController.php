@@ -12,6 +12,7 @@ use App\Http\Requests\UpdatePageRequest;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class PageController extends Controller
 {
@@ -37,7 +38,7 @@ class PageController extends Controller
     public function create()
     {
         $title = 'Thêm giới thiệu';
-       
+
         return view('backend.page.create', compact('title'));
     }
 
@@ -74,7 +75,6 @@ class PageController extends Controller
         } else {
             return redirect()->route('page.index')->with('message', ['type' => 'danger', 'msg' => 'Thêm sản phẩm không thành công']);
         }
-
     }
 
     /**
@@ -87,11 +87,11 @@ class PageController extends Controller
     {
         $title = 'Thông tin giới thiệu';
         $page = Post::where('post.id', '=', $id)
-        ->select(
-            "*",
-            DB::raw("(" . User::select("name")->whereColumn("user.id", "=", "post.updated_by")->toSql() . ") as updated_name"),
-            DB::raw("(" . User::select("name")->whereColumn("user.id", "=", "post.created_by")->toSql() . ") as created_name")
-        )
+            ->select(
+                "*",
+                DB::raw("(" . User::select("name")->whereColumn("user.id", "=", "post.updated_by")->toSql() . ") as updated_name"),
+                DB::raw("(" . User::select("name")->whereColumn("user.id", "=", "post.created_by")->toSql() . ") as created_name")
+            )
             ->first();
         if ($page == null) {
             return redirect()->route('page.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
@@ -109,7 +109,7 @@ class PageController extends Controller
     public function edit($id)
     {
         $page = Post::find($id);
-        $title = 'Sửa giới thiệu';  
+        $title = 'Sửa giới thiệu';
         return view('backend.page.edit', compact('page', 'title'));
     }
 
@@ -137,7 +137,7 @@ class PageController extends Controller
         $page->type = 'page';
         $page->updated_at = date('Y-m-d H:i:s');
 
-        $page->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+        $page->updated_by =  Auth::user()->id;
         if ($request->has('image')) {
             $path_dir = "images/post/";
             if (File::exists(public_path($path_dir . $page->image))) {
@@ -187,7 +187,7 @@ class PageController extends Controller
         } else {
             $page->status = 0;
             $page->updated_at = date('Y-m-d H:i:s');
-            $page->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+            $page->updated_by =  Auth::user()->id;
             $page->save();
             return redirect()->route('page.index')->with('message', ['type' => 'success', 'msg' => 'Chuyển vào thùng rác thành công']);
         }
@@ -201,7 +201,7 @@ class PageController extends Controller
         } else {
             $page->status = 2;
             $page->updated_at = date('Y-m-d H:i:s');
-            $page->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+            $page->updated_by =  Auth::user()->id;
             $page->save();
             return redirect()->route('page.trash')->with('message', ['type' => 'success', 'msg' => 'Khôi phục sản phẩm thành công']);
         }
@@ -215,7 +215,7 @@ class PageController extends Controller
         } else {
             $page->status = ($page->status == 1) ? 2 : 1;
             $page->updated_at = date('Y-m-d H:i:s');
-            $page->updated_by = ($request->session()->exists('user_id')) ? session('user_id') : 1;
+            $page->updated_by =  Auth::user()->id;
             $page->save();
             return redirect()->route('page.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công']);
         }
@@ -226,6 +226,86 @@ class PageController extends Controller
         $title = 'Thùng rác ';
         $list_page = Post::where([['post.status', '=', '0'], ['post.type', '=', 'page']])
             ->orderBy('post.created_at', 'desc')->get();
-        return view("backend.page.trash", compact('list_page','title'));
+        return view("backend.page.trash", compact('list_page', 'title'));
+    }
+
+    // delete-multi
+    public function deleteAll(Request $request)
+    {
+
+        if (isset($request->checkId)) {
+            $list_id = $request->input('checkId');
+
+            $count_max = sizeof($list_id);
+            $count = 0;
+            foreach ($list_id as $id) {
+                $page = Post::find($id);
+                if ($page == null) {
+                    return redirect()->route('page.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
+                }
+                $page->status = 0;
+                
+                $page->updated_at = date('Y-m-d H:i:s');
+                $page->updated_by = Auth::user()->id;
+                $page->save();
+                
+                $count++;
+            }
+            return redirect()->route('page.index')->with('message', ['type' => 'success', 'msg' => "Xóa thành công $count/$count_max !&& Vào thùng rác để xem!!!"]);
+        } else {
+            return redirect()->route('page.index')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+        }
+    }
+    // destroy-multi
+    public function TrashAll(Request $request)
+    {
+        if (isset($request['DELETE_ALL'])) {
+            if (isset($request->checkId)) {
+                $list_id = $request->input('checkId');
+                $count_max = sizeof($list_id);
+                $count = 0;
+                foreach ($list_id as $list) {
+                    $page = Post::find($list);
+                    if ($page == null) {
+                        return redirect()->route('page.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
+                    }
+                    $path_dir = "images/page/";
+                    $path_image_delete = public_path($path_dir . $page->image);
+                  
+                    if ($page->delete()) {
+                        if (File::exists($path_image_delete)) {
+                            File::delete($path_image_delete);
+                        }
+                        
+                    }
+                    $count++;
+                }
+                return redirect()->route('page.trash')->with('message', ['type' => 'success', 'msg' => "Xóa thành công $count/$count_max !&& sản phẩm!!!"]);
+            } else {
+                return redirect()->route('page.trash')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+            }
+        }
+        if (isset($request['RESTORE_ALL'])) {
+            if (isset($request->checkId)) {
+                $list_id = $request->input('checkId');
+                $count_max = sizeof($list_id);
+                $count = 0;
+
+                foreach ($list_id as $id) {
+                    $page = Post::find($id);
+                    if ($page == null) {
+                        return redirect()->route('page.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
+                    }
+                    $page->status = 2;
+                    $page->updated_at = date('Y-m-d H:i:s');
+                    $page->updated_by = Auth::user()->id;
+                    $page->save();
+                    $count++;
+                }
+                return redirect()->route('page.trash')->with('message', ['type' => 'success', 'msg' => "Khôi phục thành công $count/$count_max !&& sản phẩm!!!"]);
+            } else {
+                return redirect()->route('page.trash')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+            }
+        }
     }
 }
