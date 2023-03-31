@@ -38,10 +38,13 @@ class BrandController extends Controller
     {
         $title = 'Thêm thương hiệu';
         $list_brand = Brand::where('status', '<>', '0')->orderBy('created_at', 'desc')->get();
-
         $html_sort_order = "";
         foreach ($list_brand as $brand) {
-            $html_sort_order .= "<option value='" . ($brand->sort_order + 1) . "'" . (($brand->sort_order + 1 == old('sort_order')) ? ' selected ' : ' ') . ">Sau: " . $brand->name . "</option>";
+            if ($brand->sort_order + 1 == old('sort_order')) {
+                $html_sort_order .= "<option selected value='" . ($brand->sort_order + 1) . "'>Sau: " . $brand->name . "</option>";
+            } else {
+                $html_sort_order .= "<option value='" . ($brand->sort_order + 1) . "'>Sau: " . $brand->name . "</option>";
+            }
         }
         return view('backend.brand.create', compact('html_sort_order', 'title'));
     }
@@ -137,9 +140,15 @@ class BrandController extends Controller
 
         $html_sort_order = "";
         foreach ($list_brand as $item) {
-
-            $html_sort_order .= "<option value='" . ($item->sort_order + 1) . "'" . (($item->sort_order + 1 == old('sort_order', $brand->sort_order)) ? ' selected ' : ' ') . ">Sau: " . $item->name . "</option>";
+            if ($item->id != $id) {
+                if ($item->sort_order + 1 == $brand->sort_order) {
+                    $html_sort_order .= "<option selected value='" . ($brand->sort_order + 1) . "'>Sau: " . $brand->name . "</option>";
+                } else {
+                    $html_sort_order .= "<option value='" . ($brand->sort_order + 1) . "'>Sau: " . $brand->name . "</option>";
+                }
+            }
         }
+
         return view('backend.brand.edit', compact('brand',  'html_sort_order', 'title'));
     }
 
@@ -166,14 +175,18 @@ class BrandController extends Controller
 
         $brand->updated_by = Auth::user()->id;
 
-        
+
         // upload file
-       if($brand->status == 2) {
+        if ($brand->status == 2) {
             $brand->products()->update([
                 'status' => 2,
                 'updated_by' => Auth::user()->id
             ]);
-       }
+            $brand->menus()->update([
+                'status' => 2,
+                'updated_by' => Auth::user()->id
+            ]);
+        }
 
         if ($request->has('image')) {
             $path_dir = "images/brand/";
@@ -206,18 +219,20 @@ class BrandController extends Controller
         if ($brand == null) {
             return redirect()->route('brand.trash')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
         }
-        $brand->products()->update([
-            'status' => 0,
-            'updated_by' => Auth::user()->id
-        ]);
+       
+        
         if ($brand->delete()) {
             if (File::exists($path_image_delete)) {
                 File::delete($path_image_delete);
             }
+            $brand->products()->update([
+                'status' => 0,
+                'updated_by' => Auth::user()->id
+            ]);
             $link = Link::where(
                 [['type', '=', 'brand'], ['table_id', '=', $id]]
             )->first();
-            
+            $brand->menus()->delete();
             $link->delete();
             return redirect()->route('brand.trash')->with('message', ['type' => 'success', 'msg' => 'Xóa sản phẩm thành công']);
         } else {
@@ -237,6 +252,10 @@ class BrandController extends Controller
             $brand->save();
             if ($brand->status == 0) {
                 $brand->products()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
+                $brand->menus()->update([
                     'status' => 2,
                     'updated_by' => Auth::user()->id
                 ]);
@@ -264,6 +283,10 @@ class BrandController extends Controller
             $brand->save();
             if ($brand->status == 2) {
                 $brand->products()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
+                $brand->menus()->update([
                     'status' => 2,
                     'updated_by' => Auth::user()->id
                 ]);
@@ -304,6 +327,10 @@ class BrandController extends Controller
                     'status' => 2,
                     'updated_by' => Auth::user()->id
                 ]);
+                $brand->menus()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
                 $brand->updated_at = date('Y-m-d H:i:s');
                 $brand->updated_by = Auth::user()->id;
                 $brand->save();
@@ -336,6 +363,7 @@ class BrandController extends Controller
                         'status' => 0,
                         'updated_by' => Auth::user()->id
                     ]);
+                    $brand->menus()->delete();
                     if ($brand->delete()) {
                         if (File::exists($path_image_delete)) {
                             File::delete($path_image_delete);

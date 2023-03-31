@@ -252,7 +252,6 @@ class MenuController extends Controller
     {
         $request->validate([
             'name' => 'unique:menu,name,' . $id . ',id',
-
         ], [
             'name.unique' => 'Tên đã được sử dụng. Vui lòng chọn tên khác.'
         ]);
@@ -309,7 +308,7 @@ class MenuController extends Controller
         return view("backend.menu.trash", compact('menu', 'title', 'list_type'));
     }
 
-    public function trash_multi(Request $request)
+    public function trashAll(Request $request)
     {
 
         if (isset($request['DELETE_ALL'])) {
@@ -379,13 +378,19 @@ class MenuController extends Controller
         }
         $list_type = $this->list_type;
         $list_type = $list_type[$menu->type];
-        $typeTable = Str::studly($menu->type); // Chuyển đổi tên bảng sang dạng StudlyCase
-        $type = DB::table($typeTable)->where('id', $menu->table_id)->first();
-        if ($type->status == 1) {
+        if ($menu->type == 'custom') {
             $menu->status = ($menu->status == 1) ? 2 : 1;
         } else {
-            return redirect()->route('menu.index')->with('message', ['type' => 'success', 'msg' => "Bạn cần thay đổi trạng thái $list_type  trước!!!"]);
+            $typeTable = Str::studly($menu->type); // Chuyển đổi tên bảng sang dạng StudlyCase
+            $type = DB::table($typeTable)->where('id', $menu->table_id)->first();
+            if ($type->status == 1) {
+                $menu->status = ($menu->status == 1) ? 2 : 1;
+            } else {
+                return redirect()->route('menu.index')->with('message', ['type' => 'success', 'msg' => "Bạn cần thay đổi trạng thái $list_type  trước!!!"]);
+            }
         }
+
+
         $menu->updated_at = date('Y-m-d H:i:s');
         $menu->updated_by = Auth::user()->id;
         $menu->save();

@@ -23,9 +23,29 @@ class UpdateMenuRequest extends FormRequest
      */
     public function rules()
     {
+        return [
+            'name' => 'required|string|max:255|min:5',
+            'link' => 'required|string|max:255|min:5',
+        ];
     }
 
     public function messages()
     {
+        $messages = [
+            'required' => 'Bạn chưa điền vào đây'
+        ];
+        return [
+            'name.required' => $messages['required'],
+            'name.min' => 'Nhập ít nhất :min ký tự',
+            'name.string' => 'Tên phải là chuỗi chỉ chứa các ký tự chữ cái và số',
+            'name.max' => 'Nhập ít nhất :max ký tự',
+
+            'link.required' => $messages['required'],
+            'link.min' => 'Nhập ít nhất :min ký tự',
+            'link.string' => 'Tên phải là chuỗi chỉ chứa các ký tự chữ cái và số',
+            'link.max' => 'Nhập ít nhất :max ký tự',
+
+
+        ];
     }
 }

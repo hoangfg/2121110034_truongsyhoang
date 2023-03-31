@@ -27,6 +27,7 @@ class AuthController extends Controller
         if (Auth::attempt($data)) {
             return redirect()->route('dashboard.index');
         } else {
+            
             $error = 'Thông tin đăng nhập chưa chính xác';
 
             return view('backend.user.login', compact('error'));

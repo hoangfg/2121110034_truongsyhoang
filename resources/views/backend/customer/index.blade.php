@@ -4,7 +4,7 @@
 
 @endsection
 @section('content')
-
+{{ dd($diffInDays) }}
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">

@@ -20,7 +20,7 @@ class AdminLoginMiddleware
             $user = Auth::user();
 
             if ($user->roles == 0) {
-                return view('site.index');
+                return view('site.home');
             }
         }
         return $next($request);

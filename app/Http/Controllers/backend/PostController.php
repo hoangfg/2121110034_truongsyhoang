@@ -187,7 +187,15 @@ class PostController extends Controller
         if ($post == null) {
             return redirect()->route('post.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
         } else {
-            $post->delete();
+           
+            $path_dir = "images/post/";
+            $path_image_delete = public_path($path_dir . $post->image);
+
+            if ($post->delete()) {
+                if (File::exists($path_image_delete)) {
+                    File::delete($path_image_delete);
+                }
+            }
             return redirect()->route('post.trash')->with('message', ['type' => 'success', 'msg' => 'Hủy sản phẩm thành công']);
         }
     }

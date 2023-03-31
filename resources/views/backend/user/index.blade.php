@@ -4,7 +4,7 @@
 
 @endsection
 @section('content')
-    <form action="{{ route('user.store') }}" method="post" enctype="multipart/form-data">
+    <form action="{{ route('user.deleteAll') }}" method="post" enctype="multipart/form-data">
         @csrf
 
         <div class="content-wrapper">
@@ -72,7 +72,10 @@
                             <tbody>
                                 @foreach ($list_user as $user)
                                     <tr>
-                                        <td class="text-center"> <input type="checkbox" name="" id=""></td>
+                                        <td class="text-center" style="width:20px">
+                                            <input type="checkbox" name="checkId[]" value="{{ $user->id }}"
+                                                id="userCheck{{ $user->id }}" class="CheckItem">
+                                        </td>
                                         <td>
 
                                             @if ($user->image == null)

@@ -4,7 +4,7 @@
 
 @endsection
 @section('content')
-    <form action="{{ route('user.store') }}" method="post" enctype="multipart/form-data">
+    <form action="{{ route('user.trashAll') }}" method="post" enctype="multipart/form-data">
         @csrf
 
         <div class="content-wrapper">
@@ -31,8 +31,12 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-md-6">
+
+                                <button class="btn btn-sm btn-primary" type="submit" name="RESTORE_ALL">
+                                    <i class="fa-solid fa-rotate-left"></i> Khôi phục đã chọn đã chọn
+                                </button>
                                 <button class="btn btn-sm btn-danger" type="submit" name="DELETE_ALL">
-                                    <i class="fa-solid fa-trash-can"></i> Xóa đã chọn
+                                    <i class="fa-solid fa-trash-can"></i></i> Xóa đã chọn
                                 </button>
                             </div>
                             <div class="col-md-6 text-right">
@@ -68,7 +72,9 @@
                             <tbody>
                                 @foreach ($list_user as $user)
                                     <tr>
-                                        <td class="text-center"> <input type="checkbox" name="" id=""></td>
+                                        <td class="text-center"><input type="checkbox" name="checkId[]"
+                                                value="{{ $user->id }}" id="userCheck{{ $user->id }}"
+                                                class="CheckItem"></td>
                                         <td>
                                             @if ($user->image == null)
                                                 @if ($user->gender == 0)

@@ -56,7 +56,7 @@ class UserController extends Controller
         // $user->level = 1;
         $user->status = $request->status;
         $user->created_at = date('Y-m-d H:i:s');
-        $user->created_by = ($request->session()->exists('user_id') ? session('user_id') : 1);
+        $user->created_by = Auth::user()->id;
         //upload file
 
         if ($request->hasFile('image')) {
@@ -87,7 +87,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $title = 'Thông tin thành Viên';
+        $user = User::find($id);
+        return view("backend.user.show", compact('title', 'user'));
     }
 
     /**
@@ -130,7 +132,7 @@ class UserController extends Controller
         // $user->level = 1;
         $user->status = $request->status;
         $user->created_at = date('Y-m-d H:i:s');
-        $user->created_by = ($request->session()->exists('user_id') ? session('user_id') : 1);
+        $user->created_by = Auth::user()->id;
         //upload file
 
         if ($request->def_image == 1) {
@@ -176,8 +178,19 @@ class UserController extends Controller
         if ($user == null) {
             return redirect()->route('user.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
         } else {
-            $user->delete();
-            return redirect()->route('user.trash')->with('message', ['type' => 'success', 'msg' => 'Xóa sản phẩm thành công']);
+            $path_dir = "images/user/";
+            $path_image_delete = public_path($path_dir . $user->image);
+            if (($user->image <> 'user_men.png') && ($user->image <> 'user_women.png')) {
+                if (File::exists($path_image_delete)) {
+                    File::delete($path_image_delete);
+                }
+            }
+            if (Auth::user()->id == $id) {
+                return redirect()->route('user.index')->with('message', ['type' => 'danger', 'msg' => 'Người dùng kgoong thể xóa bản thân !!!']);
+            } else {
+                $user->delete();
+                return redirect()->route('user.trash')->with('message', ['type' => 'success', 'msg' => 'Xóa sản phẩm thành công']);
+            }
         }
     }
     // delete
@@ -187,11 +200,15 @@ class UserController extends Controller
         if ($user == null) {
             return redirect()->route('user.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
         } else {
-            $user->status = 0;
-            $user->updated_at = date('Y-m-d H:i:s');
-            $user->updated_by =  Auth::user()->id;
-            $user->save();
-            return redirect()->route('user.index')->with('message', ['type' => 'success', 'msg' => 'Chuyển vào thùng rác thành công']);
+            if (Auth::user()->id == $id) {
+                return redirect()->route('user.index')->with('message', ['type' => 'danger', 'msg' => 'Người dùng không thể xóa bản thân !!!']);
+            } else {
+                $user->status = 0;
+                $user->updated_at = date('Y-m-d H:i:s');
+                $user->updated_by =  Auth::user()->id;
+                $user->save();
+                return redirect()->route('user.index')->with('message', ['type' => 'success', 'msg' => 'Chuyển vào thùng rác thành công']);
+            }
         }
     }
     // trash
@@ -208,11 +225,15 @@ class UserController extends Controller
         if ($user == null) {
             return redirect()->route('user.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
         } else {
-            $user->status = ($user->status == 1) ? 2 : 1;
-            $user->updated_at = date('Y-m-d H:i:s');
-            $user->updated_by =  Auth::user()->id;
-            $user->save();
-            return redirect()->route('user.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công']);
+            if (Auth::user()->id == $id) {
+                return redirect()->route('user.index')->with('message', ['type' => 'danger', 'msg' => 'Người dùng không thể Thay đổi trạng thái bản thân !!!']);
+            } else {
+                $user->status = ($user->status == 1) ? 2 : 1;
+                $user->updated_at = date('Y-m-d H:i:s');
+                $user->updated_by =  Auth::user()->id;
+                $user->save();
+                return redirect()->route('user.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công']);
+            }
         }
     }
     // restore
@@ -227,6 +248,90 @@ class UserController extends Controller
             $user->updated_by =  Auth::user()->id;
             $user->save();
             return redirect()->route('user.trash')->with('message', ['type' => 'success', 'msg' => 'Khôi phục sản phẩm thành công']);
+        }
+    }
+
+    public function deleteAll(Request $request)
+    {
+
+        if (isset($request->checkId)) {
+            $list_id = $request->input('checkId');
+
+            $count_max = sizeof($list_id);
+            $count = 0;
+            foreach ($list_id as $id) {
+                $user = User::find($id);
+                if ($user == null) {
+                    return redirect()->route('user.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
+                }
+                if (Auth::user()->id == $id) {
+                    return redirect()->route('user.index')->with('message', ['type' => 'danger', 'msg' => 'Người dùng không thể xóa bản thân !!!']);
+                }
+                $user->status = 0;
+                $user->updated_at = date('Y-m-d H:i:s');
+                $user->updated_by = Auth::user()->id;
+                $user->save();
+
+                $count++;
+            }
+            return redirect()->route('user.index')->with('message', ['type' => 'success', 'msg' => "Xóa thành công $count/$count_max !&& Vào thùng rác để xem!!!"]);
+        } else {
+            return redirect()->route('user.index')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+        }
+    }
+    // destroy-multi
+    public function TrashAll(Request $request)
+    {
+        if (isset($request['DELETE_ALL'])) {
+
+            if (isset($request->checkId)) {
+                $list_id = $request->input('checkId');
+                $count_max = sizeof($list_id);
+                $count = 0;
+                foreach ($list_id as $list) {
+                    $user = User::find($list);
+                    if ($user == null) {
+                        return redirect()->route('user.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
+                    }
+                    $path_dir = "images/user/";
+                    $path_image_delete = public_path($path_dir . $user->image);
+
+                    if ($user->delete()) {
+
+                        if (($user->image <> 'user_men.png') && ($user->image <> 'user_women.png')) {
+                            if (File::exists($path_image_delete)) {
+                                File::delete($path_image_delete);
+                            }
+                        }
+                    }
+                    $count++;
+                }
+                return redirect()->route('user.trash')->with('message', ['type' => 'success', 'msg' => "Xóa thành công $count/$count_max !&& sản phẩm!!!"]);
+            } else {
+                return redirect()->route('user.trash')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+            }
+        }
+        if (isset($request['RESTORE_ALL'])) {
+            if (isset($request->checkId)) {
+                $list_id = $request->input('checkId');
+                $count_max = sizeof($list_id);
+                $count = 0;
+
+                foreach ($list_id as $id) {
+                    $user = User::find($id);
+                    if ($user == null) {
+                        return redirect()->route('user.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
+                    }
+                    $user->status = 2;
+                    $user->updated_at = date('Y-m-d H:i:s');
+                    $user->updated_by = Auth::user()->id;
+                    $user->save();
+                    $count++;
+                }
+                return redirect()->route('user.trash')->with('message', ['type' => 'success', 'msg' => "Khôi phục thành công $count/$count_max !&& sản phẩm!!!"]);
+            } else {
+                return redirect()->route('user.trash')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+            }
         }
     }
 }

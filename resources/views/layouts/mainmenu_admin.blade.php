@@ -85,15 +85,46 @@
                        <li class="nav-item">
                            <a href="{{ route('order.index') }}" class="nav-link">
                                <i class="far fa-circle nav-icon"></i>
-                               <p>Đặt hàng</p>
+                               <p>Hóa đơn</p>
                            </a>
                        </li>
                        <li class="nav-item">
-                           <a href="{{ route('orderdetail.index') }}" class="nav-link">
+                           <a href="{{ route('order.new') }}" class="nav-link">
                                <i class="far fa-circle nav-icon"></i>
-                               <p>Chi tiết đặt hàng</p>
+                               <p>Hóa đơn mới</p>
                            </a>
                        </li>
+                       <li class="nav-item">
+                           <a href="{{ route('order.confirm') }}" class="nav-link">
+                               <i class="far fa-circle nav-icon"></i>
+                               <p>Đã xác nhận</p>
+                           </a>
+                       </li>
+                       <li class="nav-item">
+                           <a href="{{ route('order.package') }}" class="nav-link">
+                               <i class="far fa-circle nav-icon"></i>
+                               <p>Đã đóng gói</p>
+                           </a>
+                       </li>
+                       <li class="nav-item">
+                           <a href="{{ route('order.transport') }}" class="nav-link">
+                               <i class="far fa-circle nav-icon"></i>
+                               <p>Đang vận chuyển</p>
+                           </a>
+                       </li>
+                       <li class="nav-item">
+                           <a href="{{ route('order.delivered') }}" class="nav-link">
+                               <i class="far fa-circle nav-icon"></i>
+                               <p>Đã giao</p>
+                           </a>
+                       </li>
+                       <li class="nav-item">
+                           <a href="{{ route('order.trash') }}" class="nav-link">
+                               <i class="far fa-circle nav-icon"></i>
+                               <p>Đã hủy</p>
+                           </a>
+                       </li>
+                       
 
 
                    </ul>

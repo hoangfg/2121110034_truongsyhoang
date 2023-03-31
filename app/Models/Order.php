@@ -11,6 +11,10 @@ class Order extends Model
 {
     use HasFactory;
     protected $table = 'order';
+    public function orderdetails()
+    {
+        return $this->hasMany(Orderdetail::class);
+    }
 
     
 }

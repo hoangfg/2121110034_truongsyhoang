@@ -88,8 +88,9 @@
                                             <li class="nav-item"><a class="nav-link active" href="#activity"
                                                     data-toggle="tab">Thông
                                                     tin khác</a></li>
-                                            <li class="nav-item"><a class="nav-link" href="#Image" data-toggle="tab">Nội
-                                                    dung</a>
+                                            <li class="nav-item"><a class="nav-link" href="#Image" data-toggle="tab">Hình ảnh</a>
+                                            </li>
+                                            <li class="nav-item"><a class="nav-link" href="#Detail" data-toggle="tab">Nội dung</a>
                                             </li>
 
                                         </ul>
@@ -140,6 +141,16 @@
                                                     <div class="card-body">
                                                         <img src="{{ asset('images/post/' . $page->image) }}"
                                                             class="card-img-top index-img" alt="{{ $page['image'] }}">
+                                                        
+                                                    </div>
+                                                    <!-- /.card-body -->
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane" id="Detail">
+                                                <!-- The Image -->
+                                                <div class="card card-primary">
+                                                    <div class="card-body">
+                                                       
                                                         <p class="mt-2">
                                                             {!! $page->detail !!}
                                                         </p>

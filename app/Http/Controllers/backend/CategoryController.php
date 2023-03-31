@@ -42,11 +42,16 @@ class CategoryController extends Controller
         $html_parent_id = "";
         $html_sort_order = "";
         foreach ($list_category as $category) {
-            // $html_sort_order .= "<option value='" . ($category->sort_order + 1) . "'" . (($category->sort_order + 1 == old('sort_order')) ? ' selected ' : ' ') . ">Sau: " . $category->name . "</option>";
-            // $html_parent_id .= "<option value='" . ($category->id) . "'" . (($category->id == old('parent_id')) ? ' selected ' : ' ') . ">Sau: " . $category->name . "</option>";
-
-            $html_parent_id .= "<option value='" . $category->id . "'>" . $category->name . "</option>";
-            $html_sort_order .= "<option value='" . ($category->sort_order + 1) . "'>" . $category->name . "</option>";
+            if ($category->id == old('parent_id')) {
+                $html_parent_id .= "<option selected value='" . $category->id . "'>" . $category->name . "</option>";
+            } else {
+                $html_parent_id .= "<option  value='" . $category->id . "'>" . $category->name . "</option>";
+            }
+            if ($category->sort_order == old('sort_order - 1')) {
+                $html_sort_order .= "<option selected value='" . ($category->sort_order + 1) . "'>Sau: " . $category->name . "</option>";
+            } else {
+                $html_sort_order .= "<option value='" . ($category->sort_order + 1) . "'>Sau: " . $category->name . "</option>";
+            }
         }
         return view('backend.category.create', compact('html_parent_id', 'html_sort_order', 'title'));
     }
@@ -167,7 +172,7 @@ class CategoryController extends Controller
 
      */
     public function update($id, UpdateCategoryRequest $request)
-    {;
+    {
         $request->validate([
             'name' => 'unique:category,name,' . $id . ',id'
         ], [
@@ -189,6 +194,10 @@ class CategoryController extends Controller
         $category->updated_by =  Auth::user()->id;
         if ($category->status == 2) {
             $category->products()->update([
+                'status' => 2,
+                'updated_by' => Auth::user()->id
+            ]);
+            $category->menus()->update([
                 'status' => 2,
                 'updated_by' => Auth::user()->id
             ]);
@@ -236,6 +245,8 @@ class CategoryController extends Controller
             'status' => 0,
             'updated_by' => Auth::user()->id
         ]);
+        $category->menus()->delete();
+
         if ($category->delete()) {
             if (File::exists($path_image_delete)) {
                 File::delete($path_image_delete);
@@ -260,6 +271,10 @@ class CategoryController extends Controller
         } else {
             $category->status = 0;
             $category->products()->update([
+                'status' => 2,
+                'updated_by' => Auth::user()->id
+            ]);
+            $category->menus()->update([
                 'status' => 2,
                 'updated_by' => Auth::user()->id
             ]);
@@ -296,6 +311,10 @@ class CategoryController extends Controller
                     'status' => 2,
                     'updated_by' => Auth::user()->id
                 ]);
+                $category->menus()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
             }
             $category->updated_at = date('Y-m-d H:i:s');
             $category->updated_by =  Auth::user()->id;
@@ -326,6 +345,10 @@ class CategoryController extends Controller
                 }
                 $category->status = 0;
                 $category->products()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
+                $category->menus()->update([
                     'status' => 2,
                     'updated_by' => Auth::user()->id
                 ]);
@@ -361,6 +384,7 @@ class CategoryController extends Controller
                         'status' => 0,
                         'updated_by' => Auth::user()->id
                     ]);
+                    $category->menus()->delete();
                     if ($category->delete()) {
                         if (File::exists($path_image_delete)) {
                             File::delete($path_image_delete);

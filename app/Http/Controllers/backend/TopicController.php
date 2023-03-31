@@ -39,7 +39,7 @@ class TopicController extends Controller
         $html_parent_id = "";
         $html_sort_order = "";
         foreach ($list_topic as $topic) {
-            
+
             if ($topic->id == old('parent_id')) {
                 $html_parent_id .= "<option selected value='" . $topic->id . "'>" . $topic->name . "</option>";
             } else {
@@ -71,7 +71,7 @@ class TopicController extends Controller
         $topic->sort_order = $request->sort_order;
         $topic->status = $request->status;
         $topic->created_at = date('Y-m-d H:i:s');
-        $topic->created_by =Auth::user()->id;
+        $topic->created_by = Auth::user()->id;
         if ($topic->save()) {
             $link = new Link();
             $link->link = $topic->slug;
@@ -134,7 +134,7 @@ class TopicController extends Controller
         $html_parent_id = "";
         $html_sort_order = "";
         foreach ($list_topic as $item) {
-           if($topic->id != $item->id) {
+            if ($topic->id != $item->id) {
                 if ($topic->parent_id == $item->id) {
                     $html_parent_id .= "<option selected value='" . $item->id . "'>" . $item->name . "</option>";
                 } else {
@@ -145,7 +145,7 @@ class TopicController extends Controller
                 } else {
                     $html_sort_order .= "<option value='" . ($topic->sort_order + 1) . "'>Sau: " . $topic->name . "</option>";
                 }
-           }
+            }
         }
         return view('backend.topic.edit', compact('topic', 'html_parent_id', 'html_sort_order', 'title'));
     }
@@ -179,6 +179,10 @@ class TopicController extends Controller
                 'status' => 2,
                 'updated_by' => Auth::user()->id
             ]);
+            $topic->menus()->update([
+                'status' => 2,
+                'updated_by' => Auth::user()->id
+            ]);
         }
         $topic->updated_by =  Auth::user()->id;
         if ($topic->save()) {
@@ -203,7 +207,16 @@ class TopicController extends Controller
         if ($topic == null) {
             return redirect()->route('topic.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
         } else {
-            $topic->delete();
+           
+
+            if ($topic->delete()) {
+                $link = Link::where(
+                    [['type', '=', 'topic'], ['table_id', '=', $id]]
+                )->first();
+                $topic->menus()->delete();
+                $topic->posts()->delete();
+                $link->delete();
+            }
             return redirect()->route('topic.trash')->with('message', ['type' => 'success', 'msg' => 'Hủy sản phẩm thành công']);
         }
     }
@@ -216,6 +229,10 @@ class TopicController extends Controller
         } else {
             $topic->status = 0;
             $topic->posts()->update([
+                'status' => 2,
+                'updated_by' => Auth::user()->id
+            ]);
+            $topic->menus()->update([
                 'status' => 2,
                 'updated_by' => Auth::user()->id
             ]);
@@ -254,8 +271,12 @@ class TopicController extends Controller
             return redirect()->route('topic.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
         } else {
             $topic->status = ($topic->status == 1) ? 2 : 1;
-            if($topic->status = 2) {
+            if ($topic->status = 2) {
                 $topic->posts()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
+                $topic->menus()->update([
                     'status' => 2,
                     'updated_by' => Auth::user()->id
                 ]);
@@ -284,6 +305,10 @@ class TopicController extends Controller
                     'status' => 2,
                     'updated_by' => Auth::user()->id
                 ]);
+                $topic->menus()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
                 $topic->updated_at = date('Y-m-d H:i:s');
                 $topic->updated_by = Auth::user()->id;
                 $topic->save();
@@ -309,12 +334,11 @@ class TopicController extends Controller
                     $topic = Topic::find($list);
                     if ($topic == null) {
                         return redirect()->route('topic.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
-                    }           
-                    $topic->posts()->update([
-                        'status' => 0,
-                        'updated_by' => Auth::user()->id
-                    ]);
-                    if ($topic->delete()) {                     
+                    }
+                    
+                    if ($topic->delete()) {
+                        $topic->posts()->delete();
+                        $topic->menus()->delete();
                         $link = Link::where(
                             [['type', '=', 'topic'], ['table_id', '=', $list]]
                         )->first();

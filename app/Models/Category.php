@@ -13,4 +13,8 @@ class Category extends Model
     {
         return $this->hasMany(Product::class);
     }
+    public function menus()
+    {
+        return $this->hasMany(Menu::class, 'table_id')->where('type', '=', 'category');
+    }
 }

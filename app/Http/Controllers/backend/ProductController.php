@@ -104,7 +104,7 @@ class ProductController extends Controller
                 $array_file = $request->file('image');
                 foreach ($array_file as $file) {
                     $extension = $file->getClientOriginalExtension();
-                    $filename = $product->slug . '_' . $count . '.' . $extension;
+                    $filename = $product->slug . '_' . $count . '_' .  $product->id . '.' . $extension;
                     $file->move($path_dir, $filename);
                     $product_image = new ProductImage();
                     $product_image->product_id = $product->id;
@@ -257,7 +257,7 @@ class ProductController extends Controller
 
                 foreach ($array_file as $file) {
                     $extension = $file->getClientOriginalExtension();
-                    $filename = $product->slug . '_' . $count . '.' . $extension;
+                    $filename = $product->slug . '_' . $count . '_' .  $product->id . '.' . $extension;
                     $file->move($path_dir, $filename);
                     $product_image = new ProductImage();
                     $product_image->product_id = $product->id;

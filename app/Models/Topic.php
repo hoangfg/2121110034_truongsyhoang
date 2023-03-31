@@ -13,4 +13,8 @@ class Topic extends Model
     {
         return $this->hasMany(Post::class);
     }
+    public function menus()
+    {
+        return $this->hasMany(Menu::class, 'table_id')->where('type', '=', 'topic');
+    }
 }

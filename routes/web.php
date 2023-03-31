@@ -22,7 +22,7 @@ use App\Http\Controllers\backend\AuthController;
 use App\Models\Contact;
 
 // trang người dùng
-Route::get('/', [SiteController::class, 'index'])->name('site.index');
+Route::get('/', [SiteController::class, 'index'])->name('site.home');
 Route::get('san-pham', [SiteController::class, 'product'])->name('site.product');
 Route::get('bai-viet', [SiteController::class, 'post'])->name('site.post');
 Route::get('lien-he', [SiteContactController::class, 'index'])->name('site.contact'); //tao controller
@@ -36,7 +36,7 @@ Route::get('gio-hang/addcart/{id}', [CartController::class, 'index'])->name('sit
 Route::get('admin/login', [AuthController::class, 'getlogin'])->name('admin.getlogin');
 Route::post('admin/login', [AuthController::class, 'postlogin'])->name('admin.postlogin');
 Route::get('admin/logout', [AuthController::class, 'logout'])->name('admin.logout');
-Route::prefix('admin')->middleware('login')->group(function () {
+Route::prefix('admin')->middleware('adminlogin')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
     //product
     Route::get('product/trash', [ProductController::class, 'trash'])->name('product.trash')->where('trash', '[A-Za-x]+');
@@ -94,7 +94,7 @@ Route::prefix('admin')->middleware('login')->group(function () {
         Route::get('status/{customer}', [CustomerController::class, 'status'])->name('customer.status');
         Route::get('delete/{customer}', [CustomerController::class, 'delete'])->name('customer.delete');
         Route::get('destroy/{customer}', [CustomerController::class, 'destroy'])->name('customer.destroy');
-        // Route::get('show/{customer}', [CustomerController::class, 'show'])->name('customer.show');
+        Route::get('show/{customer}', [CustomerController::class, 'show'])->name('customer.show');
         Route::get('restore/{customer}', [CustomerController::class, 'restore'])->name('customer.restore');
     });
     // menu
@@ -106,8 +106,15 @@ Route::prefix('admin')->middleware('login')->group(function () {
         Route::get('destroy/{menu}', [MenuController::class, 'destroy'])->name('menu.destroy');
         Route::get('show/{menu}', [MenuController::class, 'show'])->name('menu.show');
         Route::get('restore/{menu}', [MenuController::class, 'restore'])->name('menu.restore');
+        Route::post('deleteAll', [MenuController::class, 'deleteAll'])->name('menu.deleteAll');
+        Route::post('trashAll', [MenuController::class, 'trashAll'])->name('menu.trashAll');
     });
     // order
+    Route::get('order/new', [orderController::class, 'new'])->name('order.new')->where('new', '[A-Za-x]+');
+    Route::get('order/confirm', [orderController::class, 'confirm'])->name('order.confirm')->where('confirm', '[A-Za-x]+');
+    Route::get('order/package', [orderController::class, 'package'])->name('order.package')->where('package', '[A-Za-x]+');
+    Route::get('order/transport', [orderController::class, 'transport'])->name('order.transport')->where('transport', '[A-Za-x]+');
+    Route::get('order/delivered', [orderController::class, 'delivered'])->name('order.delivered')->where('delivered', '[A-Za-x]+'); 
     Route::get('order/trash', [orderController::class, 'trash'])->name('order.trash')->where('trash', '[A-Za-x]+');
     Route::resource('order', OrderController::class);
     Route::prefix('order')->group(function () {
@@ -115,7 +122,7 @@ Route::prefix('admin')->middleware('login')->group(function () {
         Route::get('delete/{order}', [orderController::class, 'delete'])->name('order.delete');
         Route::get('destroy/{order}', [orderController::class, 'destroy'])->name('order.destroy');
         Route::get('show/{order}', [orderController::class, 'show'])->name('order.show');
-        Route::get('restore/{order}', [orderController::class, 'restore'])->name('order.restore');
+       
     });
     // orderdertail
     Route::resource('orderdetail', OrderdetailController::class);
@@ -128,7 +135,7 @@ Route::prefix('admin')->middleware('login')->group(function () {
         Route::get('status/{page}', [PageController::class, 'status'])->name('page.status');
         Route::get('delete/{page}', [PageController::class, 'delete'])->name('page.delete');
         Route::get('destroy/{page}', [PageController::class, 'destroy'])->name('page.destroy');
-        // Route::get('show/{page}', [PageController::class, 'show'])->name('page.show');
+        Route::get('show/{page}', [PageController::class, 'show'])->name('page.show');
         Route::get('restore/{page}', [PageController::class, 'restore'])->name('page.restore');
         Route::post('deleteAll', [PageController::class, 'deleteAll'])->name('page.deleteAll');
         Route::post('trashAll', [PageController::class, 'trashAll'])->name('page.trashAll');
@@ -140,7 +147,7 @@ Route::prefix('admin')->middleware('login')->group(function () {
         Route::get('status/{post}', [PostController::class, 'status'])->name('post.status');
         Route::get('delete/{post}', [PostController::class, 'delete'])->name('post.delete');
         Route::get('destroy/{post}', [PostController::class, 'destroy'])->name('post.destroy');
-        // Route::get('show/{post}', [PostController::class, 'show'])->name('post.show');
+        Route::get('show/{post}', [PostController::class, 'show'])->name('post.show');
         Route::get('restore/{post}', [PostController::class, 'restore'])->name('post.restore');
         Route::post('deleteAll', [PostController::class, 'deleteAll'])->name('post.deleteAll');
         Route::post('trashAll', [PostController::class, 'trashAll'])->name('post.trashAll');
@@ -152,7 +159,7 @@ Route::prefix('admin')->middleware('login')->group(function () {
         Route::get('status/{slider}', [SliderController::class, 'status'])->name('slider.status');
         Route::get('delete/{slider}', [SliderController::class, 'delete'])->name('slider.delete');
         Route::get('destroy/{slider}', [SliderController::class, 'destroy'])->name('slider.destroy');
-        // Route::get('show/{slider}', [SliderController::class, 'show'])->name('slider.show');
+        Route::get('show/{slider}', [SliderController::class, 'show'])->name('slider.show');
         Route::get('restore/{slider}', [SliderController::class, 'restore'])->name('slider.restore');
         Route::post('deleteAll', [SliderController::class, 'deleteAll'])->name('slider.deleteAll');
         Route::post('trashAll', [SliderController::class, 'trashAll'])->name('slider.trashAll');
@@ -176,11 +183,13 @@ Route::prefix('admin')->middleware('login')->group(function () {
         Route::get('status/{user}', [UserController::class, 'status'])->name('user.status');
         Route::get('delete/{user}', [UserController::class, 'delete'])->name('user.delete');
         Route::get('destroy/{user}', [UserController::class, 'destroy'])->name('user.destroy');
-        // Route::get('show/{user}', [UserController::class, 'show'])->name('user.show');
+        Route::get('show/{user}', [UserController::class, 'show'])->name('user.show');
         Route::get('restore/{user}', [UserController::class, 'restore'])->name('user.restore');
+        Route::post('deleteAll', [UserController::class, 'deleteAll'])->name('user.deleteAll');
+        Route::post('trashAll', [UserController::class, 'trashAll'])->name('user.trashAll');
     });
    
 });
 
 // site - end
-Route::get('{slug}', [SiteController::class, 'index'])->name('site.index');
+Route::get('{slug}', [SiteController::class, 'index'])->name('slug.home');

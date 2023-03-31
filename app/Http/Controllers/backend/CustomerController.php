@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class CustomerController extends Controller
 {
@@ -16,9 +17,17 @@ class CustomerController extends Controller
      */
     public function index()
     {
+        $now = Carbon::now();
+        $targetDate = Carbon::create(2023, 2, 31);
+        if ($targetDate->isValid()) {
+            $diffInDays = "Ngày tháng năm hợp lệ.";
+        } else {
+            $diffInDays = "Ngày tháng năm không hợp lệ.";
+        }
+       
         $title = 'Tất cả khách hàng';
         $list_customer = User::where([['status', '<>', '0'], ['roles', '=', '0']])->orderBy('created_at', 'desc')->get();
-        return view("backend.customer.index", compact('list_customer', 'title'));
+        return view("backend.customer.index", compact('list_customer', 'title', 'diffInDays'));
     }
 
     /**
@@ -50,7 +59,9 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        //
+        $title = 'Thông tin khách hàng';
+        $customer = User::find($id);
+        return view("backend.customer.show", compact('title', 'customer'));
     }
 
     /**
@@ -61,7 +72,7 @@ class CustomerController extends Controller
      */
     public function edit($id)
     {
-        //
+
     }
 
     /**

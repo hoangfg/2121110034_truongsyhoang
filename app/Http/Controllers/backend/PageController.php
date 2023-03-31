@@ -150,6 +150,12 @@ class PageController extends Controller
             $page->image = $filename;
         }
         // // end
+        if ($page->status == 2) {
+            $page->menus()->update([
+                'status' => 2,
+                'updated_by' => Auth::user()->id
+            ]);
+        }
         if ($page->save()) {
             $link = Link::where([['type', '=', 'page'], ['table_id', '=', $id]])->first();
             $link->link = $page->slug;
@@ -174,7 +180,20 @@ class PageController extends Controller
         if ($page == null) {
             return redirect()->route('page.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
         } else {
-            $page->delete();
+
+            if ($page->delete()) {
+                $path_dir = "images/post/";
+                $path_image_delete = public_path($path_dir . $page->image);
+                if (File::exists($path_image_delete)) {
+                    File::delete($path_image_delete);
+                }
+                $link = Link::where(
+                    [['type', '=', 'page'], ['table_id', '=', $id]]
+                )->first();
+
+                $link->delete();
+                $page->menus()->delete();
+            }
             return redirect()->route('page.trash')->with('message', ['type' => 'success', 'msg' => 'Hủy sản phẩm thành công']);
         }
     }
@@ -188,6 +207,12 @@ class PageController extends Controller
             $page->status = 0;
             $page->updated_at = date('Y-m-d H:i:s');
             $page->updated_by =  Auth::user()->id;
+            if ($page->status == 0) {
+                $page->menus()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
+            }
             $page->save();
             return redirect()->route('page.index')->with('message', ['type' => 'success', 'msg' => 'Chuyển vào thùng rác thành công']);
         }
@@ -216,6 +241,12 @@ class PageController extends Controller
             $page->status = ($page->status == 1) ? 2 : 1;
             $page->updated_at = date('Y-m-d H:i:s');
             $page->updated_by =  Auth::user()->id;
+            if ($page->status == 2) {
+                $page->menus()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
+            }
             $page->save();
             return redirect()->route('page.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công']);
         }
@@ -244,11 +275,16 @@ class PageController extends Controller
                     return redirect()->route('page.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
                 }
                 $page->status = 0;
-                
+                if ($page->status == 0) {
+                    $page->menus()->update([
+                        'status' => 2,
+                        'updated_by' => Auth::user()->id
+                    ]);
+                }
                 $page->updated_at = date('Y-m-d H:i:s');
                 $page->updated_by = Auth::user()->id;
                 $page->save();
-                
+
                 $count++;
             }
             return redirect()->route('page.index')->with('message', ['type' => 'success', 'msg' => "Xóa thành công $count/$count_max !&& Vào thùng rác để xem!!!"]);
@@ -269,14 +305,18 @@ class PageController extends Controller
                     if ($page == null) {
                         return redirect()->route('page.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
                     }
-                    $path_dir = "images/page/";
+                    $path_dir = "images/post/";
                     $path_image_delete = public_path($path_dir . $page->image);
-                  
+                    if (File::exists($path_image_delete)) {
+                        File::delete($path_image_delete);
+                    }
                     if ($page->delete()) {
-                        if (File::exists($path_image_delete)) {
-                            File::delete($path_image_delete);
-                        }
-                        
+                        $link = Link::where(
+                            [['type', '=', 'page'], ['table_id', '=', $list]]
+                        )->first();
+
+                        $link->delete();
+                        $page->menus()->delete();
                     }
                     $count++;
                 }
