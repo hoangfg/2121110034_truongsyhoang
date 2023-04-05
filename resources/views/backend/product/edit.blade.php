@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('title', $title ?? 'trang quản lý')
 @section('header')
-
+<link rel="stylesheet" href="{{asset('css/images.css')  }}">
 @endsection
 @section('content')
 
@@ -121,6 +121,7 @@
     </form>
 @endsection
 @section('footer')
+ <script src="{{ asset('js/images.js') }}"></script>
     <script>
         CKEDITOR.replace('detail')
     </script>

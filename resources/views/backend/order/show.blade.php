@@ -1,179 +1,205 @@
 @extends('layouts.admin')
-@section('title', $title ?? 'trang quản lý')
-@section('header')
-
-@endsection
+@section('title', $title ?? 'Trang Quản Lý')
 @section('content')
+
+
     <div class="content-wrapper">
-        <form action="{{ route('order.status', ['order' => $order->id]) }}" method="GET" enctype="multipart/form-data">
-            @csrf
-            <!-- Content Header (Page header) -->
-            <section class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 style="text-transform: uppercase;">{{ $title ?? 'trang quản lý' }}</h1>
-                        </div>
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">Blank Page</li>
-                            </ol>
-                        </div>
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 style="text-transform: uppercase;  ">{{ $title }}</h1>
                     </div>
-                </div><!-- /.container-fluid -->
-            </section>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="{{ route('order.index') }}"
+                                    style="text-transform: capitalize;">Tất cả đơn hàng</a></li>
+                            <li class="breadcrumb-item active">{{ $title }}</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+
+        </section>
+
+        <!-- Main content -->
+        <form action="{{ route('order.status', ['order' => $order->id]) }}" method="GET">
+            @csrf
             <section class="content">
 
                 <!-- Default box -->
-                <div class="container-fluid">
-                    <div class="card">
-                        <div class="card-header">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
                             <div class="col-md-12 text-right">
+                                <div class="d-inline-block">
+                                    <a class="btn btn-sm btn-info" href="{{ route('order.index') }}">
+                                        <i class="fas fa-arrow-circle-left"></i> Quay về danh sách
+                                    </a>
+                                </div>
+                                <div class="d-inline-block">
+                                    <button class="btn btn-sm btn-primary" name="status" type="submit" value="xacnhan"
+                                        @if ($order->status != 1) @disabled(true) @endif>
+                                        <i class="fa-solid fa-clipboard-check"></i>Xác nhận
+                                        @if ($order->status == 1)
+                                            <i class="fa-solid fa-circle-check fa-beat" style="color: #07e921;"></i>
+                                        @endif
+                                    </button>
+                                </div>
+                                <div class="d-inline-block">
+                                    <button class="btn btn-sm btn-info" name="status" type="submit" value="donggoi"
+                                        @if ($order->status != 2 && $order->status != 1) @disabled(true) @endif>
+                                        <i class="fa-solid fa-box"></i> Đóng gói
+                                        @if ($order->status == 2)
+                                            <i class="fa-solid fa-circle-check fa-beat" style="color: #07e921;"></i>
+                                        @endif
+                                    </button>
+                                </div>
+                                <div class="d-inline-block">
+                                    <button class="btn btn-sm btn-warning" name="status" type="submit" value="vanchuyen"
+                                        @if ($order->status != 3 && $order->status != 2) @disabled(true) @endif>
+                                        <i class="fa-solid fa-plane-up"></i> Vận chuyển
+                                        @if ($order->status == 3)
+                                            <i class="fa-solid fa-circle-check fa-beat" style="color: #07e921;"></i>
+                                        @endif
+                                    </button>
+                                </div>
+                                <div class="d-inline-block">
 
-                                <a class="btn btn-sm btn-primary"
-                                    href="{{ route('order.status', ['order' => $order->id, 'type' => 'xacnhan']) }}">Xác
-                                    nhận
-                                    đơn hàng</a>
-                                <a class="btn btn-sm btn-info"
-                                    href="{{ route('order.status', ['order' => $order->id, 'type' => 'donggoi']) }}">Đóng
-                                    gói</a>
-                                <a class="btn btn-sm btn-warning"
-                                    href="{{ route('order.status', ['order' => $order->id, 'type' => 'vanchuyen']) }}">Vận
-                                    chuyển</a>
-                                <a class="btn btn-sm btn-success"
-                                    href="{{ route('order.status', ['order' => $order->id, 'type' => 'dagiao']) }}">Đã
-                                    giao</a>
-                                <a class="btn btn-sm btn-danger"
-                                    href="{{ route('order.status', ['order' => $order->id, 'type' => 'huy']) }}">Đã hủy</a>
+                                    <button class="btn btn-sm btn-success" name="status" type="submit" value="dagiao"
+                                        @if ($order->status != 4 && $order->status != 3) @disabled(true) @endif>
+                                        <i class="fa-solid fa-plane-circle-check"></i>Đã giao
+                                        @if ($order->status == 4)
+                                            <i class="fa-solid fa-circle-check fa-beat" style="color: #07e921;"></i>
+                                        @endif
+                                    </button>
+                                </div>
+                                <div class="d-inline-block">
+                                    <button class="btn btn-sm btn-danger" name="status" type="submit" value="huy"
+                                        @if ($order->status == 4) @disabled(true) @endif>
+                                        <i class="fas fa-trash"></i> Hủy
+                                        @if ($order->status == 5)
+                                            <i class="fa-solid fa-circle-check fa-beat" style="color: #07e921;"></i>
+                                        @endif
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        @includeIf('backend.message_alert')
+                        <div class="row">
+                            <div class="col-3">
+                                <h5 class="text-info">Thông tin khách hàng</h5>
+                                <div>
+                                    <h6><strong>Tên khách hàng</strong></h6>
+                                    <input type="text" class="form-control" disabled value="{{ $user->name }}">
+                                </div>
+                                <div class="mt-2">
+                                    <h6><strong>Điện thoại</strong></h6>
+                                    <input type="text" class="form-control" disabled value="{{ $user->phone }}">
+                                </div>
+                                <div class="mt-2">
+                                    <h6><strong>Địa chỉ</strong></h6>
+                                    <input type="text" class="form-control" disabled value="{{ $user->address }}">
+                                </div>
+                                <div class="mt-2">
+                                    <h6><strong>Email</strong></h6>
+                                    <input type="text" class="form-control" disabled value="{{ $user->email }}">
+                                </div>
+                            </div>
+                            <div class="col-9">
+                                <table class="table table-bordered" id="myTable">
+                                    <h5 class="text-info">Chi tiết đơn hàng</h5>
+                                    <thead>
+                                        <tr>
+                                            
 
-                                <a class="btn btn-sm btn-info " href="{{ route('order.index') }}">
+                                            <th class="col-md-1 col-sm-1 col-1 align-middle text-center">
+                                                <div class="form-group select-all">
+                                                    <input type="checkbox" class="" name="checkAll"
+                                                        id="checkAll">
+                                                </div>
+                                            </th>
+                                            <th class="col-md-2 col-sm-1 col-1 align-middle text-center">image</th>
+                                            <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Tên sản phẩm</th>
+                                            <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Giá</th>
+                                            <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Số lượng</th>
+                                            <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Thành tiền</th>
+                                            <th class="col-md-1 col-sm-1 col-1 align-middle text-center">id</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($list_orderdetail as $row)
+                                            <tr>
+
+                                                <td class="text-center" style="width:20px">
+                                                    <div class="form-group">
+                                                        <input name="checkId[]" type="checkbox"
+                                                            value="{{ $row->id }}" id="web-developer">
+                                                    </div>
+                                                </td>
+                                                <td>
+
+                                                    <img src="{{ asset('images/product/' . $row->product->images[0]->image) }}"
+                                                        class="img-fluid" alt="{{ $row->image }}">
+
+                                                </td>
+                                                <td>
+                                                    {{ $row->product->name }}
+                                                </td>
+                                                <td>
+                                                    {{ number_format($row->price) }}
+                                                </td>
+
+                                                <td class="text-center">
+                                                    {{ $row->qty }}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ number_format($row->amount) }}
+                                                </td>
+
+                                                <td class="text-center" style="width:20px">
+                                                    {{ $row->id }}
+                                                </td>
+                                            </tr>
+                                        @endforeach
+
+                                    </tbody>
+                                    <td colspan="7">
+                                        <h5 class="text-danger">Tổng tiền: {{ number_format($total) }} </h5>
+                                    </td>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-md-12 text-right">
+                                <a class="btn btn-sm btn-info" href="{{ route('order.index') }}">
                                     <i class="fas fa-arrow-circle-left"></i> Quay về danh sách
+                                </a>
+                                <a class="btn btn-sm btn-primary"
+                                    href="{{ route('order.edit', ['order' => $order->id]) }} ">
+                                    <i class=" fas fa-edit"></i>
+                                </a>
+                                <a class="btn btn-sm btn-danger"
+                                    href="{{ route('order.delete', ['order' => $order->id]) }}">
+                                    <i class="fas fa-trash"></i>
                                 </a>
                             </div>
                         </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="card">
-                                        <h5 class="text-center text-info my-1 pt-2">THÔNG TIN KHÁCH HÀNG</h5>
-                                        <div class="card-body">
-                                            <div class="mb-3">
-                                                <input type="hidden" name="id" value="{{ $order->id }}">
-                                                <label for="deliveryname">Tên người nhận</label>
-                                                <input name="deliveryname" id="deliveryname" type="text"
-                                                    value="{{ $order->deliveryname }}" class="form-control " disabled>
-                                            </div>
-                                            <div class="mb-3">
-
-                                                <label for="deliveryemail">Email</label>
-                                                <input name="deliveryemail" id="deliveryemail" type="email"
-                                                    value="{{ $order->deliveryemail }}" class="form-control " disabled>
-                                            </div>
-                                            <div class="mb-3">
-
-                                                <label for="deliveryphone">Phone</label>
-                                                <input name="deliveryphone" id="deliveryphone" type="text"
-                                                    value="{{ $order->deliveryphone }}" class="form-control " disabled>
-                                            </div>
-                                            <div class="mb-3">
-
-                                                <label for="deliveryaddress">Địa chỉ</label>
-                                                <input name="deliveryaddress" id="deliveryaddress" type="text"
-                                                    value="{{ $order->deliveryaddress }}" class="form-control " disabled>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="card">
-                                        <h5 class="text-center text-info my-1 pt-2">CHI TIẾT HÓA ĐƠN</h5>
-                                        <div class="card-body">
-                                            <table class="table table-bordered" id="dataTable">
-                                                <thead class="bg-orange">
-                                                    <tr>
-                                                        <th class="text-center" style="width:2%"><input type="checkbox">
-                                                        </th>
-                                                        <th class="text-center" style="width:15%">Hình</th>
-                                                        <th class="text-center" style="width:25%">Tên danh mục</th>
-                                                        <th class="text-center" style="width:15%">Giá</th>
-
-                                                        <th class="text-center" style="width:15%px">Số lượng</th>
-                                                        <th class="text-center" style="width:15%px">Thành tiền</th>
-                                                        <th class="text-center" style="width:10%px">ID</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-
-                                                    @foreach ($list_orderdetail as $orderdetail)
-                                                        <tr>
-                                                            <td class="text-center" style="width:20px">
-                                                                <input type="checkbox">
-                                                            </td>
-                                                            <td class="index-img">
-                                                                <img src="{{ asset('images/product/' . $orderdetail->image) }}"
-                                                                    class="card-img-top index-img"
-                                                                    alt="{{ $orderdetail->image }}">
-                                                            </td>
-                                                            <td>
-                                                                {{ $orderdetail->name }}
-                                                            </td>
-                                                            <td>
-                                                                {{ number_format($orderdetail->price) }}₫
-                                                            </td>
-                                                            <td>
-                                                                {{ $orderdetail->qty }}
-                                                            </td>
-                                                            <td>
-                                                                {{ number_format($orderdetail->amount) }}₫
-
-                                                            </td>
-                                                            <td class="text-center" style="width:20px">
-                                                                {{ number_format($orderdetail->amount) }}
-                                                            </td>
-
-
-                                                        </tr>
-                                                        
-                                                    @endforeach
-
-
-                                                </tbody>
-
-
-                                            </table>
-                                            <div class="text-danger">
-                                                <h5><strong>Tổng tiền:{{ number_format($total) }}₫</strong></h5>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="card-footer">
-
-                        </div>
                     </div>
-                    <!-- /.row -->
+                    <!-- /.card-footer-->
                 </div>
                 <!-- /.card -->
 
             </section>
         </form>
+        <!-- /.content -->
     </div>
-@endsection
-@section('footer')
-    <script>
-        $(document).ready(function() {
-            $('.product-image-thumb').on('click', function() {
-                var $image_element = $(this).find('img')
-                $('.product-image').prop('src', $image_element.attr('src'))
-                $('.product-image-thumb.active').removeClass('active')
-                $(this).addClass('active')
-            })
-        })
-    </script>
 
 @endsection

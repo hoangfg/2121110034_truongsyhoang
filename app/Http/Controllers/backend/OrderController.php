@@ -77,25 +77,27 @@ class OrderController extends Controller
     {
 
         $title = 'Chi tiết hóa đơn';
+        $order = Order::find($id);
+        $list_orderdetail = $order->orderdetail;
+        $user = $order->user;
+        // dd($list_orderdetail);
 
-        $order = Order::join('user', 'user.id', '=', 'order.user_id')
-            ->where('order.id', '=', $id)
-            ->first();
-        $list_orderdetail = Product::join('Orderdetail', 'product.id', '=', 'orderdetail.product_id')
-            ->join('product_store', 'product.id', '=', 'product_store.product_id')
-            ->join('product_sale', 'product.id', '=', 'product_sale.product_id')
-            ->select('*', 'product.price_buy as product_price', 'product_store.qty as product_qty', 'product_sale.price_sale as product_price_sale')
-            ->where('orderdetail.order_id', '=', $id)
-            ->get();
+
+        // $orderdetail=Orderdetail::where('')
+        // $list_orderdetail=Product::where('id','=',$order->)
+        // $list_orderdetail = Product::join('Orderdetail', 'product.id', '=', 'orderdetail.product_id')
+        //     ->join('product_sale', 'product.id', '=', 'product_sale.product_id')
+        //     ->select('*',  'product_sale.price_sale as product_price_sale')
+        //     ->where('orderdetail.order_id', '=', $id)
+        //     ->get();
         $total = $list_orderdetail->sum(function ($sum) {
             return $sum->amount;
         });
         if ($order == null) {
             return redirect()->route('order.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
-        } else {
-
-            return view('backend.order.show', compact('order',  'title', 'list_orderdetail', 'total'));
         }
+
+        return view('backend.order.show', compact('order',  'title', 'list_orderdetail', 'total', 'user'));
     }
 
     /**
@@ -127,7 +129,7 @@ class OrderController extends Controller
         if ($order == null) {
             return redirect()->route('order.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
         } else {
-            if($order->delete()) {
+            if ($order->delete()) {
                 $order->orderdetails()->delete();
             }
             return redirect()->route('order.trash')->with('message', ['type' => 'success', 'msg' => 'Hủy sản phẩm thành công']);

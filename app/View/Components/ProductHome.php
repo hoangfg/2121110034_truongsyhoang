@@ -37,9 +37,17 @@ class ProductHome extends Component
                 }
             }
         }
+        $count = Product::whereHas('sale', function ($query) {
+            $query->whereRaw('? between date_begin and date_end', [now()]);
+        })->where('status', '=', '1')
+            ->whereIn('category_id', $listcatid)->orderBy('created_at', 'desc')
+            ->count();
+
         $list_product = Product::with(['sale' => function ($query) {
             $query->whereRaw('? between date_begin and date_end', [now()]);
-        }])->where('status', '=', '1')->whereIn('category_id', $listcatid)->orderBy('created_at', 'desc')->take(24)->get();
-        return view('components.product-home', compact('list_product', 'cat'));
+        }])->where('status', '=', '1')->whereIn('category_id', $listcatid)->orderBy('created_at', 'desc')->take(12)->get();
+
+
+        return view('components.product-home', compact('cat', 'list_product', 'count'));
     }
 }

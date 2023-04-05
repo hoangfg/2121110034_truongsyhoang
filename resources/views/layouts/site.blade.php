@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>@yield('title')</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;1,300;1,500&family=Roboto:wght@500;700&display=swap"
         rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/all.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/layoutsite.css') }}">
+
     <link rel="stylesheet"
         href="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css') }}"
         integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
@@ -23,12 +23,16 @@
     <script src="{{ asset('assets/vendors/jquery.min.js') }}"></script>
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/owlcarousel/owl.carousel.js') }}"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    @yield('header')
+    <link rel="stylesheet" href="{{ asset('css/layoutsite.css') }}">
 
 </head>
 
 <body>
-    <header class="header">
-        <div class="container-fluid ">
+
+    <header class="header bg-white" >
+        <div class="container ">
             <div class="row py-3 border-2 border-bottom m-0">
                 <!-- logo -->
                 <div class="col-md-2 col-6  my-auto">
@@ -62,122 +66,20 @@
             </div>
 
             <!-- carousel -->
-            <x-slide-show />
+            @includeIf('layouts.site_menu', ['some' => 'data'])
         </div>
     </header>
-    <section class=" navbarsticky mainmenu my-1"id="navbarsticky">
-        <div class="container-fluid">
-            <div class="row border-2 border-top border-dark border-bottom ">
-                <div class="col-md-12 col-12  main-md-menu fs-4">
-                    <nav class="navbar  navbar-expand-lg ">
-                        <button data-bs-target="#navbar_main" data-bs-toggle="offcanvas"
-                            class="d-lg-none btn btn-outline-success navbar-toggler ms-auto" type="button">
-                            <span class=" navbar-toggler-icon"></span>
-                        </button>
-                        <div id="navbar_main" class="offcanvas offcanvas-md offcanvas-start ">
-                            <div class="offcanvas-header">
-                                <span class="offcanvas-title">
 
-                                    <img src="https://demo.wpthemego.com/themes/sw_coruja/wp-content/uploads/2019/11/logo-default.png"
-                                        alt="logo" class="img-fluid rounded-top my-auto" width="200px">
-
-                                </span>
-                                <button class="btn-close float-end" data-bs-dismiss="offcanvas"></button>
-                            </div>
-
-                            <div class="offcanvas-body  ">
-                                <div class="col-md-9 col-12">
-                                    <ul class="navbar-nav">
-                                        <x-main-menu />
-                                    </ul>
-                                </div>
-                                <div class="col-md-3 col-12">
-                                    <ul class="navbar-nav float-md-end">
-                                        <li class="nav-item me-5"><a class="nav-link "
-                                                href="index.php?option=customer-login"><i
-                                                    class="fa-solid fa-arrow-right-to-bracket me-2"></i>Đăng nhập</a>
-                                        </li>
-                                        <li class="nav-item"><a class="nav-link "
-                                                href="index.php?option=customer-signup"><i
-                                                    class="fa-sharp fa-solid fa-user-plus me-2"></i>Đăng ký</a></li>
-                                    </ul>
-                                </div>
-                                <div class="col-12 d-md-none d-block">
-                                    <div class="input-group py-2 ">
-                                        <input type="text" class="form-control fs-3" placeholder="Search"
-                                            aria-label="Search" aria-describedby="basic-addon2">
-                                        <span class="input-group-text px-4" id="basic-addon2">
-                                            <i class="fa-solid fa-magnifying-glass fs-4"></i>
-                                        </span>
-                                    </div>
-                                </div>
-
-                            </div> <!-- container-fluid.// -->
-                    </nav>
-                </div>
-            </div>
-        </div>
-
-    </section>
-    <section class=" menu-wrapper mainmenu "id="menu-wrapper">
-        <div class="container-fluid">
-            <div class="row border-2 border-top border-dark border-bottom ">
-                <div class="col-md-12 col-12  main-md-menu fs-4">
-                    <nav class="navbar  navbar-expand-lg ">
-                        <button data-bs-target="#navbar_main" data-bs-toggle="offcanvas"
-                            class="d-lg-none btn btn-outline-success navbar-toggler ms-auto" type="button">
-                            <span class=" navbar-toggler-icon"></span>
-                        </button>
-                        <div id="navbar_main" class="offcanvas offcanvas-md offcanvas-start ">
-                            <div class="offcanvas-header">
-                                <span class="offcanvas-title">
-
-                                    <img src="https://demo.wpthemego.com/themes/sw_coruja/wp-content/uploads/2019/11/logo-default.png"
-                                        alt="logo" class="img-fluid rounded-top my-auto" width="200px">
-
-                                </span>
-                                <button class="btn-close float-end" data-bs-dismiss="offcanvas"></button>
-                            </div>
-
-                            <div class="offcanvas-body  ">
-                                <div class="col-md-9 col-12">
-                                    <ul class="navbar-nav">
-                                        <x-main-menu />
-                                    </ul>
-                                </div>
-                                <div class="col-md-3 col-12">
-                                    <ul class="navbar-nav float-md-end">
-                                        <li class="nav-item me-5"><a class="nav-link "
-                                                href="index.php?option=customer-login"><i
-                                                    class="fa-solid fa-arrow-right-to-bracket me-2"></i>Đăng nhập</a>
-                                        </li>
-                                        <li class="nav-item"><a class="nav-link "
-                                                href="index.php?option=customer-signup"><i
-                                                    class="fa-sharp fa-solid fa-user-plus me-2"></i>Đăng ký</a></li>
-                                    </ul>
-                                </div>
-                                <div class="col-12 d-md-none d-block">
-                                    <div class="input-group py-2 ">
-                                        <input type="text" class="form-control fs-3" placeholder="Search"
-                                            aria-label="Search" aria-describedby="basic-addon2">
-                                        <span class="input-group-text px-4" id="basic-addon2">
-                                            <i class="fa-solid fa-magnifying-glass fs-4"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                        </div> <!-- container-fluid.// -->
-                    </nav>
-                </div>
-            </div>
-        </div>
-
-    </section>
     @yield('content')
 
     <footer class="footer py-5">
+        <ul class="list-fixed brand-sale position-fixed ">
+            <li>
+                <a data-bs-target="#left-menu" data-bs-toggle="offcanvas" type='button'
+                    class='btn btn-circle list-fixed-btn d-lg-none'><span class='fa-solid fa-bars'></span></a>
+            </li>
+
+        </ul>
         <div class="top_footer bg-dark ">
             <div class="container">
                 <div class="row">
@@ -190,10 +92,9 @@
                     <div class="col-md-7 col-12 form ">
                         <form action="#">
                             <div class="form-fields">
-                                <input class="form-email" type="email" name="EMAIL"
-                                    placeholder="Enter your email" required="">
-                                <button class="form-submit fa fa-paper-plane" type="submit"
-                                    value="subscribe"></button>
+                                <input class="form-email" type="email" name="EMAIL" placeholder="Enter your email"
+                                    required="">
+                                <button class="form-submit fa fa-paper-plane" type="submit" value="subscribe"></button>
                             </div>
                         </form>
                     </div>
@@ -492,7 +393,7 @@
                         loop: false
                     },
                     1000: {
-                        items: 2,
+                        items: 1,
                         nav: false,
                         loop: false
                     }
@@ -561,10 +462,36 @@
             })
         });
     </script>
+    {{-- sort --}}
+    <script>
+        $(document).ready(function() {
+            $('#sort').on('change', function() {
+                var url = $(this).val();
+
+                if (url) {
+                    window.location = url;
+                }
+                return false;
+            });
+        });
+    </script>
+    {{-- range --}}
+
+    {{-- list category --}}
+    <script>
+        $(function() {
+            $("#menu").menu({
+                items: "> :not(.ui-widget-header)"
+            });
+        });
+    </script>
+
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
     <!-- vendors -->
     <script src="{{ asset('assets/vendors/highlight.js') }}"></script>
     <script src="{{ asset('assets/js/app.js') }}"></script>
     <script src="{{ asset('js/sticky.js') }}"></script>
+    @yield('footer')
 </body>
 
 </html>
