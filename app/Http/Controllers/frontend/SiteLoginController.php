@@ -31,7 +31,7 @@ class SiteLoginController extends Controller
             'username' => 'required|unique:user|max:35|min:5|string',
             'email' => 'required|unique:user,email|email|gmail|max:30',
             'password' => 'required|max:40',
-            // 'confirm_password' => 'required|same:password|max:40',
+            'confirm_password' => 'required|same:password|max:40',
         ], [
             'email.required' => 'Bạn chưa điền email',
             'email.email' => 'Email không hợp lệ',

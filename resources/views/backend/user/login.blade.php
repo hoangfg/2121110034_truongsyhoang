@@ -27,74 +27,48 @@
 </head>
 
 <body class="body-login">
-    <div class="containers">
-        <div class="cards">
-            <div class="inner-boxs" id="card">
-                <div class="card-front">
-                    <h2>LOGIN</h2>
-                    <form action="{{ route('admin.postlogin') }}" method="post" >
-                        @csrf
-                        <div class="groups mt-1">
-                            <input type="text" name="username" class="input-boxs" placeholder="Username" required />
-                            <i class="fa-regular fa-user"></i>
-                        </div>
-                        <div class="groups mt-1">
-                            <input type="password" name="password" class="input-boxs" placeholder="Password" required />
-                            <i class="far fa-eye btn" onclick="togglePassword(this)"></i>
-                        </div>
-                        <div class="groups mt-3">
-                            <input type="submit" name="DANGNHAP" class="submit-btns" value="Login">
-                        </div>
-                        <div>
-                            <input type="checkbox" name="remember" id="" /><span>Remember Me</span>
-                        </div>
-                        @if (isset($error))
-                            <div class="mt-3">
-                                <div class="text-danger text-center ">
-                                    {{ $error }}
-                                </div>
-                            </div>
-                        @endif
-                    </form>
-                    <button type="button" class="btn mt-7 btn-btn-login" onclick="openRegister()">
-                        I'm new here
-                    </button>
-                    <a href="" class="forget">Forget password</a>
-                </div>
-                <div class="card-back">
-                    <h2>REGISTER</h2>
-                    <form action="">
-                        <div class="groups">
-                            <input type="text" class="input-boxs" placeholder="Username" required />
-                            <i class="fa-regular fa-user"></i>
-                        </div>
-                        <div class="groups">
-                            <input type="text" class="input-boxs" placeholder="Phone" required />
-                            <i class="fa-solid fa-phone"></i>
-                        </div>
-                        <div class="groups">
-                            <input type="email" class="input-boxs" placeholder="email" required />
-                            <i class="fa-regular fa-envelope"></i>
-                        </div>
-                        <div class="groups">
-                            <input type="password" class="input-boxs" placeholder="password" required />
-                            <i class="far fa-eye btn" onclick="togglePassword(this)"></i>
-                        </div>
-                        <div class="groups">
-                            <input type="submit" name="DANGNHAP" class="submit-btns" value="Register">
-                        </div>
-                        <input type="checkbox" name="" id="" /><span class="checkbox">Remember
-                            Me</span>
-                    </form>
-                    <button type="button" class="btn mt-7 btn-btn-login" onclick="openLogin()">
-                        I've an account
-                    </button>
 
+    <div class="containers">
+        <div class="screen">
+            <div class="screen__content">
+                <form class="login" action="{{ route('admin.postlogin') }}" method="post">
+                    @csrf
+                    <div class="login__field">
+                        <i class="login__icon fas fa-user"></i>
+                        <input type="text" name="username" class="login__input" placeholder="User name / Email">
+                    </div>
+                    <div class="login__field">
+                        <i class="login__icon fas fa-lock"></i>
+                        <input type="password" name="password" class="login__input" placeholder="Password">
+                    </div>
+                    <div class="login__field remember">
+                        <input id="login-sign-up" name="remember" type="checkbox" class="login__input--checkbox" />
+                        <p>Remember password</p>
+                    </div>
+
+                    <button class="button login__submit">
+                        <span class="button__text">Log In Now</span>
+                        <i class="button__icon fas fa-chevron-right"></i>
+                    </button>
+                </form>
+                <div class="social-login">
+                    <h3>log in via</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-login__icon fab fa-instagram"></a>
+                        <a href="#" class="social-login__icon fab fa-facebook"></a>
+                        <a href="#" class="social-login__icon fab fa-twitter"></a>
+                    </div>
                 </div>
+            </div>
+            <div class="screen__background">
+                <span class="screen__background__shape screen__background__shape4"></span>
+                <span class="screen__background__shape screen__background__shape3"></span>
+                <span class="screen__background__shape screen__background__shape2"></span>
+                <span class="screen__background__shape screen__background__shape1"></span>
             </div>
         </div>
     </div>
-    <script>
+    {{-- <script>
         var card = document.getElementById("cards");
 
         function openRegister() {
@@ -104,7 +78,7 @@
         function openLogin() {
             card.style.transform = "rotateY(0deg)";
         }
-    </script>
+    </script> --}}
 </body>
 
 </html>

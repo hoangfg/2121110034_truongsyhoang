@@ -21,23 +21,28 @@ use App\Http\Controllers\backend\UserController;
 use App\Http\Controllers\backend\AuthController;
 use App\Http\Controllers\backend\CommentController;
 use App\Http\Controllers\frontend\SiteLoginController;
+use App\Http\Controllers\frontend\CartController;
 use App\Models\Contact;
 
 // trang người dùng
 Route::get('/', [SiteController::class, 'index'])->name('site.home');
 Route::get('san-pham', [SiteController::class, 'product'])->name('site.product');
 Route::get('bai-viet', [SiteController::class, 'post'])->name('site.post');
+
+
 Route::post('comment', [CommentController::class, 'store'])->name('comment.store');
 Route::post('reply', [CommentController::class, 'reply'])->name('comment.reply');
 Route::post('replys', [CommentController::class, 'replys'])->name('comment.replys');
-
-
 Route::post('dang-ky', [SiteLoginController::class, 'register'])->name('site.register');
 Route::get('dang-nhap', [SiteLoginController::class, 'getlogin'])->name('site.getlogin');
 Route::post('dang-nhap', [SiteLoginController::class, 'postlogin'])->name('site.postlogin');
-
 Route::get('xac-nhan/{id}/{actived_token}', [SiteLoginController::class, 'actived'])->name('site.actived');
 Route::get('xac-nhan-lai/{id}', [SiteLoginController::class, 'actived_again'])->name('site.actived_again');
+
+Route::get('gio-hang', [CartController::class, 'cart'])->name('site.cart');
+Route::post('add-to-cart', [CartController::class, 'addcart']);
+Route::post('delete-cart-item', [CartController::class, 'deletecart']);
+Route::post('update-cart', [CartController::class, 'updatecart']);
 
 Route::get('lay-lai-mat-khau', [SiteLoginController::class, 'forget_password'])->name('site.forget_password');
 Route::post('lay-lai-mat-khau', [SiteLoginController::class, 'postforget_password'])->name('site.postforget_password');

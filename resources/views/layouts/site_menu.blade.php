@@ -37,19 +37,21 @@
                                                     class="fa-solid fa-arrow-right-to-bracket me-2"></i> Tài khoản</a>
                                     
                                         </li> --}}
-                                        <li class="nav-item me-5 d-md-block d-none"><a class="nav-link  mt-0"
-                                                href="" data-bs-toggle="modal" data-bs-target="#myModal"><i
+                                        <li class="nav-item me-5 d-md-block d-none">
+                                            <a class="nav-link  mt-0"
+                                                href="" data-bs-toggle="modal" data-bs-target="#myModalLogin"><i
                                                     class="fa-solid fa-arrow-right-to-bracket me-2"></i>Đăng
                                                 nhập / Đăng ký</a>
                                             <!-- The Modal -->
-                                            <div class="modal " id="myModal">
-                                                <div class="modal-dialog modal-fullscreen-sm-down">
-                                                    <div class="modal-content">
-                                                        @includeIf('frontend.model-login')
-                                                    </div>
+
+                                        </li>
+                                        <div class="modal " id="myModalLogin">
+                                            <div class="modal-dialog modal-fullscreen-sm-down">
+                                                <div class="modal-content">
+                                                    @includeIf('frontend.model-login')
                                                 </div>
                                             </div>
-                                        </li>
+                                        </div>
                                         {{-- <li class="nav-item me-5 d-md-none d-block"><a class="nav-link  mt-0"
                                                 href="{{ route('frontend.login') }}"><i
                                                     class="fa-solid fa-arrow-right-to-bracket me-2"></i>Đăng

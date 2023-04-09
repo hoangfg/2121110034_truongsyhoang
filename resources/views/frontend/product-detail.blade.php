@@ -22,52 +22,52 @@
 
         /* qty */
         /* .btn-qty {
-                height: 40px;
-                min-width: 80%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: #FFF;
+                                height: 40px;
+                                min-width: 80%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                background: #FFF;
 
-            }
+                            }
 
-            .btn-qty span {
+                            .btn-qty span {
 
-                text-align: center;
-                font-size: 20px;
-                font-weight: 600;
-                cursor: pointer;
-                user-select: none;
-                border: 2px solid rgba(0, 0, 0, 0.2);
-                border-radius: 20px;
-                line-height: 30px;
-            }
+                                text-align: center;
+                                font-size: 20px;
+                                font-weight: 600;
+                                cursor: pointer;
+                                user-select: none;
+                                border: 2px solid rgba(0, 0, 0, 0.2);
+                                border-radius: 20px;
+                                line-height: 30px;
+                            }
 
-            .btn-qty span:not(.num) {
-                width: 20%;
-                border-radius: 50%;
-            }
+                            .btn-qty span:not(.num) {
+                                width: 20%;
+                                border-radius: 50%;
+                            }
 
-            .btn-qty span.num {
-                width: 100%;
-                font-size: 20px;
-                border-right: 2px solid rgba(0, 0, 0, 0.2);
-                border-left: 2px solid rgba(0, 0, 0, 0.2);
-                pointer-events: none;
-            } */
+                            .btn-qty span.num {
+                                width: 100%;
+                                font-size: 20px;
+                                border-right: 2px solid rgba(0, 0, 0, 0.2);
+                                border-left: 2px solid rgba(0, 0, 0, 0.2);
+                                pointer-events: none;
+                            } */
 
         /* cart */
 
         .add-cart {
             border-radius: 50%;
             display: inline-block;
-             width: 35px;
+            width: 35px;
             height: 35px;
             line-height: 35px;
 
         }
 
-        .add-cart a {
+        .add-cart button {
             background: #00000030;
             display: inline-block;
             width: 100%;
@@ -80,7 +80,7 @@
             border-radius: 20px;
         }
 
-        .add-cart a:hover {
+        .add-cart button:hover {
             color: white;
             cursor: pointer;
             background-color: #04aa6d;
@@ -103,37 +103,7 @@
         }
 
         /*  */
-        #buy-amount {
-            display: flex;
-        }
-
-        #buy-amount button {
-            width: 35px;
-            height: 35px;
-            outline: none;
-            background: none;
-            border: 1px solid #ececec;
-            cursor: pointer;
-        }
-
-        #buy-amount button:hover {
-            background: #ececec;
-        }
-
-        #buy-amount button svg {
-            color: #909090;
-        }
-
-        #buy-amount button:hover svg {
-            color: #4f4f4f;
-        }
-
-        #buy-amount #amount {
-            width: 40px;
-            text-align: center;
-            border: 1px solid #ececec;
-
-        }
+        
     </style>
 @endsection
 
@@ -160,7 +130,7 @@
                 </nav>
             </div>
         </div>
-        <div class="row">
+        <div class="row product-data">
             <div class="col-md-12 col-12 mx-auto bg-white py-5  ">
                 <div class="row mt-3">
                     <div class="col-md-3 col-10 mx-auto  p-3 ">
@@ -231,38 +201,41 @@
                             </div>
 
                         </div>
-
-                        <div class="row my-3 d-flex justify-content-between">
-                            <div class="col-md-4 col-4 ">
-                                <div class="" id="buy-amount">
-                                    <input type="hidden" value="{{ $product->store->qty }} " id="qty">
-                                    <button class="minus-btn" onclick="handleMinus()">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
-                                        </svg>
-                                    </button>
-                                    <input type="text" name="amount" id="amount" value="1">
-                                    <button class="plus-btn" onclick="handlePlus()">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                    </button>
+                       
+                            <div class="row my-3 d-flex justify-content-between">
+                                <div class="col-md-6 col-6">
+                                    <div class="buy-amount">
+                                        <input type="hidden" value="{{ $product->store->qty }} " class="qty_max">
+                                        <input type="hidden" value="{{ $product->id }} " name="product_id_hidden" class="prod_id">
+                                        <button class="minus-btn">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
+                                            </svg>
+                                        </button>
+                                        <input type="text" class="amount qly_input" name="amount" value="1">
+                                        <button class="plus-btn">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M12 4.5v15m7.5-7.5h-15" />
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6 col-2 ">
-                                <div class="add-cart">
-                                    <a class="action-cart" title="Thêm vào giỏ" href="#" data-abc="true">
-                                        <i class="fa fa-shopping-cart"></i>
-                                    </a>
+                                <div class="col-md-6 col-2 ">
+                                    <div class="add-cart">
+                                        <button class="action-cart addToCartBtn" type="submit" title="Thêm vào giỏ" data-abc="true">
+                                            <i class="fa fa-shopping-cart"></i>
+                                        </button>
+
+                                    </div>
 
                                 </div>
 
                             </div>
+                        
 
-                        </div>
                         <!-- 3 -->
                         <div class="row mt-3 border-top border-bottom ">
                             <div class="col-md-12 col-12 mb-2">
@@ -475,8 +448,6 @@
 
 
         // range - price 
-
-       
     </script>
     {{--  --}}
     <!-- all js here -->
@@ -526,30 +497,7 @@
         //         num.innerText = a;
         //     }
         // });
-        let amountElement = document.getElementById('amount');
-        let amount = amountElement.value;
-        
-        let qty = document.getElementById('qty').value;
-        let reander = (amount) => {
-            amountElement.value = amount
-        }
-        let handlePlus = () => {
-            if (amount < qty)
-                amount++
-            reander(amount);
-        }
-        let handleMinus = () => {
-            if (amount > 1)
-                amount--
-            reander(amount);
-        }
-        amountElement.addEventListener('input', () => {
-            amount = amountElement.value;
-            amount = parseInt(amount);
-            amount = (isNaN(amount) || (amount == 0)) ? 1 : amount;
-            amount = (amount > qty) ? qty : amount;
-            reander(amount);
-        })
+       
     </script>
 
 

@@ -11,7 +11,7 @@
         rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/all.min.css') }}">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet"
         href="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css') }}"
         integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="{{ asset('css/login.css') }}" />
     @yield('header')
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/layoutsite.css') }}">
 
 </head>
@@ -58,10 +59,38 @@
 
                 <div class="col-md-2 col-6 my-auto cart">
                     <div class="d-grid gap-2" role="group" aria-label="Basic outlined example">
-                        <button type="button" class="btn bg-success py-3 cart-item">
+
+                        <a type="button" href="{{ route('site.cart') }}" class="btn bg-success py-3 cart-item">
                             <i class="fa-solid fa-cart-shopping"></i>
                             <span class="">Giỏ hàng</span>
+
+                        </a>
+                        {{-- <button type="button" class="btn bg-success py-3 cart-item" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal" data-bs-whatever="@mdo">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            <span class="">Giỏ hàng</span>
+
                         </button>
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        @includeIf('frontend.modal-cart')
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Send message</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -498,29 +527,122 @@
     </script>
     {{-- login --}}
     <script>
-        var card = document.getElementById("cards");
+        const switchers = [...document.querySelectorAll('.switcher')]
 
-        function openRegister() {
-            card.style.transform = "rotateY(-180deg)";
-        }
+        switchers.forEach(item => {
+            item.addEventListener('click', function() {
+                switchers.forEach(item => item.parentElement.classList.remove('is-active'))
+                this.parentElement.classList.add('is-active')
+            })
+        })
 
-        function openLogin() {
-            card.style.transform = "rotateY(0deg)";
-        }
-        // 
-    </script>
+        $(document).ready(function() {
+            // nut so luong
+            $(".minus-btn").click(function(e) {
+                e.preventDefault();
+                var amountInput = $(this).closest(".buy-amount").find(".amount");
+                var value = parseInt(amountInput.val(), 10);
+                value = isNaN(value) ? 1 : value;
+                if (value > 1) {
+                    value--;
+                    amountInput.val(value);
+                }
+            });
+            $(".plus-btn").click(function(e) {
+                e.preventDefault();
+                var amountInput = $(this).closest(".buy-amount").find(".amount");
+                var qty_max = $(this).closest(".buy-amount").find(".qty_max").val();
+                var value = parseInt(amountInput.val(), 10);
+                value = isNaN(value) ? 1 : value;
+                if (value < qty_max) {
+                    value++;
+                    amountInput.val(value);
+                }
+            });
+            $(".amount").on("input", function() {
+                var qty_max = $(this).closest(".buy-amount").find(".qty_max").val();
+                var value = parseInt($(this).val());
+                value = isNaN(value) || value == 0 ? 1 : value;
+                value = value > qty_max ? qty_max : value;
+                $(this).val(value);
+            });
+            // addcart
+            $(".addToCartBtn").click(function(e) {
+                e.preventDefault();
 
-    <script>
-        const sign_in_btn = document.querySelector(".sign-in-btn");
-        const sign_up_btn = document.querySelector(".sign-up-btn");
-        const container = document.querySelector(".containers");
+                var product_id = $(this).closest('.product-data').find('.prod_id').val();
+                var product_qty = $(this).closest('.product-data').find('.qly_input').val();
+                // alert(product_id);
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    type: "POST",
+                    url: "add-to-cart",
+                    data: {
+                        'product_id': product_id,
+                        'product_qty': product_qty,
+                    },
 
-        sign_up_btn.addEventListener("click", () => {
-            container.classList.add("sign-up-mode");
-        });
+                    success: function(response) {
+                        swal(response.status);
+                        // alert(response.status);
+                    }
+                });
+            });
+            // delete cart
+            $('.delete__cart--item').click(function(e) {
+                e.preventDefault();
+                var product_id = $(this).closest('.product_data').find('.prod_id').val();
 
-        sign_in_btn.addEventListener("click", () => {
-            container.classList.remove("sign-up-mode");
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    type: "POST",
+                    url: "delete-cart-item",
+                    data: {
+                        'product_id': product_id,
+
+                    },
+
+                    success: function(response) {
+                          window.location.reload();
+                        swal("", response.status, "success");
+                        //  alert(response.status);
+                    }
+                });
+            });
+            // changeQty
+            $('.changeQty').click(function(e) {
+                e.preventDefault();
+                var product_id = $(this).closest('.product_data').find('.prod_id').val();
+                var product_qty = $(this).closest('.product_data').find('.amount').val();
+                data = {
+                    'product_id': product_id,
+                    'product_qty': product_qty,
+                }
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    type: "POST",
+                    url: "update-cart",
+                    data: data,
+
+                    success: function(response) {
+                        window.location.reload();
+                        swal("", response.status, "success");
+                        //  alert(response.status);
+                    }
+                });
+            });
         });
     </script>
 
