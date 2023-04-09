@@ -1,10 +1,5 @@
-* {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
 
-body {
+.body-login {
     /* width: 100vw;
     height: 100vh;
     position: relative; */
@@ -20,7 +15,7 @@ body {
         ),
         url(https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=928&q=80); */
 }
-body::before {
+.body-login::before {
     position: absolute;
     top: 60%;
     left: 0;
@@ -29,14 +24,12 @@ body::before {
     content: "";
     background-image: linear-gradient(to top, #10121c, transparent);
 }
-a {
-    text-decoration: none;
-}
+
 .text-danger {
     color: red;
 }
 
-.container {
+.containers1 {
     /* position: absolute;
     top: 50%;
     left: 50%;
@@ -51,7 +44,7 @@ a {
     align-items: center;
 }
 
-.card {
+.cards {
     width: 350px;
     height: 560px;
     border-radius: 10px;
@@ -61,7 +54,7 @@ a {
     font-weight: 400;
     font-size: 16px;
 }
-.inner-box {
+.inner-boxs {
     position: relative;
     width: 100%;
     height: 100%;
@@ -81,14 +74,14 @@ a {
     transform: rotateY(180deg);
 }
 
-.card h2 {
+.cards h2 {
     font-weight: normal;
     font-size: 24px;
     text-align: center;
     margin-bottom: 20px;
 }
 
-.input-box {
+.input-boxs {
     background-color: transparent;
     border: 1px solid currentColor;
     width: 100%;
@@ -103,11 +96,11 @@ a {
     font-size: inherit;
 }
 
-.group {
+.groups {
     position: relative;
 }
 
-.group i {
+.groups i {
     position: absolute;
     top: 15px;
     right: 20px;
@@ -118,8 +111,8 @@ a {
     color: inherit;
 }
 
-button,
-input.submit-btn {
+button.btn-btn-login,
+input.submit-btns {
     width: 100%;
     background-color: transparent;
     border: 1px solid currentColor;
@@ -152,7 +145,7 @@ input.submit-btn::after {
     top: -1px;
 } */
 
-span.checkbox {
+span.checkboxs {
     font-size: 12px;
     margin-left: 10px;
 }
@@ -170,8 +163,8 @@ span.checkbox {
     margin-top: 10px;
 }
 
-.card,
-a {
+.cards,
+.forget {
     color: inherit;
     display: block;
     text-align: center;

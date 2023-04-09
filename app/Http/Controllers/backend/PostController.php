@@ -47,11 +47,11 @@ class PostController extends Controller
         $html_topic_id = "";
 
         foreach ($list_topic as $topic) {
-           if($topic->id == old('topic_id')) {
+            if ($topic->id == old('topic_id')) {
                 $html_topic_id .= "<option selected value='" . $topic->id . "'>" . $topic->name . "</option>";
-           } else {
+            } else {
                 $html_topic_id .= "<option value='" . $topic->id . "'>" . $topic->name . "</option>";
-           }
+            }
         }
         return view('backend.post.create', compact('html_topic_id', 'title'));
     }
@@ -156,7 +156,7 @@ class PostController extends Controller
         $post->type = 'post';
         $post->updated_at = date('Y-m-d H:i:s');
 
-        $post->updated_by =  Auth::user()->id;
+        $post->updated_by =   Auth::guard('admin')->user()->id;
         // upload file
         if ($request->has('image')) {
             $path_dir = "images/post/";
@@ -187,7 +187,7 @@ class PostController extends Controller
         if ($post == null) {
             return redirect()->route('post.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
         } else {
-           
+
             $path_dir = "images/post/";
             $path_image_delete = public_path($path_dir . $post->image);
 
@@ -208,7 +208,7 @@ class PostController extends Controller
         } else {
             $post->status = 0;
             $post->updated_at = date('Y-m-d H:i:s');
-            $post->updated_by =  Auth::user()->id;
+            $post->updated_by =   Auth::guard('admin')->user()->id;
             $post->save();
             return redirect()->route('post.index')->with('message', ['type' => 'success', 'msg' => 'Chuyển vào thùng rác thành công']);
         }
@@ -222,7 +222,7 @@ class PostController extends Controller
         } else {
             $post->status = 2;
             $post->updated_at = date('Y-m-d H:i:s');
-            $post->updated_by =  Auth::user()->id;
+            $post->updated_by =   Auth::guard('admin')->user()->id;
             $post->save();
             return redirect()->route('post.trash')->with('message', ['type' => 'success', 'msg' => 'Khôi phục sản phẩm thành công']);
         }
@@ -246,7 +246,7 @@ class PostController extends Controller
         } else {
             $post->status = ($post->status == 1) ? 2 : 1;
             $post->updated_at = date('Y-m-d H:i:s');
-            $post->updated_by =  Auth::user()->id;
+            $post->updated_by =   Auth::guard('admin')->user()->id;
             $post->save();
             return redirect()->route('post.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công']);
         }
@@ -265,11 +265,11 @@ class PostController extends Controller
                     return redirect()->route('post.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
                 }
                 $post->status = 0;
-               
+
                 $post->updated_at = date('Y-m-d H:i:s');
-                $post->updated_by = Auth::user()->id;
+                $post->updated_by =  Auth::guard('admin')->user()->id;
                 $post->save();
-                
+
                 $count++;
             }
             return redirect()->route('post.index')->with('message', ['type' => 'success', 'msg' => "Xóa thành công $count/$count_max !&& Vào thùng rác để xem!!!"]);
@@ -292,7 +292,7 @@ class PostController extends Controller
                     }
                     $path_dir = "images/post/";
                     $path_image_delete = public_path($path_dir . $post->image);
-                    
+
                     if ($post->delete()) {
                         if (File::exists($path_image_delete)) {
                             File::delete($path_image_delete);
@@ -318,7 +318,7 @@ class PostController extends Controller
                     }
                     $post->status = 2;
                     $post->updated_at = date('Y-m-d H:i:s');
-                    $post->updated_by = Auth::user()->id;
+                    $post->updated_by =  Auth::guard('admin')->user()->id;
                     $post->save();
                     $count++;
                 }

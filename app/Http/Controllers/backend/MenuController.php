@@ -85,7 +85,7 @@ class MenuController extends Controller
                     }
                     $menu->status = 0;
                     $menu->updated_at = date('Y-m-d H:i:s');
-                    $menu->updated_by = Auth::user()->id;
+                    $menu->updated_by =  Auth::guard('admin')->user()->id;
                     $menu->save();
                     $count++;
                 }
@@ -111,7 +111,7 @@ class MenuController extends Controller
                     $menu->parent_id = 0;
                     $menu->level = 1;
                     $menu->created_at = date('Y-m-d H:i:s');
-                    $menu->created_by = Auth::user()->id;
+                    $menu->created_by =  Auth::guard('admin')->user()->id;
                     $menu->status = 2;
                     $menu->save();
                 }
@@ -135,7 +135,7 @@ class MenuController extends Controller
                     $menu->parent_id = 0;
                     $menu->level = 1;
                     $menu->created_at = date('Y-m-d H:i:s');
-                    $menu->created_by = Auth::user()->id;
+                    $menu->created_by =  Auth::guard('admin')->user()->id;
                     $menu->status = 2;
                     $menu->save();
                 }
@@ -159,7 +159,7 @@ class MenuController extends Controller
                     $menu->parent_id = 0;
                     $menu->level = 1;
                     $menu->created_at = date('Y-m-d H:i:s');
-                    $menu->created_by = Auth::user()->id;
+                    $menu->created_by =  Auth::guard('admin')->user()->id;
                     $menu->status = 2;
                     $menu->save();
                 }
@@ -183,7 +183,7 @@ class MenuController extends Controller
                     $menu->parent_id = 0;
                     $menu->level = 1;
                     $menu->created_at = date('Y-m-d H:i:s');
-                    $menu->created_by = Auth::user()->id;
+                    $menu->created_by =  Auth::guard('admin')->user()->id;
                     $menu->status = 2;
                     $menu->save();
                 }
@@ -203,7 +203,7 @@ class MenuController extends Controller
             $menu->parent_id = 0;
             $menu->level = 1;
             $menu->created_at = date('Y-m-d H:i:s');
-            $menu->created_by = Auth::user()->id;
+            $menu->created_by =  Auth::guard('admin')->user()->id;
             $menu->status = 2;
             $menu->save();
             return redirect()->route('menu.index')->with('message', ['type' => 'success', 'msg' => 'Thêm thành công!']);
@@ -263,7 +263,7 @@ class MenuController extends Controller
         $menu->parent_id = $request->parent_id;
         $menu->level = 1;
         $menu->updated_at = date('Y-m-d H:i:s');
-        $menu->updated_by = Auth::user()->id;
+        $menu->updated_by =  Auth::guard('admin')->user()->id;
         $menu->status = $request->status;
 
         if ($menu->save()) {
@@ -295,7 +295,7 @@ class MenuController extends Controller
         }
         $menu->status = 0;
         $menu->updated_at = date('Y-m-d H:i:s');
-        $menu->updated_by = Auth::user()->id;
+        $menu->updated_by =  Auth::guard('admin')->user()->id;
         $menu->save();
         return redirect()->route('menu.index')->with('message', ['type' => 'success', 'msg' => 'Xóa thành công!&& vào thùng rác để xem!!!']);
     }
@@ -345,7 +345,7 @@ class MenuController extends Controller
 
                     $menu->status = 2;
                     $menu->updated_at = date('Y-m-d H:i:s');
-                    $menu->updated_by = Auth::user()->id;
+                    $menu->updated_by =  Auth::guard('admin')->user()->id;
                     $menu->save();
                     $count++;
                 }
@@ -365,7 +365,7 @@ class MenuController extends Controller
 
         $menu->status = 2;
         $menu->updated_at = date('Y-m-d H:i:s');
-        $menu->updated_by = Auth::user()->id;
+        $menu->updated_by =  Auth::guard('admin')->user()->id;
         $menu->save();
         return redirect()->route('menu.index')->with('message', ['type' => 'success', 'msg' => 'Phục hồi thành công!']);
     }
@@ -392,7 +392,7 @@ class MenuController extends Controller
 
 
         $menu->updated_at = date('Y-m-d H:i:s');
-        $menu->updated_by = Auth::user()->id;
+        $menu->updated_by =  Auth::guard('admin')->user()->id;
         $menu->save();
         return redirect()->route('menu.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công!']);
     }

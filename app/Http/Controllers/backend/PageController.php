@@ -137,7 +137,7 @@ class PageController extends Controller
         $page->type = 'page';
         $page->updated_at = date('Y-m-d H:i:s');
 
-        $page->updated_by =  Auth::user()->id;
+        $page->updated_by =   Auth::guard('admin')->user()->id;
         if ($request->has('image')) {
             $path_dir = "images/post/";
             if (File::exists(public_path($path_dir . $page->image))) {
@@ -153,7 +153,7 @@ class PageController extends Controller
         if ($page->status == 2) {
             $page->menus()->update([
                 'status' => 2,
-                'updated_by' => Auth::user()->id
+                'updated_by' =>  Auth::guard('admin')->user()->id
             ]);
         }
         if ($page->save()) {
@@ -206,11 +206,11 @@ class PageController extends Controller
         } else {
             $page->status = 0;
             $page->updated_at = date('Y-m-d H:i:s');
-            $page->updated_by =  Auth::user()->id;
+            $page->updated_by =   Auth::guard('admin')->user()->id;
             if ($page->status == 0) {
                 $page->menus()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' =>  Auth::guard('admin')->user()->id
                 ]);
             }
             $page->save();
@@ -226,7 +226,7 @@ class PageController extends Controller
         } else {
             $page->status = 2;
             $page->updated_at = date('Y-m-d H:i:s');
-            $page->updated_by =  Auth::user()->id;
+            $page->updated_by =   Auth::guard('admin')->user()->id;
             $page->save();
             return redirect()->route('page.trash')->with('message', ['type' => 'success', 'msg' => 'Khôi phục sản phẩm thành công']);
         }
@@ -240,11 +240,11 @@ class PageController extends Controller
         } else {
             $page->status = ($page->status == 1) ? 2 : 1;
             $page->updated_at = date('Y-m-d H:i:s');
-            $page->updated_by =  Auth::user()->id;
+            $page->updated_by =   Auth::guard('admin')->user()->id;
             if ($page->status == 2) {
                 $page->menus()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' =>  Auth::guard('admin')->user()->id
                 ]);
             }
             $page->save();
@@ -278,11 +278,11 @@ class PageController extends Controller
                 if ($page->status == 0) {
                     $page->menus()->update([
                         'status' => 2,
-                        'updated_by' => Auth::user()->id
+                        'updated_by' =>  Auth::guard('admin')->user()->id
                     ]);
                 }
                 $page->updated_at = date('Y-m-d H:i:s');
-                $page->updated_by = Auth::user()->id;
+                $page->updated_by =  Auth::guard('admin')->user()->id;
                 $page->save();
 
                 $count++;
@@ -338,7 +338,7 @@ class PageController extends Controller
                     }
                     $page->status = 2;
                     $page->updated_at = date('Y-m-d H:i:s');
-                    $page->updated_by = Auth::user()->id;
+                    $page->updated_by =  Auth::guard('admin')->user()->id;
                     $page->save();
                     $count++;
                 }

@@ -144,7 +144,7 @@ class OrderController extends Controller
         } else {
             $order->status = 0;
             $order->updated_at = date('Y-m-d H:i:s');
-            $order->updated_by =  Auth::user()->id;
+            $order->updated_by =   Auth::guard('admin')->user()->id;
             $order->save();
             return redirect()->route('order.index')->with('message', ['type' => 'success', 'msg' => 'Chuyển vào thùng rác thành công']);
         }

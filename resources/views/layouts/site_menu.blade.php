@@ -20,20 +20,46 @@
                         </div>
 
                         <div class="offcanvas-body  ">
-                            <div class="col-md-9 col-12">
+                            <div class="col-md-7 col-12">
                                 <ul class="navbar-nav">
                                     <x-main-menu />
                                 </ul>
                             </div>
-                            <div class="col-md-3 col-12">
+                            <div class="col-md-5 col-12">
                                 <ul class="navbar-nav float-md-end">
-                                    <li class="nav-item me-5"><a class="nav-link "
-                                            href="index.php?option=customer-login"><i
-                                                class="fa-solid fa-arrow-right-to-bracket me-2"></i>Đăng
-                                            nhập</a>
-                                    </li>
-                                    <li class="nav-item"><a class="nav-link " href="index.php?option=customer-signup"><i
-                                                class="fa-sharp fa-solid fa-user-plus me-2"></i>Đăng ký</a></li>
+                                    @if (Auth::guard('users')->check())
+                                        <li class="nav-item me-5"><a class="nav-link mt-0"
+                                                href="{{ route('site.logout') }}"><i
+                                                    class="fa-solid fa-arrow-right-to-bracket me-2"></i> Tài khoản</a>
+                                        </li>
+                                    @else
+                                        {{-- <li class="nav-item me-5"><a class="nav-link mt-0" href=""><i
+                                                    class="fa-solid fa-arrow-right-to-bracket me-2"></i> Tài khoản</a>
+                                    
+                                        </li> --}}
+                                        <li class="nav-item me-5 d-md-block d-none"><a class="nav-link  mt-0"
+                                                href="" data-bs-toggle="modal" data-bs-target="#myModal"><i
+                                                    class="fa-solid fa-arrow-right-to-bracket me-2"></i>Đăng
+                                                nhập / Đăng ký</a>
+                                            <!-- The Modal -->
+                                            <div class="modal " id="myModal">
+                                                <div class="modal-dialog modal-fullscreen-sm-down">
+                                                    <div class="modal-content">
+                                                        @includeIf('frontend.model-login')
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        {{-- <li class="nav-item me-5 d-md-none d-block"><a class="nav-link  mt-0"
+                                                href="{{ route('frontend.login') }}"><i
+                                                    class="fa-solid fa-arrow-right-to-bracket me-2"></i>Đăng
+                                                nhập / Đăng ký</a>
+                                            <!-- The Modal -->
+
+                                        </li> --}}
+                                    @endif
+
+
                                 </ul>
                             </div>
                             <div class="col-12 d-md-none d-block">
@@ -55,7 +81,7 @@
         </div>
 
     </section>
-    <section class=" menu-wrapper mainmenu "id="menu-wrapper">
+    {{-- <section class=" menu-wrapper mainmenu "id="menu-wrapper">
         <div class="container-fluid">
             <div class="row border-2 border-top border-dark border-bottom ">
                 <div class="col-md-12 col-12  main-md-menu fs-4">
@@ -85,11 +111,10 @@
                                     <ul class="navbar-nav float-md-end">
                                         <li class="nav-item me-5"><a class="nav-link "
                                                 href="index.php?option=customer-login"><i
-                                                    class="fa-solid fa-arrow-right-to-bracket me-2"></i>Đăng nhập</a>
+                                                    class="fa-solid fa-arrow-right-to-bracket me-2"></i>Đăng nhập / Đăng
+                                                ký</a>
                                         </li>
-                                        <li class="nav-item"><a class="nav-link "
-                                                href="index.php?option=customer-signup"><i
-                                                    class="fa-sharp fa-solid fa-user-plus me-2"></i>Đăng ký</a></li>
+
                                     </ul>
                                 </div>
                                 <div class="col-12 d-md-none d-block">
@@ -110,4 +135,4 @@
             </div>
         </div>
 
-    </section>
+    </section> --}}

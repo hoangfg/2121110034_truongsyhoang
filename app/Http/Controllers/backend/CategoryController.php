@@ -72,7 +72,7 @@ class CategoryController extends Controller
         $category->status = $request->status;
         $category->created_at = date('Y-m-d H:i:s');
 
-        $category->created_by =  Auth::user()->id;
+        $category->created_by =   Auth::guard('admin')->user()->id;
 
         // upload file
         if ($request->has('image')) {
@@ -191,15 +191,15 @@ class CategoryController extends Controller
         $category->status = $request->status;
         $category->updated_at = date('Y-m-d H:i:s');
 
-        $category->updated_by =  Auth::user()->id;
+        $category->updated_by =   Auth::guard('admin')->user()->id;
         if ($category->status == 2) {
             $category->products()->update([
                 'status' => 2,
-                'updated_by' => Auth::user()->id
+                'updated_by' =>  Auth::guard('admin')->user()->id
             ]);
             $category->menus()->update([
                 'status' => 2,
-                'updated_by' => Auth::user()->id
+                'updated_by' =>  Auth::guard('admin')->user()->id
             ]);
         }
         // dd($category);
@@ -243,7 +243,7 @@ class CategoryController extends Controller
         }
         $category->products()->update([
             'status' => 0,
-            'updated_by' => Auth::user()->id
+            'updated_by' =>  Auth::guard('admin')->user()->id
         ]);
         $category->menus()->delete();
 
@@ -272,14 +272,14 @@ class CategoryController extends Controller
             $category->status = 0;
             $category->products()->update([
                 'status' => 2,
-                'updated_by' => Auth::user()->id
+                'updated_by' =>  Auth::guard('admin')->user()->id
             ]);
             $category->menus()->update([
                 'status' => 2,
-                'updated_by' => Auth::user()->id
+                'updated_by' =>  Auth::guard('admin')->user()->id
             ]);
             $category->updated_at = date('Y-m-d H:i:s');
-            $category->updated_by =  Auth::user()->id;
+            $category->updated_by =   Auth::guard('admin')->user()->id;
             $category->save();
             return redirect()->route('category.index')->with('message', ['type' => 'success', 'msg' => 'Chuyển vào thùng rác thành công']);
         }
@@ -293,7 +293,7 @@ class CategoryController extends Controller
         } else {
             $category->status = 2;
             $category->updated_at = date('Y-m-d H:i:s');
-            $category->updated_by =  Auth::user()->id;
+            $category->updated_by =   Auth::guard('admin')->user()->id;
             $category->save();
             return redirect()->route('category.trash')->with('message', ['type' => 'success', 'msg' => 'Khôi phục sản phẩm thành công']);
         }
@@ -309,15 +309,15 @@ class CategoryController extends Controller
             if ($category->status == 2) {
                 $category->products()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' =>  Auth::guard('admin')->user()->id
                 ]);
                 $category->menus()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' =>  Auth::guard('admin')->user()->id
                 ]);
             }
             $category->updated_at = date('Y-m-d H:i:s');
-            $category->updated_by =  Auth::user()->id;
+            $category->updated_by =   Auth::guard('admin')->user()->id;
             $category->save();
             return redirect()->route('category.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công']);
         }
@@ -346,14 +346,14 @@ class CategoryController extends Controller
                 $category->status = 0;
                 $category->products()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' =>  Auth::guard('admin')->user()->id
                 ]);
                 $category->menus()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' =>  Auth::guard('admin')->user()->id
                 ]);
                 $category->updated_at = date('Y-m-d H:i:s');
-                $category->updated_by = Auth::user()->id;
+                $category->updated_by =  Auth::guard('admin')->user()->id;
                 $category->save();
                 if ($category->status == 0) {
                     $category->products()->update(['status' => 2]);
@@ -382,7 +382,7 @@ class CategoryController extends Controller
                     $path_image_delete = public_path($path_dir . $category->image);
                     $category->products()->update([
                         'status' => 0,
-                        'updated_by' => Auth::user()->id
+                        'updated_by' =>  Auth::guard('admin')->user()->id
                     ]);
                     $category->menus()->delete();
                     if ($category->delete()) {
@@ -414,7 +414,7 @@ class CategoryController extends Controller
                     }
                     $category->status = 2;
                     $category->updated_at = date('Y-m-d H:i:s');
-                    $category->updated_by = Auth::user()->id;
+                    $category->updated_by =  Auth::guard('admin')->user()->id;
                     $category->save();
                     $count++;
                 }

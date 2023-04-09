@@ -24,6 +24,7 @@
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/owlcarousel/owl.carousel.js') }}"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}" />
     @yield('header')
     <link rel="stylesheet" href="{{ asset('css/layoutsite.css') }}">
 
@@ -31,7 +32,7 @@
 
 <body>
 
-    <header class="header bg-white" >
+    <header class="header bg-white">
         <div class="container ">
             <div class="row py-3 border-2 border-bottom m-0">
                 <!-- logo -->
@@ -484,6 +485,55 @@
                 items: "> :not(.ui-widget-header)"
             });
         });
+    </script>
+    {{-- comment --}}
+    <script>
+        const replyButtons = document.querySelectorAll(".show-replies");
+        replyButtons.forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                const replyBox = e.target.closest(".comment").querySelector(".reply-box");
+                replyBox.classList.toggle("opened");
+            });
+        });
+    </script>
+    {{-- login --}}
+    <script>
+        var card = document.getElementById("cards");
+
+        function openRegister() {
+            card.style.transform = "rotateY(-180deg)";
+        }
+
+        function openLogin() {
+            card.style.transform = "rotateY(0deg)";
+        }
+        // 
+    </script>
+
+    <script>
+        const sign_in_btn = document.querySelector(".sign-in-btn");
+        const sign_up_btn = document.querySelector(".sign-up-btn");
+        const container = document.querySelector(".containers");
+
+        sign_up_btn.addEventListener("click", () => {
+            container.classList.add("sign-up-mode");
+        });
+
+        sign_in_btn.addEventListener("click", () => {
+            container.classList.remove("sign-up-mode");
+        });
+    </script>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+            var scrollpos = localStorage.getItem('scrollpos');
+            if (scrollpos) window.scrollTo(0, scrollpos);
+        });
+
+        window.onbeforeunload = function(e) {
+            localStorage.setItem('scrollpos', window.scrollY);
+        };
     </script>
 
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>

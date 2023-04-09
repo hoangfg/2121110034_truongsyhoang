@@ -94,7 +94,7 @@ class ProductController extends Controller
         $product->metadesc = $request->metadesc;
         $product->status = $request->status;
         $product->created_at = date('Y-m-d H:i:s');
-        $product->created_by =  Auth::user()->id;
+        $product->created_by =   Auth::guard('admin')->user()->id;
         // dd($product);
         if ($product->save()) {
             // // upload file
@@ -129,7 +129,7 @@ class ProductController extends Controller
                 $product_store->price = $request->price;
                 $product_store->qty = $request->qty;
                 $product_store->created_at = date('Y-m-d H:i:s');
-                $product_store->created_by =  Auth::user()->id;
+                $product_store->created_by =   Auth::guard('admin')->user()->id;
             }
             $product->sale()->save($product_store);
         }
@@ -238,7 +238,7 @@ class ProductController extends Controller
         $product->metadesc = $request->metadesc;
         $product->status = $request->status;
         $product->updated_at = date('Y-m-d H:i:s');
-        $product->updated_by =  Auth::user()->id;
+        $product->updated_by =   Auth::guard('admin')->user()->id;
 
         if ($product->save()) {
             // // upload file
@@ -282,7 +282,7 @@ class ProductController extends Controller
                 $product_store->price = $request->price;
                 $product_store->qty = $request->qty;
                 $product_store->updated_at = date('Y-m-d H:i:s');
-                $product_store->updated_by =  Auth::user()->id;
+                $product_store->updated_by =   Auth::guard('admin')->user()->id;
                 $product_store->save();
             }
         }
@@ -401,7 +401,7 @@ class ProductController extends Controller
                 }
                 $product->status = 0;
                 $product->updated_at = date('Y-m-d H:i:s');
-                $product->updated_by = Auth::user()->id;
+                $product->updated_by =  Auth::guard('admin')->user()->id;
                 $product->save();
                 $count++;
             }
@@ -456,7 +456,7 @@ class ProductController extends Controller
 
                     $product->status = 2;
                     $product->updated_at = date('Y-m-d H:i:s');
-                    $product->updated_by = Auth::user()->id;
+                    $product->updated_by =  Auth::guard('admin')->user()->id;
                     $product->save();
                     $count++;
                 }

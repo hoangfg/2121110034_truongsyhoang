@@ -64,7 +64,7 @@ class BrandController extends Controller
         $brand->sort_order = $request->sort_order;
         $brand->status = $request->status;
         $brand->created_at = date('Y-m-d H:i:s');
-        $brand->created_by = Auth::user()->id;
+        $brand->created_by =  Auth::guard('admin')->user()->id;
         // upload file
         if ($request->has('image')) {
             $path_dir = "images/brand/";
@@ -173,18 +173,18 @@ class BrandController extends Controller
         $brand->status = $request->status;
         $brand->updated_at = date('Y-m-d H:i:s');
 
-        $brand->updated_by = Auth::user()->id;
+        $brand->updated_by =  Auth::guard('admin')->user()->id;
 
 
         // upload file
         if ($brand->status == 2) {
             $brand->products()->update([
                 'status' => 2,
-                'updated_by' => Auth::user()->id
+                'updated_by' =>  Auth::guard('admin')->user()->id
             ]);
             $brand->menus()->update([
                 'status' => 2,
-                'updated_by' => Auth::user()->id
+                'updated_by' =>  Auth::guard('admin')->user()->id
             ]);
         }
 
@@ -219,15 +219,15 @@ class BrandController extends Controller
         if ($brand == null) {
             return redirect()->route('brand.trash')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
         }
-       
-        
+
+
         if ($brand->delete()) {
             if (File::exists($path_image_delete)) {
                 File::delete($path_image_delete);
             }
             $brand->products()->update([
                 'status' => 0,
-                'updated_by' => Auth::user()->id
+                'updated_by' =>  Auth::guard('admin')->user()->id
             ]);
             $link = Link::where(
                 [['type', '=', 'brand'], ['table_id', '=', $id]]
@@ -248,16 +248,16 @@ class BrandController extends Controller
         } else {
             $brand->status = 0;
             $brand->updated_at = date('Y-m-d H:i:m');
-            $brand->updated_by = Auth::user()->id;
+            $brand->updated_by =  Auth::guard('admin')->user()->id;
             $brand->save();
             if ($brand->status == 0) {
                 $brand->products()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' =>  Auth::guard('admin')->user()->id
                 ]);
                 $brand->menus()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' =>  Auth::guard('admin')->user()->id
                 ]);
             }
             return redirect()->route('brand.index')->with('message', ['type' => 'success', 'msg' => 'Xóa sản phẩm thành công']);
@@ -279,16 +279,16 @@ class BrandController extends Controller
         } else {
             $brand->status = ($brand->status == 1) ? 2 : 1;
             $brand->updated_at = date('Y-m-d H:i:m');
-            $brand->updated_by = Auth::user()->id;;
+            $brand->updated_by =  Auth::guard('admin')->user()->id;;
             $brand->save();
             if ($brand->status == 2) {
                 $brand->products()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' =>  Auth::guard('admin')->user()->id
                 ]);
                 $brand->menus()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' =>  Auth::guard('admin')->user()->id
                 ]);
             }
             return redirect()->route('brand.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công']);
@@ -303,7 +303,7 @@ class BrandController extends Controller
         } else {
             $brand->status = 2;
             $brand->updated_at = date('Y-m-d H:i:m');
-            $brand->updated_by = Auth::user()->id;;
+            $brand->updated_by =  Auth::guard('admin')->user()->id;;
             $brand->save();
             return redirect()->route('brand.trash')->with('message', ['type' => 'success', 'msg' => 'Khôi phục sản phâm thành công']);
         }
@@ -325,14 +325,14 @@ class BrandController extends Controller
                 $brand->status = 0;
                 $brand->products()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' =>  Auth::guard('admin')->user()->id
                 ]);
                 $brand->menus()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' =>  Auth::guard('admin')->user()->id
                 ]);
                 $brand->updated_at = date('Y-m-d H:i:s');
-                $brand->updated_by = Auth::user()->id;
+                $brand->updated_by =  Auth::guard('admin')->user()->id;
                 $brand->save();
                 if ($brand->status == 0) {
                     $brand->products()->update(['status' => 2]);
@@ -361,7 +361,7 @@ class BrandController extends Controller
                     $path_image_delete = public_path($path_dir . $brand->image);
                     $brand->products()->update([
                         'status' => 0,
-                        'updated_by' => Auth::user()->id
+                        'updated_by' =>  Auth::guard('admin')->user()->id
                     ]);
                     $brand->menus()->delete();
                     if ($brand->delete()) {
@@ -393,7 +393,7 @@ class BrandController extends Controller
                     }
                     $brand->status = 2;
                     $brand->updated_at = date('Y-m-d H:i:s');
-                    $brand->updated_by = Auth::user()->id;
+                    $brand->updated_by =  Auth::guard('admin')->user()->id;
                     $brand->save();
                     $count++;
                 }

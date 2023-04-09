@@ -71,7 +71,7 @@ class TopicController extends Controller
         $topic->sort_order = $request->sort_order;
         $topic->status = $request->status;
         $topic->created_at = date('Y-m-d H:i:s');
-        $topic->created_by = Auth::user()->id;
+        $topic->created_by =  Auth::guard('admin')->user()->id;
         if ($topic->save()) {
             $link = new Link();
             $link->link = $topic->slug;
@@ -177,14 +177,14 @@ class TopicController extends Controller
         if ($topic->status = 2) {
             $topic->posts()->update([
                 'status' => 2,
-                'updated_by' => Auth::user()->id
+                'updated_by' =>  Auth::guard('admin')->user()->id
             ]);
             $topic->menus()->update([
                 'status' => 2,
-                'updated_by' => Auth::user()->id
+                'updated_by' =>  Auth::guard('admin')->user()->id
             ]);
         }
-        $topic->updated_by =  Auth::user()->id;
+        $topic->updated_by =   Auth::guard('admin')->user()->id;
         if ($topic->save()) {
             $link = Link::where([['type', '=', 'topic'], ['table_id', '=', $id]])->first();
             $link->link = $topic->slug;
@@ -207,7 +207,7 @@ class TopicController extends Controller
         if ($topic == null) {
             return redirect()->route('topic.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
         } else {
-           
+
 
             if ($topic->delete()) {
                 $link = Link::where(
@@ -230,14 +230,14 @@ class TopicController extends Controller
             $topic->status = 0;
             $topic->posts()->update([
                 'status' => 2,
-                'updated_by' => Auth::user()->id
+                'updated_by' =>  Auth::guard('admin')->user()->id
             ]);
             $topic->menus()->update([
                 'status' => 2,
-                'updated_by' => Auth::user()->id
+                'updated_by' =>  Auth::guard('admin')->user()->id
             ]);
             $topic->updated_at = date('Y-m-d H:i:s');
-            $topic->updated_by =  Auth::user()->id;
+            $topic->updated_by =   Auth::guard('admin')->user()->id;
             $topic->save();
             return redirect()->route('topic.index')->with('message', ['type' => 'success', 'msg' => 'Chuyển vào thùng rác thành công']);
         }
@@ -251,7 +251,7 @@ class TopicController extends Controller
         } else {
             $topic->status = 2;
             $topic->updated_at = date('Y-m-d H:i:s');
-            $topic->updated_by =  Auth::user()->id;
+            $topic->updated_by =   Auth::guard('admin')->user()->id;
             $topic->save();
             return redirect()->route('topic.trash')->with('message', ['type' => 'success', 'msg' => 'Khôi phục sản phẩm thành công']);
         }
@@ -274,15 +274,15 @@ class TopicController extends Controller
             if ($topic->status = 2) {
                 $topic->posts()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' =>  Auth::guard('admin')->user()->id
                 ]);
                 $topic->menus()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' =>  Auth::guard('admin')->user()->id
                 ]);
             }
             $topic->updated_at = date('Y-m-d H:i:s');
-            $topic->updated_by =  Auth::user()->id;
+            $topic->updated_by =   Auth::guard('admin')->user()->id;
             $topic->save();
             return redirect()->route('topic.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công']);
         }
@@ -303,14 +303,14 @@ class TopicController extends Controller
                 $topic->status = 0;
                 $topic->posts()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' =>  Auth::guard('admin')->user()->id
                 ]);
                 $topic->menus()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' =>  Auth::guard('admin')->user()->id
                 ]);
                 $topic->updated_at = date('Y-m-d H:i:s');
-                $topic->updated_by = Auth::user()->id;
+                $topic->updated_by =  Auth::guard('admin')->user()->id;
                 $topic->save();
                 if ($topic->status == 0) {
                     $topic->posts()->update(['status' => 2]);
@@ -335,7 +335,7 @@ class TopicController extends Controller
                     if ($topic == null) {
                         return redirect()->route('topic.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
                     }
-                    
+
                     if ($topic->delete()) {
                         $topic->posts()->delete();
                         $topic->menus()->delete();
@@ -364,7 +364,7 @@ class TopicController extends Controller
                     }
                     $topic->status = 2;
                     $topic->updated_at = date('Y-m-d H:i:s');
-                    $topic->updated_by = Auth::user()->id;
+                    $topic->updated_by =  Auth::guard('admin')->user()->id;
                     $topic->save();
                     $count++;
                 }

@@ -1,5 +1,5 @@
 @if ($count != 0)
-    <div class="col-md-6 col-12 product_flash owl-carousel-parent">
+    <div class="col-md-5 col-12 product_flash owl-carousel-parent">
         <div class="row title border-1 border-dark border-bottom mb-5">
 
             <div class="col-md-10 col-8  ">
@@ -24,7 +24,7 @@
                         <div class="item  p-0 bg-none">
                             <div class="card ">
                                 <div class="row g-0">
-                                    <div class="col-md-6 col-6 item-img ">
+                                    <div class="col-md-5 col-6 item-img ">
                                         <a href="{{ route('slug.home',['slug' => $product->slug]) }}">
                                             <img src="{{ asset('images/product/'.$product->images[0]->image) }}"
                                                 class="card-img-top img-product_flash img-fluid py-auto" alt="...">
@@ -52,9 +52,9 @@
                                                 </div>
                                             </div>
 
-                                            <p class="card-text text-line-5">
-                                                {{ $product->metadesc }}
-                                            </p>
+                                            <div class="card-text text-line-5">
+                                                {!! $product->metadesc !!}
+                                            </div>
                                             <div class="card-item">
                                                 <div class="row ">
                                                     <div class="col-md-6 col-8">

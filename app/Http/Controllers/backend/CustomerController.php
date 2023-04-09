@@ -24,7 +24,7 @@ class CustomerController extends Controller
         } else {
             $diffInDays = "Ngày tháng năm không hợp lệ.";
         }
-       
+
         $title = 'Tất cả khách hàng';
         $list_customer = User::where([['status', '<>', '0'], ['roles', '=', '0']])->orderBy('created_at', 'desc')->get();
         return view("backend.customer.index", compact('list_customer', 'title', 'diffInDays'));
@@ -72,7 +72,6 @@ class CustomerController extends Controller
      */
     public function edit($id)
     {
-
     }
 
     /**
@@ -112,7 +111,7 @@ class CustomerController extends Controller
         } else {
             $customer->status = 0;
             $customer->updated_at = date('Y-m-d H:i:s');
-            $customer->updated_by =  Auth::user()->id;
+            $customer->updated_by =   Auth::guard('admin')->user()->id;
             $customer->save();
             return redirect()->route('customer.index')->with('message', ['type' => 'success', 'msg' => 'Chuyển vào thùng rác thành công']);
         }
@@ -133,7 +132,7 @@ class CustomerController extends Controller
         } else {
             $customer->status = ($customer->status == 1) ? 2 : 1;
             $customer->updated_at = date('Y-m-d H:i:s');
-            $customer->updated_by =  Auth::user()->id;
+            $customer->updated_by =   Auth::guard('admin')->user()->id;
             $customer->save();
             return redirect()->route('customer.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công']);
         }
@@ -147,7 +146,7 @@ class CustomerController extends Controller
         } else {
             $customer->status = 2;
             $customer->updated_at = date('Y-m-d H:i:s');
-            $customer->updated_by =  Auth::user()->id;
+            $customer->updated_by =   Auth::guard('admin')->user()->id;
             $customer->save();
             return redirect()->route('customer.trash')->with('message', ['type' => 'success', 'msg' => 'Khôi phục sản phẩm thành công']);
         }

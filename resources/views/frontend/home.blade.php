@@ -28,7 +28,7 @@
                 </div>
                 <div class="product py-5">
 
-                    <div class="row">
+                    <div class="row d-flex justify-content-between">
                         <x-sale-home />
                         <!-- Best Sellers -->
                         <div class="col-md-6 col-12 product_Best-Sellers owl-carousel-parent">
@@ -283,9 +283,6 @@
                     @foreach ($list_category as $category)
                         <x-product-home :rowcate="$category" />
                     @endforeach
-
-
-
                 </div>
             </div>
         </div>

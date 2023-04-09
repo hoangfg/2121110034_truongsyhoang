@@ -23,11 +23,13 @@ class AuthController extends Controller
         } else {
             $data['username'] =  $username;
         }
+        $remember = $request->has('remember');
 
-        if (Auth::attempt($data)) {
+        if (Auth::guard('admin')->attempt($data, $remember)) {
+            $request->session()->regenerate();
             return redirect()->route('dashboard.index');
         } else {
-            
+            echo bcrypt($password);
             $error = 'Thông tin đăng nhập chưa chính xác';
 
             return view('backend.user.login', compact('error'));
@@ -35,7 +37,7 @@ class AuthController extends Controller
     }
     public function logout()
     {
-        Auth::logout();
+        Auth::guard('admin')->logout();
         return redirect()->route('admin.getlogin');
     }
 }

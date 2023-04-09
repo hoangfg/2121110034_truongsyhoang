@@ -62,7 +62,7 @@ class SliderController extends Controller
         // $slider->level = 1;
         $slider->status = $request->status;
         $slider->created_at = date('Y-m-d H:i:s');
-        $slider->created_by = Auth::user()->id;
+        $slider->created_by =  Auth::guard('admin')->user()->id;
         // upload file
         if ($request->has('image')) {
             $path_dir = "images/slider/";
@@ -144,7 +144,7 @@ class SliderController extends Controller
         // $slider->level = 1;
         $slider->status = $request->status;
         $slider->created_at = date('Y-m-d H:i:s');
-        $slider->created_by = Auth::user()->id;
+        $slider->created_by =  Auth::guard('admin')->user()->id;
         // upload file
         if ($request->has('image')) {
             $path_dir = "images/slider/";
@@ -186,7 +186,7 @@ class SliderController extends Controller
         } else {
             $slider->status = 0;
             $slider->updated_at = date('Y-m-d H:i:s');
-            $slider->updated_by =  Auth::user()->id;
+            $slider->updated_by =   Auth::guard('admin')->user()->id;
             $slider->save();
             return redirect()->route('slider.index')->with('message', ['type' => 'success', 'msg' => 'Chuyển vào thùng rác thành công']);
         }
@@ -207,7 +207,7 @@ class SliderController extends Controller
         } else {
             $slider->status = ($slider->status == 1) ? 2 : 1;
             $slider->updated_at = date('Y-m-d H:i:s');
-            $slider->updated_by =  Auth::user()->id;
+            $slider->updated_by =   Auth::guard('admin')->user()->id;
             $slider->save();
             return redirect()->route('slider.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công']);
         }
@@ -221,7 +221,7 @@ class SliderController extends Controller
         } else {
             $slider->status = 2;
             $slider->updated_at = date('Y-m-d H:i:s');
-            $slider->updated_by =  Auth::user()->id;
+            $slider->updated_by =   Auth::guard('admin')->user()->id;
             $slider->save();
             return redirect()->route('slider.trash')->with('message', ['type' => 'success', 'msg' => 'Khôi phục sản phẩm thành công']);
         }
@@ -243,7 +243,7 @@ class SliderController extends Controller
                 $slider->status = 0;
 
                 $slider->updated_at = date('Y-m-d H:i:s');
-                $slider->updated_by = Auth::user()->id;
+                $slider->updated_by =  Auth::guard('admin')->user()->id;
                 $slider->save();
 
                 $count++;
@@ -294,7 +294,7 @@ class SliderController extends Controller
                     }
                     $slider->status = 2;
                     $slider->updated_at = date('Y-m-d H:i:s');
-                    $slider->updated_by = Auth::user()->id;
+                    $slider->updated_by =  Auth::guard('admin')->user()->id;
                     $slider->save();
                     $count++;
                 }

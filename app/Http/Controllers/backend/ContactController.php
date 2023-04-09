@@ -102,7 +102,7 @@ class ContactController extends Controller
         } else {
             $contact->status = 0;
             $contact->updated_at = date('Y-m-d H:i:s');
-            $contact->updated_by =  Auth::user()->id;
+            $contact->updated_by =   Auth::guard('admin')->user()->id;
             $contact->save();
             return redirect()->route('contact.index')->with('message', ['type' => 'success', 'msg' => 'Xóa tin nhắn thành công']);
         }
@@ -116,7 +116,7 @@ class ContactController extends Controller
         } else {
             $contact->status = 2;
             $contact->updated_at = date('Y-m-d H:i:s');
-            $contact->updated_by =  Auth::user()->id;
+            $contact->updated_by =   Auth::guard('admin')->user()->id;
             $contact->save();
             return redirect()->route('contact.trash')->with('message', ['type' => 'success', 'msg' => 'Khôi phục sản phẩm thành công']);
         }

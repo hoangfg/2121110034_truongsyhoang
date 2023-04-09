@@ -37,9 +37,7 @@ class ProductHome extends Component
                 }
             }
         }
-        $count = Product::whereHas('sale', function ($query) {
-            $query->whereRaw('? between date_begin and date_end', [now()]);
-        })->where('status', '=', '1')
+        $count = Product::where('status', '=', '1')
             ->whereIn('category_id', $listcatid)->orderBy('created_at', 'desc')
             ->count();
 

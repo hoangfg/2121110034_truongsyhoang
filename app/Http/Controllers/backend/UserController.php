@@ -56,7 +56,7 @@ class UserController extends Controller
         // $user->level = 1;
         $user->status = $request->status;
         $user->created_at = date('Y-m-d H:i:s');
-        $user->created_by = Auth::user()->id;
+        $user->created_by =  Auth::guard('admin')->user()->id;
         //upload file
 
         if ($request->hasFile('image')) {
@@ -132,7 +132,7 @@ class UserController extends Controller
         // $user->level = 1;
         $user->status = $request->status;
         $user->created_at = date('Y-m-d H:i:s');
-        $user->created_by = Auth::user()->id;
+        $user->created_by =  Auth::guard('admin')->user()->id;
         //upload file
 
         if ($request->def_image == 1) {
@@ -185,7 +185,7 @@ class UserController extends Controller
                     File::delete($path_image_delete);
                 }
             }
-            if (Auth::user()->id == $id) {
+            if (Auth::guard('admin')->user()->id == $id) {
                 return redirect()->route('user.index')->with('message', ['type' => 'danger', 'msg' => 'Người dùng kgoong thể xóa bản thân !!!']);
             } else {
                 $user->delete();
@@ -200,12 +200,12 @@ class UserController extends Controller
         if ($user == null) {
             return redirect()->route('user.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
         } else {
-            if (Auth::user()->id == $id) {
+            if (Auth::guard('admin')->user()->id == $id) {
                 return redirect()->route('user.index')->with('message', ['type' => 'danger', 'msg' => 'Người dùng không thể xóa bản thân !!!']);
             } else {
                 $user->status = 0;
                 $user->updated_at = date('Y-m-d H:i:s');
-                $user->updated_by =  Auth::user()->id;
+                $user->updated_by =   Auth::guard('admin')->user()->id;
                 $user->save();
                 return redirect()->route('user.index')->with('message', ['type' => 'success', 'msg' => 'Chuyển vào thùng rác thành công']);
             }
@@ -225,12 +225,12 @@ class UserController extends Controller
         if ($user == null) {
             return redirect()->route('user.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
         } else {
-            if (Auth::user()->id == $id) {
+            if (Auth::guard('admin')->user()->id == $id) {
                 return redirect()->route('user.index')->with('message', ['type' => 'danger', 'msg' => 'Người dùng không thể Thay đổi trạng thái bản thân !!!']);
             } else {
                 $user->status = ($user->status == 1) ? 2 : 1;
                 $user->updated_at = date('Y-m-d H:i:s');
-                $user->updated_by =  Auth::user()->id;
+                $user->updated_by =   Auth::guard('admin')->user()->id;
                 $user->save();
                 return redirect()->route('user.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công']);
             }
@@ -245,7 +245,7 @@ class UserController extends Controller
         } else {
             $user->status = 2;
             $user->updated_at = date('Y-m-d H:i:s');
-            $user->updated_by =  Auth::user()->id;
+            $user->updated_by =   Auth::guard('admin')->user()->id;
             $user->save();
             return redirect()->route('user.trash')->with('message', ['type' => 'success', 'msg' => 'Khôi phục sản phẩm thành công']);
         }
@@ -264,12 +264,12 @@ class UserController extends Controller
                 if ($user == null) {
                     return redirect()->route('user.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!Đã xóa $count/$count_max ! "]);
                 }
-                if (Auth::user()->id == $id) {
+                if (Auth::guard('admin')->user()->id == $id) {
                     return redirect()->route('user.index')->with('message', ['type' => 'danger', 'msg' => 'Người dùng không thể xóa bản thân !!!']);
                 }
                 $user->status = 0;
                 $user->updated_at = date('Y-m-d H:i:s');
-                $user->updated_by = Auth::user()->id;
+                $user->updated_by =  Auth::guard('admin')->user()->id;
                 $user->save();
 
                 $count++;
@@ -324,7 +324,7 @@ class UserController extends Controller
                     }
                     $user->status = 2;
                     $user->updated_at = date('Y-m-d H:i:s');
-                    $user->updated_by = Auth::user()->id;
+                    $user->updated_by =  Auth::guard('admin')->user()->id;
                     $user->save();
                     $count++;
                 }

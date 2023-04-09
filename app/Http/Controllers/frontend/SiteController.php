@@ -9,6 +9,7 @@ use App\Models\Link;
 use App\Models\Product;
 use App\Models\Post;
 use App\Models\Brand;
+use App\Models\Comment;
 
 class SiteController extends Controller
 {
@@ -150,16 +151,22 @@ class SiteController extends Controller
 
         $list_product = Product::with(['sale' => function ($query) {
             $query->whereRaw('? between date_begin and date_end', [now()]);
-        }])->where([['status', '=', '1'],['id','<>',$product->id]])->whereIn('category_id', $listcatid)->orderBy('created_at', 'desc')->paginate(5);
+        }])->where([['status', '=', '1'], ['id', '<>', $product->id]])->whereIn('category_id', $listcatid)->orderBy('created_at', 'desc')->paginate(5);
 
         $product_sale = Product::with(['sale' => function ($query) {
             $query->whereRaw('? between date_begin and date_end', [now()]);
         }])->find($product->id);
 
-        $min_price = Product::min('price_buy');
-        $max_price = Product::max('price_buy');
-        $max_price_range = $max_price + 100000;
-        return view('frontend.product-detail', compact('min_price', 'max_price', 'max_price_range', 'product', 'list_product', 'product_sale'));
+       
+
+        $list_comment = Comment::with(['product', 'user'])
+            ->where('type', '=', 'product')
+            ->where('table_id', '=', $product->id)
+            ->where('parent_id', '=', 0)
+            ->orderBy('created_at', 'DESC')
+            ->paginate(7);
+
+        return view('frontend.product-detail', compact('list_comment',  'product', 'list_product', 'product_sale'));
     }
     #Brand
     private function ProductBrand($slug)

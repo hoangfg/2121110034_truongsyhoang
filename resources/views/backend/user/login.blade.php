@@ -26,27 +26,27 @@
     </script>
 </head>
 
-<body>
-    <div class="container">
-        <div class="card">
-            <div class="inner-box" id="card">
+<body class="body-login">
+    <div class="containers">
+        <div class="cards">
+            <div class="inner-boxs" id="card">
                 <div class="card-front">
                     <h2>LOGIN</h2>
                     <form action="{{ route('admin.postlogin') }}" method="post" >
                         @csrf
-                        <div class="group mt-1">
-                            <input type="text" name="username" class="input-box" placeholder="Username" required />
+                        <div class="groups mt-1">
+                            <input type="text" name="username" class="input-boxs" placeholder="Username" required />
                             <i class="fa-regular fa-user"></i>
                         </div>
-                        <div class="group mt-1">
-                            <input type="password" name="password" class="input-box" placeholder="Password" required />
+                        <div class="groups mt-1">
+                            <input type="password" name="password" class="input-boxs" placeholder="Password" required />
                             <i class="far fa-eye btn" onclick="togglePassword(this)"></i>
                         </div>
-                        <div class="group mt-3">
-                            <input type="submit" name="DANGNHAP" class="submit-btn" value="Login">
+                        <div class="groups mt-3">
+                            <input type="submit" name="DANGNHAP" class="submit-btns" value="Login">
                         </div>
                         <div>
-                            <input type="checkbox" name="" id="" /><span>Remember Me</span>
+                            <input type="checkbox" name="remember" id="" /><span>Remember Me</span>
                         </div>
                         @if (isset($error))
                             <div class="mt-3">
@@ -56,37 +56,37 @@
                             </div>
                         @endif
                     </form>
-                    <button type="button" class="btn mt-7" onclick="openRegister()">
+                    <button type="button" class="btn mt-7 btn-btn-login" onclick="openRegister()">
                         I'm new here
                     </button>
-                    <a href="">Forget password</a>
+                    <a href="" class="forget">Forget password</a>
                 </div>
                 <div class="card-back">
                     <h2>REGISTER</h2>
                     <form action="">
-                        <div class="group">
-                            <input type="text" class="input-box" placeholder="Username" required />
+                        <div class="groups">
+                            <input type="text" class="input-boxs" placeholder="Username" required />
                             <i class="fa-regular fa-user"></i>
                         </div>
-                        <div class="group">
-                            <input type="text" class="input-box" placeholder="Phone" required />
+                        <div class="groups">
+                            <input type="text" class="input-boxs" placeholder="Phone" required />
                             <i class="fa-solid fa-phone"></i>
                         </div>
-                        <div class="group">
-                            <input type="email" class="input-box" placeholder="email" required />
+                        <div class="groups">
+                            <input type="email" class="input-boxs" placeholder="email" required />
                             <i class="fa-regular fa-envelope"></i>
                         </div>
-                        <div class="group">
-                            <input type="password" class="input-box" placeholder="password" required />
+                        <div class="groups">
+                            <input type="password" class="input-boxs" placeholder="password" required />
                             <i class="far fa-eye btn" onclick="togglePassword(this)"></i>
                         </div>
-                        <div class="group">
-                            <input type="submit" name="DANGNHAP" class="submit-btn" value="Register">
+                        <div class="groups">
+                            <input type="submit" name="DANGNHAP" class="submit-btns" value="Register">
                         </div>
                         <input type="checkbox" name="" id="" /><span class="checkbox">Remember
                             Me</span>
                     </form>
-                    <button type="button" class="btn mt-7" onclick="openLogin()">
+                    <button type="button" class="btn mt-7 btn-btn-login" onclick="openLogin()">
                         I've an account
                     </button>
 
@@ -95,7 +95,7 @@
         </div>
     </div>
     <script>
-        var card = document.getElementById("card");
+        var card = document.getElementById("cards");
 
         function openRegister() {
             card.style.transform = "rotateY(-180deg)";

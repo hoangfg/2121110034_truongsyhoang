@@ -21,49 +21,49 @@
         }
 
         /* qty */
-        .btn-qty {
-            height: 40px;
-            min-width: 80%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #FFF;
+        /* .btn-qty {
+                height: 40px;
+                min-width: 80%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: #FFF;
 
-        }
+            }
 
-        .btn-qty span {
+            .btn-qty span {
 
-            text-align: center;
-            font-size: 20px;
-            font-weight: 600;
-            cursor: pointer;
-            user-select: none;
-            border: 2px solid rgba(0, 0, 0, 0.2);
-            border-radius: 20px;
-            line-height: 30px;
-        }
+                text-align: center;
+                font-size: 20px;
+                font-weight: 600;
+                cursor: pointer;
+                user-select: none;
+                border: 2px solid rgba(0, 0, 0, 0.2);
+                border-radius: 20px;
+                line-height: 30px;
+            }
 
-        .btn-qty span:not(.num) {
-            width: 20%;
-            border-radius: 50%;
-        }
+            .btn-qty span:not(.num) {
+                width: 20%;
+                border-radius: 50%;
+            }
 
-        .btn-qty span.num {
-            width: 100%;
-            font-size: 20px;
-            border-right: 2px solid rgba(0, 0, 0, 0.2);
-            border-left: 2px solid rgba(0, 0, 0, 0.2);
-            pointer-events: none;
-        }
+            .btn-qty span.num {
+                width: 100%;
+                font-size: 20px;
+                border-right: 2px solid rgba(0, 0, 0, 0.2);
+                border-left: 2px solid rgba(0, 0, 0, 0.2);
+                pointer-events: none;
+            } */
 
         /* cart */
 
         .add-cart {
             border-radius: 50%;
             display: inline-block;
-            height: 40px;
-            width: 40px;
-            line-height: 40px;
+             width: 35px;
+            height: 35px;
+            line-height: 35px;
 
         }
 
@@ -72,7 +72,7 @@
             display: inline-block;
             width: 100%;
 
-            line-height: 40px;
+            line-height: 35px;
             text-align: center;
             padding: 0;
             font-size: 20px;
@@ -88,8 +88,8 @@
 
         @media (min-width: 768px) {
             .add-cart {
-                height: 30px !important;
-                line-height: 30px !important;
+                height: 35px !important;
+                line-height: 35px !important;
                 width: 40% !important;
                 border-radius: 20px !important;
             }
@@ -100,6 +100,39 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+
+        /*  */
+        #buy-amount {
+            display: flex;
+        }
+
+        #buy-amount button {
+            width: 35px;
+            height: 35px;
+            outline: none;
+            background: none;
+            border: 1px solid #ececec;
+            cursor: pointer;
+        }
+
+        #buy-amount button:hover {
+            background: #ececec;
+        }
+
+        #buy-amount button svg {
+            color: #909090;
+        }
+
+        #buy-amount button:hover svg {
+            color: #4f4f4f;
+        }
+
+        #buy-amount #amount {
+            width: 40px;
+            text-align: center;
+            border: 1px solid #ececec;
+
         }
     </style>
 @endsection
@@ -112,8 +145,8 @@
             $index = 1;
         }
     @endphp
-    <div class="container">
-        <div class="row my-3 bg-white">
+    <div class="container ">
+        <div class="row my-3 ">
             <div class="d-flex justify-content-center">
 
 
@@ -121,14 +154,14 @@
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="{{ route('site.home') }}" class="text-bl_gr">Trang
                                 chủ</a></li>
-                        <li class="breadcrumb-item" aria-current="page">4444444444444444444</li>
+                        <li class="breadcrumb-item" aria-current="page">{{ $product->category->name }}</li>
                         <li class="breadcrumb-item active-main cate-name" aria-current="page">{{ $product->name }}</li>
                     </ol>
                 </nav>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12 col-12 mx-auto bg-white">
+            <div class="col-md-12 col-12 mx-auto bg-white py-5  ">
                 <div class="row mt-3">
                     <div class="col-md-3 col-10 mx-auto  p-3 ">
                         <section id="image-carousel" class="splide" aria-label="Beautiful Images">
@@ -200,12 +233,23 @@
                         </div>
 
                         <div class="row my-3 d-flex justify-content-between">
-                            <div class="col-md-6 col-10 ">
-                                <div class="btn-qty">
-                                    <span class="minus">-</span>
-                                    <span class="num">01</span>
-
-                                    <span class="plus">+</span>
+                            <div class="col-md-4 col-4 ">
+                                <div class="" id="buy-amount">
+                                    <input type="hidden" value="{{ $product->store->qty }} " id="qty">
+                                    <button class="minus-btn" onclick="handleMinus()">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
+                                        </svg>
+                                    </button>
+                                    <input type="text" name="amount" id="amount" value="1">
+                                    <button class="plus-btn" onclick="handlePlus()">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M12 4.5v15m7.5-7.5h-15" />
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
                             <div class="col-md-6 col-2 ">
@@ -343,9 +387,9 @@
                 </div>
                 <div class="row mt-3">
                     <div class="Featured-products row bg-product-item mt-3">
-                        <div class="col-md-12  mt-2">
+                        <div class="col-md-12  mt-2 pe-0">
                             <div class="row">
-                                <nav>
+                                <nav class="pe-0">
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                         <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
                                             data-bs-target="#nav-home" type="button" role="tab"
@@ -357,14 +401,19 @@
                                             aria-controls="nav-profile" aria-selected="false">
                                             <h2 class="fs-5">Thông Tin</h2>
                                         </button>
+                                        <button class="nav-link" id="nav-comment-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-comment" type="button" role="tab"
+                                            aria-controls="nav-comment" aria-selected="false">
+                                            <h2 class="fs-5">BÌNH LUẬN</h2>
+                                        </button>
                                     </div>
                                 </nav>
                             </div>
                         </div>
 
-                        <div class="col-md-12 col-12">
+                        <div class="col-md-12 col-12 pe-0">
                             <div class="row tab-content " id="nav-tabContent">
-                                <div class="tab-pane fade show active  " id="nav-home" role="tabpanel"
+                                <div class="tab-pane fade show active pe-0 " id="nav-home" role="tabpanel"
                                     aria-labelledby="nav-home-tab" tabindex="0">
                                     <div class="card card-body">
                                         <h1>{{ $product->name }}</h1>
@@ -374,10 +423,17 @@
                                     </div>
                                 </div>
                                 <!-- end-MÔ TẢ SẢN PHẨM -->
-                                <div class="tab-pane fade" id="nav-profile" role="tabpanel"
+                                <div class="tab-pane fade pe-0" id="nav-profile" role="tabpanel"
                                     aria-labelledby="nav-profile-tab" tabindex="0">
                                     <div class="card card-body">
                                         {!! $product->detail !!}
+                                    </div>
+                                </div>
+                                <!-- end Thông Tin Chi Tiết-->
+                                <div class="tab-pane fade pe-0" id="nav-comment" role="tabpanel"
+                                    aria-labelledby="nav-comment-tab" tabindex="0">
+                                    <div class="card card-body">
+                                        @includeIf('frontend.comment', ['some' => 'data'])
                                     </div>
                                 </div>
                                 <!-- end Thông Tin Chi Tiết-->
@@ -392,9 +448,10 @@
                 </div>
             </div>
         </div>
-    </div>
 
     </div>
+
+
 
 
 @endsection
@@ -419,23 +476,7 @@
 
         // range - price 
 
-        $(function() {
-            $("#slider-range").slider({
-                orientation: "horizontal",
-                range: true,
-                min: {{ $min_price }},
-                max: {{ $max_price_range }},
-                step: 10000,
-                values: [{{ $min_price }}, {{ $max_price }}],
-                slide: function(event, ui) {
-                    $("#amount").val(ui.values[0] + "đ" + " - " + ui.values[1] + "đ");
-                    $("#start_price").val(ui.values[0]);
-                    $("#end_price").val(ui.values[1]);
-                }
-            });
-            $("#amount").val($("#slider-range").slider("values", 0) + "đ" +
-                " - " + $("#slider-range").slider("values", 1) + "đ");
-        });
+       
     </script>
     {{--  --}}
     <!-- all js here -->
@@ -466,25 +507,49 @@
             thumbnails.mount();
         });
         // button qty
-        const plus = document.querySelector(".plus"),
-            minus = document.querySelector(".minus"),
-            num = document.querySelector(".num");
+        // const plus = document.querySelector(".plus"),
+        //     minus = document.querySelector(".minus"),
+        //     num = document.querySelector(".num");
 
-        let a = 1;
+        // let a = 1;
 
-        plus.addEventListener("click", () => {
-            a++;
-            a = (a < 10) ? "0" + a : a;
-            num.innerText = a;
-        });
+        // plus.addEventListener("click", () => {
+        //     a++;
+        //     a = (a < 10) ? "0" + a : a;
+        //     num.innerText = a;
+        // });
 
-        minus.addEventListener("click", () => {
-            if (a > 1) {
-                a--;
-                a = (a < 10) ? "0" + a : a;
-                num.innerText = a;
-            }
-        });
+        // minus.addEventListener("click", () => {
+        //     if (a > 1) {
+        //         a--;
+        //         a = (a < 10) ? "0" + a : a;
+        //         num.innerText = a;
+        //     }
+        // });
+        let amountElement = document.getElementById('amount');
+        let amount = amountElement.value;
+        
+        let qty = document.getElementById('qty').value;
+        let reander = (amount) => {
+            amountElement.value = amount
+        }
+        let handlePlus = () => {
+            if (amount < qty)
+                amount++
+            reander(amount);
+        }
+        let handleMinus = () => {
+            if (amount > 1)
+                amount--
+            reander(amount);
+        }
+        amountElement.addEventListener('input', () => {
+            amount = amountElement.value;
+            amount = parseInt(amount);
+            amount = (isNaN(amount) || (amount == 0)) ? 1 : amount;
+            amount = (amount > qty) ? qty : amount;
+            reander(amount);
+        })
     </script>
 
 
