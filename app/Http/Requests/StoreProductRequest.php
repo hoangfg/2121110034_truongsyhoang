@@ -31,7 +31,7 @@ class StoreProductRequest extends FormRequest
             'detail' => 'required|min:5|max:10000',
             'metadesc' => 'required|min:5|max:10000',
             'image' => 'required|array|min:2',
-            'image.*' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'image.*' => 'image|mimes:jpg,png,jpeg,gif,svg,webp|max:2048',
             'price_buy' => 'required|numeric|digits_between:1,10',
             'price' => 'required|numeric|digits_between:1,10',
             'qty' => 'required|numeric|between:1,1000',

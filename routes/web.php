@@ -22,12 +22,14 @@ use App\Http\Controllers\backend\AuthController;
 use App\Http\Controllers\backend\CommentController;
 use App\Http\Controllers\frontend\SiteLoginController;
 use App\Http\Controllers\frontend\CartController;
+use App\Http\Controllers\frontend\CheckOutController;
 use App\Models\Contact;
 
 // trang người dùng
 Route::get('/', [SiteController::class, 'index'])->name('site.home');
-Route::get('san-pham', [SiteController::class, 'product'])->name('site.product');
-Route::get('bai-viet', [SiteController::class, 'post'])->name('site.post');
+Route::get('product', [SiteController::class, 'product'])->name('site.product');
+Route::get('post', [SiteController::class, 'post'])->name('site.post');
+Route::get('page', [SiteController::class, 'page'])->name('site.page');
 
 
 Route::post('comment', [CommentController::class, 'store'])->name('comment.store');
@@ -39,17 +41,27 @@ Route::post('dang-nhap', [SiteLoginController::class, 'postlogin'])->name('site.
 Route::get('xac-nhan/{id}/{actived_token}', [SiteLoginController::class, 'actived'])->name('site.actived');
 Route::get('xac-nhan-lai/{id}', [SiteLoginController::class, 'actived_again'])->name('site.actived_again');
 
+
+
+Route::get('load-cart-data', [CartController::class, 'cartcount']);
 Route::get('gio-hang', [CartController::class, 'cart'])->name('site.cart');
+Route::get('check-out', [CheckOutController::class, 'check']);
+Route::post('place-order', [CheckOutController::class, 'placeorder']);
+
 Route::post('add-to-cart', [CartController::class, 'addcart']);
 Route::post('delete-cart-item', [CartController::class, 'deletecart']);
 Route::post('update-cart', [CartController::class, 'updatecart']);
 
+
+Route::get('profile', [SiteLoginController::class, 'profile'])->name('site.profile');
 Route::get('lay-lai-mat-khau', [SiteLoginController::class, 'forget_password'])->name('site.forget_password');
 Route::post('lay-lai-mat-khau', [SiteLoginController::class, 'postforget_password'])->name('site.postforget_password');
 Route::get('dat-lai-mat-khau/{id}/{actived_token}', [SiteLoginController::class, 'get_password'])->name('site.get_password');
 Route::post('dat-lai-mat-khau/{id}', [SiteLoginController::class, 'postget_password'])->name('site.postget_password');
-
 Route::get('dang-xuat', [SiteLoginController::class, 'logout'])->name('site.logout');
+
+
+
 // trang admin
 Route::get('admin/login', [AuthController::class, 'getlogin'])->name('admin.getlogin');
 Route::post('admin/login', [AuthController::class, 'postlogin'])->name('admin.postlogin');

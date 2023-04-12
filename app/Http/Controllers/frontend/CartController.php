@@ -28,15 +28,15 @@ class CartController extends Controller
     {
         $productid = $request->input('product_id');
         $quality = $request->input('product_qty');
-        if (Auth::guard('users')->check() || Auth::guard('admin')->check()) {
+        if (Auth::guard('users')->check()) {
             $prod_check = Product::where('id', $productid)->first();
             if ($prod_check) {
-                if (Cart::where('product_id', $productid)->where('user_id', Auth::guard('admin')->user()->id ?? Auth::guard('users')->user()->id)->exists()) {
+                if (Cart::where('product_id', $productid)->where('user_id', Auth::guard('users')->user()->id)->exists()) {
                 } else {
                     $cartItem = new Cart();
                     $cartItem->product_id = $productid;
                     $cartItem->product_qty = $quality;
-                    $cartItem->user_id = Auth::guard('admin')->user()->id ?? Auth::guard('users')->user()->id;
+                    $cartItem->user_id =  Auth::guard('users')->user()->id;
                     $cartItem->save();
                     return response()->json(['status' => $prod_check->name .= ' Added to Cart']);
                 }
@@ -47,11 +47,11 @@ class CartController extends Controller
     }
     public function deletecart(Request $request)
     {
-        if (Auth::guard('users')->check() || Auth::guard('admin')->check()) {
+        if (Auth::guard('users')->check()) {
             $productid = $request->input('product_id');
 
-            if (Cart::where('product_id', $productid)->where('user_id', Auth::guard('admin')->user()->id ?? Auth::guard('users')->user()->id)->exists()) {
-                $cartItem = Cart::where('product_id', $productid)->where('user_id', Auth::guard('admin')->user()->id ?? Auth::guard('users')->user()->id)->first();
+            if (Cart::where('product_id', $productid)->where('user_id',  Auth::guard('users')->user()->id)->exists()) {
+                $cartItem = Cart::where('product_id', $productid)->where('user_id',  Auth::guard('users')->user()->id)->first();
                 $cartItem->delete();
                 return response()->json(['status' => 'Product delete successfully']);
             }
@@ -63,11 +63,11 @@ class CartController extends Controller
     {
         $productid = $request->input('product_id');
         $productqty = $request->input('product_qty');
-        if (Auth::guard('users')->check() || Auth::guard('admin')->check()) {
-          
+        if (Auth::guard('users')->check()) {
 
-            if (Cart::where('product_id', $productid)->where('user_id', Auth::guard('admin')->user()->id ?? Auth::guard('users')->user()->id)->exists()) {
-                $cartItem = Cart::where('product_id', $productid)->where('user_id', Auth::guard('admin')->user()->id ?? Auth::guard('users')->user()->id)->first();
+
+            if (Cart::where('product_id', $productid)->where('user_id',  Auth::guard('users')->user()->id)->exists()) {
+                $cartItem = Cart::where('product_id', $productid)->where('user_id',  Auth::guard('users')->user()->id)->first();
                 $cartItem->product_qty = $productqty;
                 $cartItem->update();
                 return response()->json(['status' => 'Quatily updated successfully']);
@@ -79,8 +79,16 @@ class CartController extends Controller
     public function cart()
     {
 
-        $data = Cart::where('user_id', Auth::guard('admin')->user()->id ?? Auth::guard('users')->user()->id)->get();
-       
-        return view('frontend.cart', compact('data'));
+        if (Auth::guard('users')->check()) {
+            $data = Cart::where('user_id',  Auth::guard('users')->user()->id)->get();
+            return view('frontend.cart', compact('data'));
+        } else {
+            return redirect()->route('site.getlogin');
+        }
+    }
+    public function cartcount()
+    {
+        $cartcount = Cart::where('user_id', Auth::guard('users')->user()->id)->count();
+        return response()->json(['count' => $cartcount]);
     }
 }

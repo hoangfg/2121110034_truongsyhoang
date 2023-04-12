@@ -29,7 +29,7 @@
                                 <ul class="navbar-nav float-md-end">
                                     @if (Auth::guard('users')->check())
                                         <li class="nav-item me-5"><a class="nav-link mt-0"
-                                                href="{{ route('site.logout') }}"><i
+                                                href="{{ route('site.profile') }}"><i
                                                     class="fa-solid fa-arrow-right-to-bracket me-2"></i> Tài khoản</a>
                                         </li>
                                     @else

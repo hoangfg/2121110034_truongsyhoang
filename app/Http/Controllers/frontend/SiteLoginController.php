@@ -174,11 +174,14 @@ class SiteLoginController extends Controller
     {
         $request->validate([
             'password' => 'required|max:40',
-            'confirm_password' => 'required|same:password|max:40',
+            'new_password' => 'required|max:40',
+            'confirm_password' => 'required|same:new_password|max:40',
         ], [
 
             'password.required' => 'Bạn chưa điền mật khẩu',
             'password.max' => 'Mật khẩu không được dài quá 40 ký tự',
+            'new_password.required' => 'Bạn chưa điền mật khẩu',
+            'new_password.max' => 'Mật khẩu không được dài quá 40 ký tự',
 
             'confirm_password.required' => 'Bạn chưa nhập lại mật khẩu',
             'confirm_password.max' => 'Không được dài quá 40 ký tự',
@@ -187,7 +190,7 @@ class SiteLoginController extends Controller
 
         ]);
         $user = User::find($user);
-        $user->password = bcrypt($request->password);
+        $user->password = bcrypt($request->new_password);
         $user->actived_token = null;
         if ($user->save()) {
             return redirect()->route('site.getlogin')->with('message', ['type' => 'success', 'msg' => 'Đổi mật khẩu thành công !! Vui lòng đăng nhập!!']);
@@ -237,5 +240,12 @@ class SiteLoginController extends Controller
     {
         Auth::guard('users')->logout();
         return redirect()->route('site.home');
+    }
+
+    public function profile()
+    {
+        $profile = User::where('id', Auth::guard('users')->user()->id)->first();
+       
+        return view('frontend.profile.profile', compact('profile'));
     }
 }

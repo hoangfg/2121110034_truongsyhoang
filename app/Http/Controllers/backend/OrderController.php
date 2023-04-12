@@ -157,7 +157,7 @@ class OrderController extends Controller
         if ($order == null) {
             return redirect()->route('order.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
         } else {
-            $type = $request->type;
+            $type = $request->status;
             switch ($type) {
 
                 case 'xacnhan': {

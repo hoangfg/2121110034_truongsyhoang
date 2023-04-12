@@ -22,7 +22,7 @@
             cursor: pointer;
         }
     </style>
-     <link rel="stylesheet" href="{{ asset('css/navigation.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/navigation.css') }}">
 @endsection
 @section('content')
     <section class="maincontent">
@@ -39,7 +39,8 @@
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('site.home') }}" class="text-bl_gr">Trang
                                         chủ</a></li>
-                                <li class="breadcrumb-item active-main cate-name" aria-current="page">{{ $brand->name }}</li>
+                                <li class="breadcrumb-item active-main cate-name" aria-current="page">{{ $brand->name }}
+                                </li>
                             </ol>
                         </nav>
                     </div>
@@ -64,7 +65,7 @@
                             </form>
                         </div>
                     </div>
-                    <div class="col-md-12 col-12 mx-auto py-5">
+                    <div class="col-md-12 col-12 mx-auto py-5 ">
                         <div class="row">
                             <!-- mobile -->
                             <div class="col-md-3">
@@ -107,7 +108,7 @@
                                             @endphp
 
                                             <div class="col-md-3 col-6 item">
-                                                <div class="card h-100 text-center shadow-product product-wrapper">
+                                                <div class="card h-100 text-center shadow-product product-wrapper product-data">
                                                     <div class="card-header item-img">
 
                                                         <a href="{{ route('slug.home', ['slug' => $product->slug]) }}">
@@ -126,17 +127,28 @@
                                                         <div class="product-action">
                                                             <div class="product-action-style">
 
-
-                                                                <a class="action-cart" title="Thêm vào giỏ" href="#"
-                                                                    data-abc="true">
-                                                                    <i class="fa fa-shopping-cart"></i>
-                                                                </a>
+                                                                <input type="hidden" class="amount qly_input"
+                                                                    name="amount" value="1">
+                                                                <input type="hidden" value="{{ $product->id }} "
+                                                                    name="product_id_hidden" class="prod_id">
+                                                                @if ($product->store->qty > 0)
+                                                                    <a class="action-cart addToCartBtn" type="submit"
+                                                                        title="Thêm vào giỏ" data-abc="true">
+                                                                        <i class="fa fa-shopping-cart"></i>
+                                                                    </a>
+                                                                @else
+                                                                    <a class="action-cart no-product" title="Hết hàng"
+                                                                        data-abc="true">
+                                                                        <i class="fa-solid fa-ban"></i>
+                                                                    </a>
+                                                                @endif
 
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="card-body ">
-                                                        <h3 class="card-title fs-6 fs-7 text-bl_gr text-truncate product-name">
+                                                        <h3
+                                                            class="card-title fs-6 fs-7 text-bl_gr text-truncate product-name">
                                                             <a
                                                                 href="{{ route('slug.home', ['slug' => $product->slug]) }}">{{ $product->name }}</a>
                                                     </div>
@@ -197,7 +209,7 @@
 @endsection
 
 @section('footer')
-<script>
+    <script>
         let listElements = document.querySelectorAll('.link');
 
         listElements.forEach(listElement => {
@@ -213,7 +225,7 @@
             })
         });
         // range - price 
-        
+
         $(function() {
             $("#slider-range").slider({
                 orientation: "horizontal",

@@ -47,7 +47,8 @@ class CommentController extends Controller
                 'body.min' => 'Nội dung gửi ít nhất :min ký tự',
             ]);
             $comment = new Comment();
-            $comment->user_id = Auth::guard('admin')->user()->id ?? Auth::guard('users')->user()->id;
+            $comment->user_id =  Auth::guard('users')->user()->id;
+           
             $comment->table_id = $product_id;
             $comment->body = $request->body;
             $comment->parent_id = 0;
@@ -59,7 +60,7 @@ class CommentController extends Controller
     }
     public function reply(Request $request)
     {
-        if (Auth::guard('users')->check() || Auth::guard('admin')->check()) {
+        if (Auth::guard('users')->check() ) {
             $request->validate([
                 'body1' => 'min:10'
             ], [
@@ -70,7 +71,7 @@ class CommentController extends Controller
             $reply_id = $request->input('reply_id');
            
             $comment = new Comment();
-            $comment->user_id = Auth::guard('admin')->user()->id ?? Auth::guard('users')->user()->id;;
+            $comment->user_id = Auth::guard('users')->user()->id;
             $comment->table_id = $product_id;
             $comment->body = $request->body1;
             $comment->parent_id = $parent_id;
@@ -85,7 +86,7 @@ class CommentController extends Controller
     }
     public function replys(Request $request)
     {
-        if (Auth::guard('users')->check() || Auth::guard('admin')->check()) {
+        if (Auth::guard('users')->check()) {
             $product_id = $request->input('product_id');
             $parent_id = $request->input('parent_id');
             $reply_id = $request->input('reply_id');
@@ -95,7 +96,7 @@ class CommentController extends Controller
                 'body_1.min' => 'Nội dung gửi ít nhất :min ký tự',
             ]);
             $comment = new Comment();
-            $comment->user_id = Auth::guard('admin')->user()->id ?? Auth::guard('users')->user()->id;
+            $comment->user_id = Auth::guard('users')->user()->id;
             $comment->table_id = $product_id;
             $comment->body = $request->body_1;
             $comment->parent_id = $parent_id;

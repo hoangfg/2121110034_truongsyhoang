@@ -1,5 +1,5 @@
 @if ($count > 0)
-    <div class="row product my-5">
+    <div class="row my-5">
         <div class="col-md-12 col-12 owl-carousel-parent">
             <div class="row title border-1 border-bottom mb-5">
                 <div class="col-md-10 col-8  ">
@@ -26,7 +26,7 @@
                             }
                         @endphp
 
-                        <div class="item  p-0 bg-none">
+                        <div class="item  p-0 bg-none  product-data">
                             <div class="card h-100 text-center shadow-product product-wrapper">
                                 <div class="card-header item-img">
 
@@ -45,10 +45,21 @@
                                     <div class="product-action">
                                         <div class="product-action-style">
 
-
-                                            <a class="action-cart" title="Thêm vào giỏ" href="#" data-abc="true">
-                                                <i class="fa fa-shopping-cart"></i>
-                                            </a>
+                                            <input type="hidden" class="amount qly_input" name="amount"
+                                                value="1">
+                                            <input type="hidden" value="{{ $product->id }} " name="product_id_hidden"
+                                                class="prod_id">
+                                            @if ($product->store->qty > 0)
+                                                <a class="action-cart addToCartBtn" type="submit" title="Thêm vào giỏ"
+                                                    data-abc="true">
+                                                    <i class="fa fa-shopping-cart"></i>
+                                                </a>
+                                            @else
+                                                <a class="action-cart no-product"  title="Hết hàng"
+                                                    data-abc="true">
+                                                   <i class="fa-solid fa-ban"></i>
+                                                </a>
+                                            @endif
 
                                         </div>
                                     </div>

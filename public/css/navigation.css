@@ -1,21 +1,18 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css");
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap");
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
 }
-
-
 
 ul {
     list-style: none;
 }
-  
+
 .accordion-menus {
-   
     overflow: hidden;
     padding: 0;
 }
@@ -26,7 +23,7 @@ ul {
 .accordion-menus li.active .dropdown {
     color: #fff;
 }
-.accordion-menus li.active .dropdown  .fa-chevron-down {
+.accordion-menus li.active .dropdown .fa-chevron-down {
     transform: rotate(180deg);
 }
 .dropdowns {
@@ -34,18 +31,17 @@ ul {
     display: block;
     padding: 10px 15px 10px 45px;
     font-size: 18px;
-    border-bottom: 2px solid #2d374d;
+
     color: #999999;
     position: relative;
     transition: all 0.4s ease-out;
 }
 
-.dropdowns:hover{
-    background: #566f82; /* fallback colour */
-	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#27455c), to(#273a47));
+.dropdowns a:hover {
+    color: #ff0000;
 }
-  
-.dropdowns  i {
+
+.dropdowns i {
     position: absolute;
     top: 17px;
     left: 16px;
@@ -59,13 +55,13 @@ ul {
 
 .submenuItems {
     display: none;
-    background: #2d374d;;
+
     transition: all 2s ease-in-out;
 }
 
-.accordion-menus li.active .submenuItems{
+.accordion-menus li.active .submenuItems {
     display: block;
-     padding: 0;
+    padding: 0;
 }
 
 .submenuItems a {
@@ -78,6 +74,5 @@ ul {
 }
 
 .submenuItems a:hover {
-    background-color: #5c7185;
-    color: #fff;
-  }
+    color: #ff0000;
+}

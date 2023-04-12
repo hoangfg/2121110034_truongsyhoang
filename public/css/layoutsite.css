@@ -174,10 +174,17 @@ ul {
     text-align: center;
     transition: all 0s;
 }
+.cart-item__action.no-product {     
+    width: auto;  
+}
 
 .cart-item__style:hover,
 .cart-item__action:hover {
     background-color: #04aa6d;
+    color: #fff;
+}
+.cart-item__action.no-product:hover {
+    background-color: red;
     color: #fff;
 }
 @media (min-width: 768px) {
@@ -246,6 +253,11 @@ ul {
     color: white;
     cursor: pointer;
     background-color: #04aa6d;
+}
+.product-action-style a.no-product:hover {
+    color: white;
+    cursor: pointer;
+    background-color: red;
 }
 .product-wrapper:hover {
     height: 100%;
@@ -418,10 +430,10 @@ ul {
     }
     .item-price .amount {
         color: rgb(255, 66, 78);
-        font-size: 18px !important;
+        font-size: 15px !important;
     }
     .item-price .sale {
-        font-size: 16px !important;
+        font-size: 15px !important;
     }
 }
 
@@ -444,7 +456,7 @@ ul {
     color: #fff;
     display: block;
 }
-.form {
+.form_footer {
     margin: 2rem 0;
 }
 @media (min-width: 768px) {

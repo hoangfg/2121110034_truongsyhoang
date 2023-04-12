@@ -193,6 +193,19 @@ class MenuController extends Controller
             }
         }
         if (isset($request->AddCustom)) {
+            $request->validate([
+                'name' => 'required|max:255|min:5|string',
+                'link' => 'required|min:1',
+            ], [
+
+                'name.required' => 'Tên là trường bắt buộc',
+                'name.min' => 'Nhập ít nhất 5 ký tự',
+                'name.string' => 'Tên phải là chuỗi chỉ chứa các ký tự chữ cái và số',
+               
+                'link.required' =>'link là trường bắt buộc',
+                'link.min' => 'Nhập ít nhất 5 ký tự',
+
+            ]);
 
             $menu = new Menu();
             $menu->name = $request->name;
@@ -248,12 +261,21 @@ class MenuController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateMenuRequest $request, $id)
+    public function update(Request $request, $id)
     {
+       
         $request->validate([
-            'name' => 'unique:menu,name,' . $id . ',id',
+            'name' => 'required|max:255|min:1|string' ,
+            'link' => 'required|min:1' ,
         ], [
-            'name.unique' => 'Tên đã được sử dụng. Vui lòng chọn tên khác.'
+
+            'name.required' => 'Tên là trường bắt buộc',
+            'name.min' => 'Nhập ít nhất 5 ký tự',
+            'name.string' => 'Tên phải là chuỗi chỉ chứa các ký tự chữ cái và số',
+
+            'link.required' => 'link là trường bắt buộc',
+            'link.min' => 'Nhập ít nhất 1 ký tự',
+
         ]);
         $menu = Menu::find($id);
         $menu->name = $request->name;

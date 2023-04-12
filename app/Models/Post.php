@@ -14,5 +14,12 @@ class Post extends Model
     return $this->hasMany(Menu::class,
         'table_id')->where('type', '=', 'post');
    }
-   
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+    public function topic()
+    {
+        return $this->belongsTo(Topic::class, 'topic_id');
+    }
 }

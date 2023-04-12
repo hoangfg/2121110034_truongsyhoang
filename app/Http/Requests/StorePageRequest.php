@@ -28,7 +28,7 @@ class StorePageRequest extends FormRequest
             'detail' => 'required|min:5',
             'metakey' => 'required|min:5',
             'metadesc' => 'required|min:5',
-            'image' => 'required|image|mimes:png,jpg,jpeg|max:2048',  // Max file size is 2MB (2048KB)
+            'image' => 'required|image|mimes:png,jpg,jpeg,webp|max:2048',  // Max file size is 2MB (2048KB)
             
         ];
     }

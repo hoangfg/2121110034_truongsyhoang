@@ -40,7 +40,7 @@
                                 </div>
                                 <div class="d-inline-block">
                                     <button class="btn btn-sm btn-primary" name="status" type="submit" value="xacnhan"
-                                        @if ($order->status != 1) @disabled(true) @endif>
+                                        @if ($order->status != 1 && $order->status != 0) @disabled(true) @endif>
                                         <i class="fa-solid fa-clipboard-check"></i>Xác nhận
                                         @if ($order->status == 1)
                                             <i class="fa-solid fa-circle-check fa-beat" style="color: #07e921;"></i>
@@ -93,20 +93,20 @@
                             <div class="col-3">
                                 <h5 class="text-info">Thông tin khách hàng</h5>
                                 <div>
-                                    <h6><strong>Tên khách hàng</strong></h6>
-                                    <input type="text" class="form-control" disabled value="{{ $user->name }}">
+                                    <h6><strong>Tên người nhận</strong></h6>
+                                    <input type="text" class="form-control" disabled value="{{ $order->name }}">
                                 </div>
                                 <div class="mt-2">
                                     <h6><strong>Điện thoại</strong></h6>
-                                    <input type="text" class="form-control" disabled value="{{ $user->phone }}">
+                                    <input type="text" class="form-control" disabled value="{{ $order->phone }}">
                                 </div>
                                 <div class="mt-2">
                                     <h6><strong>Địa chỉ</strong></h6>
-                                    <input type="text" class="form-control" disabled value="{{ $user->address }}">
+                                    <input type="text" class="form-control" disabled value="{{ $order->address }}">
                                 </div>
                                 <div class="mt-2">
                                     <h6><strong>Email</strong></h6>
-                                    <input type="text" class="form-control" disabled value="{{ $user->email }}">
+                                    <input type="text" class="form-control" disabled value="{{ $order->email }}">
                                 </div>
                             </div>
                             <div class="col-9">

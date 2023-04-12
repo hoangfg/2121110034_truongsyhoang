@@ -22,39 +22,39 @@
 
         /* qty */
         /* .btn-qty {
-                                height: 40px;
-                                min-width: 80%;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                background: #FFF;
+                                            height: 40px;
+                                            min-width: 80%;
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: center;
+                                            background: #FFF;
 
-                            }
+                                        }
 
-                            .btn-qty span {
+                                        .btn-qty span {
 
-                                text-align: center;
-                                font-size: 20px;
-                                font-weight: 600;
-                                cursor: pointer;
-                                user-select: none;
-                                border: 2px solid rgba(0, 0, 0, 0.2);
-                                border-radius: 20px;
-                                line-height: 30px;
-                            }
+                                            text-align: center;
+                                            font-size: 20px;
+                                            font-weight: 600;
+                                            cursor: pointer;
+                                            user-select: none;
+                                            border: 2px solid rgba(0, 0, 0, 0.2);
+                                            border-radius: 20px;
+                                            line-height: 30px;
+                                        }
 
-                            .btn-qty span:not(.num) {
-                                width: 20%;
-                                border-radius: 50%;
-                            }
+                                        .btn-qty span:not(.num) {
+                                            width: 20%;
+                                            border-radius: 50%;
+                                        }
 
-                            .btn-qty span.num {
-                                width: 100%;
-                                font-size: 20px;
-                                border-right: 2px solid rgba(0, 0, 0, 0.2);
-                                border-left: 2px solid rgba(0, 0, 0, 0.2);
-                                pointer-events: none;
-                            } */
+                                        .btn-qty span.num {
+                                            width: 100%;
+                                            font-size: 20px;
+                                            border-right: 2px solid rgba(0, 0, 0, 0.2);
+                                            border-left: 2px solid rgba(0, 0, 0, 0.2);
+                                            pointer-events: none;
+                                        } */
 
         /* cart */
 
@@ -103,7 +103,6 @@
         }
 
         /*  */
-        
     </style>
 @endsection
 
@@ -115,7 +114,7 @@
             $index = 1;
         }
     @endphp
-    <div class="container ">
+    <div class="container " >
         <div class="row my-3 ">
             <div class="d-flex justify-content-center">
 
@@ -124,13 +123,14 @@
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="{{ route('site.home') }}" class="text-bl_gr">Trang
                                 chủ</a></li>
-                        <li class="breadcrumb-item" aria-current="page">{{ $product->category->name }}</li>
+                        <li class="breadcrumb-item" aria-current="page"><a href="{{ route('slug.home', ['slug' =>  $product->category->slug]) }}">{{ $product->category->name }}</a></li>
+                        
                         <li class="breadcrumb-item active-main cate-name" aria-current="page">{{ $product->name }}</li>
                     </ol>
                 </nav>
             </div>
         </div>
-        <div class="row product-data">
+        <div class="row product-data shadow">
             <div class="col-md-12 col-12 mx-auto bg-white py-5  ">
                 <div class="row mt-3">
                     <div class="col-md-3 col-10 mx-auto  p-3 ">
@@ -201,40 +201,45 @@
                             </div>
 
                         </div>
-                       
-                            <div class="row my-3 d-flex justify-content-between">
-                                <div class="col-md-6 col-6">
-                                    <div class="buy-amount">
-                                        <input type="hidden" value="{{ $product->store->qty }} " class="qty_max">
-                                        <input type="hidden" value="{{ $product->id }} " name="product_id_hidden" class="prod_id">
-                                        <button class="minus-btn">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
-                                            </svg>
-                                        </button>
-                                        <input type="text" class="amount qly_input" name="amount" value="1">
-                                        <button class="plus-btn">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M12 4.5v15m7.5-7.5h-15" />
-                                            </svg>
-                                        </button>
-                                    </div>
+
+                        <div class="row my-3 d-flex justify-content-between">
+                            <div class="col-md-6 col-6">
+                                <div class="buy-amount">
+                                    <input type="hidden" value="{{ $product->store->qty }} " class="qty_max">
+                                    <input type="hidden" value="{{ $product->id }} " name="product_id_hidden"
+                                        class="prod_id">
+                                    <button class="minus-btn">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
+                                        </svg>
+                                    </button>
+                                    <input type="text" class="amount qly_input" name="amount" value="1">
+                                    <button class="plus-btn">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M12 4.5v15m7.5-7.5h-15" />
+                                        </svg>
+                                    </button>
                                 </div>
-                                <div class="col-md-6 col-2 ">
-                                    <div class="add-cart">
-                                        <button class="action-cart addToCartBtn" type="submit" title="Thêm vào giỏ" data-abc="true">
+                            </div>
+                            <div class="col-md-6 col-2 ">
+                                <div class="add-cart">
+                                    @if ($product->store->qty > 0)
+                                        <button class="action-cart addToCartBtn" type="submit" title="Thêm vào giỏ"
+                                            data-abc="true">
                                             <i class="fa fa-shopping-cart"></i>
                                         </button>
+                                    @endif
 
-                                    </div>
 
                                 </div>
 
                             </div>
-                        
+
+                        </div>
+
 
                         <!-- 3 -->
                         <div class="row mt-3 border-top border-bottom ">
@@ -260,13 +265,17 @@
                                 <span>
                                     Tình trạng:
                                 </span>
-                                <span class="cate-name">
-                                    @if ($product->store->qty > 0)
+
+                                @if ($product->store->qty > 0)
+                                    <span class="cate-name">
                                         Còn hàng
-                                    @else
-                                        Hết hàng
-                                    @endif
-                                </span>
+                                    </span>
+                                @else
+                                   <span class="text-danger">
+                                     Hết hàng
+                                   </span>
+                                @endif
+
                             </div>
                         </div>
                         <!-- 4 -->
@@ -359,7 +368,7 @@
 
                 </div>
                 <div class="row mt-3">
-                    <div class="Featured-products row bg-product-item mt-3">
+                    <div class="Featured-products row bg-product-item mt-3" id="menuWrapper">
                         <div class="col-md-12  mt-2 pe-0">
                             <div class="row">
                                 <nav class="pe-0">
@@ -497,7 +506,6 @@
         //         num.innerText = a;
         //     }
         // });
-       
     </script>
 
 

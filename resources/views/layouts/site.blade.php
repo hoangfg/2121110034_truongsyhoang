@@ -31,9 +31,9 @@
 
 </head>
 
-<body>
+<body class=" bg-white">
 
-    <header class="header bg-white">
+    <header class="header">
         <div class="container ">
             <div class="row py-3 border-2 border-bottom m-0">
                 <!-- logo -->
@@ -63,6 +63,7 @@
                         <a type="button" href="{{ route('site.cart') }}" class="btn bg-success py-3 cart-item">
                             <i class="fa-solid fa-cart-shopping"></i>
                             <span class="">Giỏ hàng</span>
+                            <span class="badge badge-fill bg-danger cart-count"></span>
 
                         </a>
                         {{-- <button type="button" class="btn bg-success py-3 cart-item" data-bs-toggle="modal"
@@ -119,7 +120,7 @@
                             Để nhận được những thông báo ưu đãi từ dịch vụ của chúng tôi!
                         </span>
                     </div>
-                    <div class="col-md-7 col-12 form ">
+                    <div class="col-md-7 col-12 form_footer ">
                         <form action="#">
                             <div class="form-fields">
                                 <input class="form-email" type="email" name="EMAIL" placeholder="Enter your email"
@@ -535,8 +536,16 @@
                 this.parentElement.classList.add('is-active')
             })
         })
+        // 
+
 
         $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            loadcart();
             // nut so luong
             $(".minus-btn").click(function(e) {
                 e.preventDefault();
@@ -560,7 +569,8 @@
                 }
             });
             $(".amount").on("input", function() {
-                var qty_max = $(this).closest(".buy-amount").find(".qty_max").val();
+                var
+                    qty_max = $(this).closest(".buy-amount").find(".qty_max").val();
                 var value = parseInt($(this).val());
                 value = isNaN(value) || value == 0 ? 1 : value;
                 value = value > qty_max ? qty_max : value;
@@ -573,11 +583,7 @@
                 var product_id = $(this).closest('.product-data').find('.prod_id').val();
                 var product_qty = $(this).closest('.product-data').find('.qly_input').val();
                 // alert(product_id);
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
+
                 $.ajax({
                     type: "POST",
                     url: "add-to-cart",
@@ -588,6 +594,7 @@
 
                     success: function(response) {
                         swal(response.status);
+                        loadcart();
                         // alert(response.status);
                     }
                 });
@@ -597,11 +604,6 @@
                 e.preventDefault();
                 var product_id = $(this).closest('.product_data').find('.prod_id').val();
 
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
                 $.ajax({
                     type: "POST",
                     url: "delete-cart-item",
@@ -611,9 +613,10 @@
                     },
 
                     success: function(response) {
-                          window.location.reload();
+                        window.location.reload();
                         swal("", response.status, "success");
-                        //  alert(response.status);
+
+                        // alert(response.status);
                     }
                 });
             });
@@ -626,11 +629,7 @@
                     'product_id': product_id,
                     'product_qty': product_qty,
                 }
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
+
                 $.ajax({
                     type: "POST",
                     url: "update-cart",
@@ -639,10 +638,38 @@
                     success: function(response) {
                         window.location.reload();
                         swal("", response.status, "success");
-                        //  alert(response.status);
+                        // alert(response.status);
                     }
                 });
             });
+            // checkout
+
+            $('.placeOrderBtn').click(function() {
+                $.ajax({
+                    url: 'place-order',
+                    method: 'post',
+
+                    success: function(response) {
+                        window.location.reload();
+                        swal("", response.status, "success");
+                    },
+
+                });
+            });
+
+
+            function loadcart() {
+                $.ajax({
+                    method: "GET",
+                    url: "load-cart-data",
+
+                    success: function(response) {
+                        $('.cart-count').html('');
+                        $('.cart-count').html(response.count);
+                        // console.log(response.count)
+                    }
+                });
+            }
         });
     </script>
 

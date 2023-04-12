@@ -21,16 +21,16 @@
             <div class="large-12 columns">
                 <div class="owl-carousel owl-carousel_flash_sale  owl-theme ">
                     @foreach ($list_product as $product)
-                        <div class="item  p-0 bg-none">
+                        <div class="item  p-0 bg-none  product-data">
                             <div class="card ">
                                 <div class="row g-0">
                                     <div class="col-md-5 col-6 item-img ">
-                                        <a href="{{ route('slug.home',['slug' => $product->slug]) }}">
-                                            <img src="{{ asset('images/product/'.$product->images[0]->image) }}"
+                                        <a href="{{ route('slug.home', ['slug' => $product->slug]) }}">
+                                            <img src="{{ asset('images/product/' . $product->images[0]->image) }}"
                                                 class="card-img-top img-product_flash img-fluid py-auto" alt="...">
                                         </a>
                                         <div class="product-sale">
-                                           <div class="sale-off">
+                                            <div class="sale-off">
                                                 -{{ (int) ((($product->price_buy - $product->sale->price_sale) / $product->price_buy) * 100) }}%
                                             </div>
                                         </div>
@@ -38,7 +38,8 @@
                                     <div class="col-md-6 col-6">
                                         <div class="card-body ">
                                             <h3 class="mt-0 text-line-2 fs-1 custom-title ">
-                                                <a href="{{ route('slug.home',['slug' => $product->slug]) }}">{{ $product->name }}</a>
+                                                <a
+                                                    href="{{ route('slug.home', ['slug' => $product->slug]) }}">{{ $product->name }}</a>
                                             </h3>
                                             <div class="row item-price">
                                                 <div class="col-md-6 col-6 ">
@@ -57,18 +58,30 @@
                                             </div>
                                             <div class="card-item">
                                                 <div class="row ">
-                                                    <div class="col-md-6 col-8">
-                                                        <a class="cart-item__style">Buy product</a>
-                                                    </div>
-                                                    <div class="col-md-6 col-4">
-                                                        <a class="cart-item__action active-1" title="Xem" href="{{ route('slug.home',['slug' => $product->slug]) }}"
+
+
+                                                    <div class="col-md-6 col-12">
+                                                        <a class="cart-item__action active-1" title="Xem"
+                                                            href="{{ route('slug.home', ['slug' => $product->slug]) }}"
                                                             data-abc="true">
                                                             <i class="fa-regular fa-eye"></i>
                                                         </a>
-                                                        <a class="cart-item__action" title="Thêm vào giỏ" href="#"
-                                                            data-abc="true">
-                                                            <i class="fa fa-shopping-cart"></i>
-                                                        </a>
+                                                        <input type="hidden" class="amount qly_input" name="amount"
+                                                            value="1">
+                                                        <input type="hidden" value="{{ $product->id }} "
+                                                            name="product_id_hidden" class="prod_id">
+                                                        @if ($product->store->qty > 0)
+                                                            <a class="cart-item__action addToCartBtn" type="submit"
+                                                                title="Thêm vào giỏ" data-abc="true">
+                                                                <i class="fa fa-shopping-cart"></i>
+                                                            </a>
+                                                        @else
+                                                            <a class="cart-item__action no-product"
+                                                                title="Hết hàng" data-abc="true">
+                                                                Hết hàng
+                                                            </a>
+                                                        @endif
+
                                                     </div>
                                                 </div>
                                             </div>

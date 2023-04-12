@@ -4,6 +4,9 @@
 @section('header')
 @endsection
 @section('content')
+    @php
+        $total = 0;
+    @endphp
     <div class="container modal-body">
         @includeIf('backend.messageAlert', ['some' => 'data'])
         <div class="row my-3 ">
@@ -30,7 +33,7 @@
                     <div class="row mx-auto ">
 
 
-                        <table class="table table-bordered" id="myTable">
+                        <table class="table table-bordered">
                             <h1 class="text-info my-3"> Giỏ hàng</h1>
                             <thead>
                                 <tr>
@@ -47,9 +50,7 @@
                             </thead>
                             <tbody>
                                 @if (count($data) > 0)
-                                    @php
-                                        $total = 0;
-                                    @endphp
+
                                     @foreach ($data as $row)
                                         <tr class="product_data">
 
@@ -80,37 +81,49 @@
                                             </td>
 
                                             <td class="text-center">
-                                                <div class="buy-amount " style="justify-content: center">
-                                                    <input type="hidden" value="{{ $row->products->id }} "
-                                                        value="{{ $row->products->id }}" class="prod_id">
-                                                    <input type="hidden" value="{{ $row->products->store->qty }} "
-                                                        class="qty_max">
-                                                    <button class="minus-btn changeQty">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                                            class="w-6 h-6">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M19.5 12h-15" />
-                                                        </svg>
-                                                    </button>
-                                                    <input type="text" class="amount" name="amount"
-                                                        value=" {{ $row->product_qty }}">
-                                                    <button class="plus-btn changeQty">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                                            class="w-6 h-6">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M12 4.5v15m7.5-7.5h-15" />
-                                                        </svg>
-                                                    </button>
-                                                </div>
+                                                @if ($row->products->store->qty >= $row->product_qty)
+                                                    <div class="buy-amount " style="justify-content: center">
+                                                        <input type="hidden" value="{{ $row->products->id }} "
+                                                            value="{{ $row->products->id }}" class="prod_id">
+                                                        <input type="hidden" value="{{ $row->products->store->qty }} "
+                                                            class="qty_max">
+                                                        <button class="minus-btn changeQty">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                                class="w-6 h-6">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    d="M19.5 12h-15" />
+                                                            </svg>
+                                                        </button>
+                                                        <input type="text" class="amount" name="amount"
+                                                            value=" {{ $row->product_qty }}">
+                                                        <button class="plus-btn changeQty">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                                class="w-6 h-6">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    d="M12 4.5v15m7.5-7.5h-15" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                    @php
+                                                        $total += $row->product_qty * ($row->products->sale && $row->products->sale->date_begin <= now() && $row->products->sale->date_end >= now() ? $row->products->sale->price_sale : $row->products->price_buy);
+                                                    @endphp
+                                                @else
+                                                    <span class="text-danger">
+                                                        Hết hàng
+                                                    </span>
+                                                @endif
+
 
                                             </td>
                                             <td class="text-center">
-                                                @if ($row->products->sale && $row->products->sale->date_begin <= now() && $row->products->sale->date_end >= now())
-                                                    {{ number_format($row->product_qty * $row->products->sale->price_sale) }}đ
-                                                @else
-                                                    {{ number_format($row->product_qty * $row->products->price_buy) }}đ
+                                                @if ($row->products->store->qty >= $row->product_qty)
+                                                    @if ($row->products->sale && $row->products->sale->date_begin <= now() && $row->products->sale->date_end >= now())
+                                                        {{ number_format($row->product_qty * $row->products->sale->price_sale) }}đ
+                                                    @else
+                                                        {{ number_format($row->product_qty * $row->products->price_buy) }}đ
+                                                    @endif
                                                 @endif
 
                                             </td>
@@ -121,25 +134,25 @@
                                             </td>
 
 
-                                            @php
-                                                $total += $row->product_qty * ($row->products->sale && $row->products->sale->date_begin <= now() && $row->products->sale->date_end >= now() ? $row->products->sale->price_sale : $row->products->price_buy);
-                                            @endphp
+
 
 
 
                                         </tr>
                                     @endforeach
                                 @else
+                                    <img src="https://anphapetrol.store/img/empty-cart__G35z9.png" alt="">
+                                @endif
                             </tbody>
-                            <img src="https://anphapetrol.store/img/empty-cart__G35z9.png" alt="">
-                            @endif
-                            <td colspan="7">
-                                <h5 class="fs-3 my-2">Tổng tiền: <strong class="text-danger">{{ number_format($total) }}
-                                        đ</strong></h5>
 
-                            </td>
 
                         </table>
+                        <div class="cart my-2">
+                            <h5 class="fs-3 " style="display: inline-block">Tổng tiền: <strong
+                                    class="text-danger">{{ number_format($total) }}đ</strong></h5>
+                            <a href="{{ url('check-out') }}" class="btn btn-outline-success float-end">CheckOut</a>
+                        </div>
+
                     </div>
                 </div>
             </section>

@@ -27,7 +27,7 @@ class StoreBrandRequest extends FormRequest
             'name' => 'required|unique:brand|max:255|min:5|string',
             'metakey' => 'required|min:5',
             'metadesc' => 'required|min:5',
-            'image' => 'image|mimes:png,jpg,jpeg|max:2048'  // Max file size is 2MB (2048KB)
+            'image' => 'image|mimes:png,jpg,jpeg,webp|max:2048'  // Max file size is 2MB (2048KB)
         ];
     }
 

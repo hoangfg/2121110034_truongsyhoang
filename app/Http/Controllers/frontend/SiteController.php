@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\frontend;
 
-use App\Http\Controllers\Controller;
-use App\Models\Category;
-use Illuminate\Http\Request;
 use App\Models\Link;
-use App\Models\Product;
 use App\Models\Post;
 use App\Models\Brand;
+use App\Models\Topic;
 use App\Models\Comment;
+use App\Models\Product;
+use App\Models\Category;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class SiteController extends Controller
 {
@@ -70,6 +71,7 @@ class SiteController extends Controller
     {
         return view('frontend.product');
     }
+
 
     #category
     private function ProductCategory($slug)
@@ -157,7 +159,7 @@ class SiteController extends Controller
             $query->whereRaw('? between date_begin and date_end', [now()]);
         }])->find($product->id);
 
-       
+
 
         $list_comment = Comment::with(['product', 'user'])
             ->where('type', '=', 'product')
@@ -211,20 +213,89 @@ class SiteController extends Controller
         $max_price_range = $max_price + 100000;
         return view('frontend.product-brand', compact('brand', 'list_product', 'min_price', 'max_price', 'max_price_range'));
     }
+
+    #pqge - all
+    public function page()
+    {
+        $title = 'Tất cả bài viết';
+        $list = Post::where([['status', '=', '1'], ['type', 'page']])->get();
+        // dd($list->toArray());
+        return view('frontend.page', compact('list', 'title'));
+    }
+    #post - all
+    public function post()
+    {
+        $title = 'Tất cả bài viết';
+        if (isset($_GET['sort_by'])) {
+            $sort_by = $_GET['sort_by'];
+            if ($sort_by == 'az') {
+                $list = Post::where([['status', '=', '1'], ['type', 'post']])->orderBy('title', 'ASC')->paginate(12)->appends(request()->query());
+            }
+            if ($sort_by == 'za') {
+                $list = Post::where([['status', '=', '1'], ['type', 'post']])->orderBy('title', 'DESC')->paginate(12)->appends(request()->query());
+            }
+            if ($sort_by == 'OldToNew') {
+                $list = Post::where([['status', '=', '1'], ['type', 'post']])->orderBy('created_at', 'ASC')->paginate(12)->appends(request()->query());
+            }
+            if ($sort_by == 'NewToOld') {
+                $list = Post::where([['status', '=', '1'], ['type', 'post']])->orderBy('created_at', 'DESC')->paginate(12)->appends(request()->query());
+            }
+        } else {
+            $list = Post::where([['status', '=', '1'], ['type', 'post']])->orderBy('created_at', 'DESC')->paginate(12);
+        }
+        // dd($list->toArray());
+        return view('frontend.post', compact('list', 'title'));
+    }
     #Topic
     private function PostTopic($slug)
     {
-        return view('frontend.post-topic');
+        $topic = Topic::where([['slug', '=', $slug], ['status', '=', '1']])->first();
+
+        $listtopic = array();
+        array_push($listtopic, $topic->id);
+        $list_topic1 = Topic::where([['parent_id', '=', $topic->id], ['status', '=', '1']])->orderBy('sort_order', 'asc')->get();
+        if (count($list_topic1) != 0) {
+            foreach ($list_topic1 as $topic1) {
+                array_push($listtopic, $topic1->id);
+                $list_topic2 = Topic::where([['parent_id', '=', $topic1->id], ['status', '=', '1']])->orderBy('sort_order', 'asc')->get();
+                if (count($list_topic2) != 0) {
+                    foreach ($list_topic2 as $topic2) {
+                        array_push($listtopic, $topic2->id);
+                    }
+                }
+            }
+        }
+        if (isset($_GET['sort_by'])) {
+            $sort_by = $_GET['sort_by'];
+            if ($sort_by == 'az') {
+                $list = Post::where([['status', '=', '1'], ['type', 'post']])->whereIn('topic_id', $listtopic)->orderBy('title', 'ASC')->paginate(12)->appends(request()->query());
+            }
+            if ($sort_by == 'za') {
+                $list = Post::where([['status', '=', '1'], ['type', 'post']])->whereIn('topic_id', $listtopic)->orderBy('title', 'DESC')->paginate(12)->appends(request()->query());
+            }
+            if ($sort_by == 'OldToNew') {
+                $list = Post::where([['status', '=', '1'], ['type', 'post']])->whereIn('topic_id', $listtopic)->orderBy('created_at', 'ASC')->paginate(12)->appends(request()->query());
+            }
+            if ($sort_by == 'NewToOld') {
+                $list = Post::where([['status', '=', '1'], ['type', 'post']])->whereIn('topic_id', $listtopic)->orderBy('created_at', 'DESC')->paginate(12)->appends(request()->query());
+            }
+        } else {
+            $list = Post::where([['status', '=', '1'], ['type', 'post']])->whereIn('topic_id', $listtopic)->orderBy('created_at', 'DESC')->paginate(12);
+        }
+        return view('frontend.post-topic', compact('list', 'topic'));
     }
     #page
     private function PostPage($slug)
     {
+
         return view('frontend.post-page');
     }
     #Detail
     private function PostDetail($slug)
     {
-        return view('frontend.post-detail');
+        $post = Post::where('id',$slug->id)->first();
+        // dd($post->toArray());
+        return view('frontend.post-detail', compact('post'));
     }
     #Error_404
     private function Error_404($slug)
