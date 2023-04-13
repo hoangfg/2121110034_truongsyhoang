@@ -1,7 +1,7 @@
                     <div class="row title border-1 border-dark border-bottom mb-3">
                         <div class="col-md-10 col-8 ">
                             <h2 class="custom-title d-inline-block "><a class="text-decoration-none btn-tab "
-                                    href="index.php?option=product">Sách mới</a></h2>
+                                    href="{{ route('site.product') }}">Sách mới</a></h2>
 
                         </div>
                         <div class="col-md-2 col-4 text-end owl-carousel-parent__btn">

@@ -34,6 +34,9 @@
                                     <x-list-category />
                                     <x-list-brand />
                                     <x-list-topic />
+                                   
+                                    <x-list-post-topic :rowpost="$list" />
+
 
                                 </div>
                             </div>
@@ -52,26 +55,38 @@
                     </div>
 
                 </div>
-                {{-- <div class="row mt-3">
-                    <div class="Featured-products row bg-product-item mt-3" id="menuWrapper">
+                <div class="row mt-3">
+                    <nav>
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
+                                data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
+                                aria-selected="true">
+                                <h2 class="fs-5">BÌNH LUẬN</h2>
+                            </button>
+
+                        </div>
+                    </nav>
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab"
+                            tabindex="0">
+                            <div class="card card-body">
+
+                                @includeIf('frontend.comment', ['some' => 'data'])
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {{-- <div class="Featured-products row bg-product-item mt-3" id="menuWrapper">
                         <div class="col-md-12  mt-2 pe-0">
                             <div class="row">
                                 <nav class="pe-0">
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
-                                            data-bs-target="#nav-home" type="button" role="tab"
-                                            aria-controls="nav-home" aria-selected="true">
-                                            <h2 class="fs-5">MÔ TẢ SẢN PHẨM</h2>
-                                        </button>
-                                        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
-                                            data-bs-target="#nav-profile" type="button" role="tab"
-                                            aria-controls="nav-profile" aria-selected="false">
-                                            <h2 class="fs-5">Thông Tin</h2>
-                                        </button>
-                                        <button class="nav-link" id="nav-comment-tab" data-bs-toggle="tab"
+
+                                        <button class="nav-link  " id="nav-comment-tab_1" data-bs-toggle="tab"
                                             data-bs-target="#nav-comment" type="button" role="tab"
                                             aria-controls="nav-comment" aria-selected="false">
-                                            <h2 class="fs-5">BÌNH LUẬN</h2>
+
                                         </button>
                                     </div>
                                 </nav>
@@ -80,28 +95,11 @@
 
                         <div class="col-md-12 col-12 pe-0">
                             <div class="row tab-content " id="nav-tabContent">
-                                <div class="tab-pane fade show active pe-0 " id="nav-home" role="tabpanel"
-                                    aria-labelledby="nav-home-tab" tabindex="0">
-                                    <div class="card card-body">
-                                        <h1>{{ $product->name }}</h1>
-                                        <div>
-                                            {!! $product->metadesc !!}
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- end-MÔ TẢ SẢN PHẨM -->
-                                <div class="tab-pane fade pe-0" id="nav-profile" role="tabpanel"
-                                    aria-labelledby="nav-profile-tab" tabindex="0">
-                                    <div class="card card-body">
-                                        {!! $product->detail !!}
-                                    </div>
-                                </div>
+
                                 <!-- end Thông Tin Chi Tiết-->
-                                <div class="tab-pane fade pe-0" id="nav-comment" role="tabpanel"
+                                <div class="tab-pane fade pe-0 " id="nav-comment" role="tabpanel"
                                     aria-labelledby="nav-comment-tab" tabindex="0">
-                                    <div class="card card-body">
-                                        @includeIf('frontend.comment', ['some' => 'data'])
-                                    </div>
+
                                 </div>
                                 <!-- end Thông Tin Chi Tiết-->
                             </div>
@@ -111,8 +109,8 @@
 
 
 
-                    </div>
-                </div> --}}
+                    </div> --}}
+                </div>
             </div>
         </div>
 

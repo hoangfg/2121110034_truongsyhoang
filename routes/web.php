@@ -23,14 +23,16 @@ use App\Http\Controllers\backend\CommentController;
 use App\Http\Controllers\frontend\SiteLoginController;
 use App\Http\Controllers\frontend\CartController;
 use App\Http\Controllers\frontend\CheckOutController;
+use App\Http\Controllers\frontend\SiteContactController;
 use App\Models\Contact;
 
 // trang người dùng
 Route::get('/', [SiteController::class, 'index'])->name('site.home');
 Route::get('product', [SiteController::class, 'product'])->name('site.product');
+Route::get('product-sale', [SiteController::class, 'productSale'])->name('site.product-sale');
 Route::get('post', [SiteController::class, 'post'])->name('site.post');
 Route::get('page', [SiteController::class, 'page'])->name('site.page');
-
+Route::get('contact', [SiteContactController::class, 'sitecontact'])->name('site.contact');
 
 Route::post('comment', [CommentController::class, 'store'])->name('comment.store');
 Route::post('reply', [CommentController::class, 'reply'])->name('comment.reply');
@@ -51,6 +53,9 @@ Route::post('place-order', [CheckOutController::class, 'placeorder']);
 Route::post('add-to-cart', [CartController::class, 'addcart']);
 Route::post('delete-cart-item', [CartController::class, 'deletecart']);
 Route::post('update-cart', [CartController::class, 'updatecart']);
+
+
+Route::post('contact-admin', [SiteContactController::class, 'contactadmin']);
 
 
 Route::get('profile', [SiteLoginController::class, 'profile'])->name('site.profile');

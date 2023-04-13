@@ -9,7 +9,7 @@
                      <div class="d-flex flex-column justify-content-start ml-2">
                          <span class="d-block font-weight-bold name">{{ $item1->user->name }}</span>
                          <span class="date text-black-50">
-                             {{ \Carbon\Carbon::parse($item1->user->created_at)->format('H:i:s d-m-Y') }}
+                             {{ ($item1->created_at)->format('H:i:s d-m-Y') }}
                          </span>
                      </div>
                  </div>
@@ -38,6 +38,7 @@
                  <input type="hidden" name="product_id" value="{{ $item1->table_id }}">
                  <input type="hidden" name="parent_id" value="{{ $item1->parent_id }}">
                  <input type="hidden" name="reply_id" value="{{ $item1->user_id }}">
+                 <input type="hidden" name="type" value="{{ $item1->type }}">
                  @if ($errors->has('body_1'))
                      <div class="text-danger">
                          {{ $errors->first('body_1') }}

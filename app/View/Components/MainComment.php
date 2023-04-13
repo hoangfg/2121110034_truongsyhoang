@@ -22,9 +22,9 @@ class MainComment extends Component
     {
         $item = $this->item;
         $args = [
-           ['parent_id','=', $item->id],['type', '=', 'product'], ['table_id', '=', $item->table_id]
+           ['parent_id','=', $item->id],['type', '=', $item->type], ['table_id', '=', $item->table_id]
         ];
-        $list_comment_1 = Comment::with(['product', 'user'])
+        $list_comment_1 = Comment::with(['product', 'user', 'post'])
             ->where($args)
             ->orderBy('created_at', 'ASC')
             ->paginate(7);

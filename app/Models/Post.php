@@ -22,4 +22,8 @@ class Post extends Model
     {
         return $this->belongsTo(Topic::class, 'topic_id');
     }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

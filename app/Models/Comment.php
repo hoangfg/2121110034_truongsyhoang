@@ -17,6 +17,10 @@ class Comment extends Model
     {
         return $this->belongsTo(Product::class, 'table_id');
     }
+    public function post()
+    {
+        return $this->belongsTo(Post::class, 'table_id');
+    }
     public function replies()
     {
         return $this->hasMany(Comment::class, 'parent_id', 'id')->with('replies');

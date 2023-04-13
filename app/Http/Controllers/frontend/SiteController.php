@@ -9,6 +9,7 @@ use App\Models\Topic;
 use App\Models\Comment;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\ProductSale;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -69,9 +70,99 @@ class SiteController extends Controller
     #product - all
     public function product()
     {
-        return view('frontend.product');
+        $title = 'Tất cả sản phẩm';
+        if (isset($_GET['sort_by'])) {
+            $sort_by = $_GET['sort_by'];
+            if ($sort_by == 'az') {
+                $list_product = Product::with(['sale' => function ($query) {
+                    $query->whereRaw('? between date_begin and date_end', [now()]);
+                }])->where('status', '=', '1')->orderBy('name', 'ASC')->paginate(12)->appends(request()->query());
+            }
+            if ($sort_by == 'za') {
+                $list_product = Product::with(['sale' => function ($query) {
+                    $query->whereRaw('? between date_begin and date_end', [now()]);
+                }])->where('status', '=', '1')->orderBy('name', 'DESC')->paginate(12)->appends(request()->query());
+            }
+            if ($sort_by == 'LowToHigh') {
+                $list_product = Product::with(['sale' => function ($query) {
+                    $query->whereRaw('? between date_begin and date_end', [now()]);
+                }])->where('status', '=', '1')->orderBy('price_buy', 'ASC')->paginate(12)->appends(request()->query());
+            }
+            if ($sort_by == 'HighToLow') {
+                $list_product = Product::with(['sale' => function ($query) {
+                    $query->whereRaw('? between date_begin and date_end', [now()]);
+                }])->where('status', '=', '1')->orderBy('price_buy', 'DESC')->paginate(12)->appends(request()->query());
+            }
+        } else if (isset($_GET['start_price']) && $_GET['end_price']) {
+            $min_price = $_GET['start_price'];
+            $max_price = $_GET['end_price'];
+            $list_product = Product::with(['sale' => function ($query) {
+                $query->whereRaw('? between date_begin and date_end', [now()]);
+            }])->where('status', '=', '1')->whereBetween('price_buy', [$min_price, $max_price])->orderBy('price_buy', 'ASC')->paginate(12)->appends(request()->query());
+        } else {
+            $list_product = Product::with(['sale' => function ($query) {
+                $query->whereRaw('? between date_begin and date_end', [now()]);
+            }])->where('status', '=', '1')->orderBy('created_at', 'desc')->paginate(12);
+        }
+        $min_price = Product::min('price_buy');
+        $max_price = Product::max('price_buy');
+        $max_price_range = $max_price + 100000;
+        return view('frontend.product', compact('title', 'list_product', 'min_price', 'max_price', 'max_price_range'));
     }
+    // sale
+    public function productSale()
+    {
+        if (isset($_GET['sort_by'])) {
+            $sort_by = $_GET['sort_by'];
+            if ($sort_by == 'az') {
+                $list_product = Product::with(['sale'])
+                    ->whereHas('sale', function ($query) {
+                        $query->whereNotNull('price_sale')->whereRaw('? between date_begin and date_end', [now()]);
+                    })->where('status', '=', '1')->orderBy('name', 'ASC')->paginate(12)->appends(request()->query());
+            }
+            if ($sort_by == 'za') {
+                $list_product = Product::with(['sale'])
+                    ->whereHas('sale', function ($query) {
+                        $query->whereNotNull('price_sale')->whereRaw('? between date_begin and date_end', [now()]);
+                    })->where('status', '=', '1')->orderBy('name', 'DESC')->paginate(12)->appends(request()->query());
+            }
+            if ($sort_by == 'LowToHigh') {
+                $list_product = Product::with(['sale'])
+                    ->whereHas('sale', function ($query) {
+                        $query->whereNotNull('price_sale')->whereRaw('? between date_begin and date_end', [now()]);
+                    })->where('status', '=', '1')->orderBy('price_buy', 'ASC')->paginate(12)->appends(request()->query());
+            }
+            if ($sort_by == 'HighToLow') {
+                $list_product = Product::with(['sale'])
+                    ->whereHas('sale', function ($query) {
+                        $query->whereNotNull('price_sale')->whereRaw('? between date_begin and date_end', [now()]);
+                    })->where('status', '=', '1')->paginate(12)->appends(request()->query());
+            }
+        } else if (isset($_GET['start_price']) && $_GET['end_price']) {
+            $min_price = $_GET['start_price'];
+            $max_price = $_GET['end_price'];
+            $list_product = Product::with(['sale'])
+                ->whereHas('sale', function ($query) {
+                    $query->whereNotNull('price_sale')->whereRaw('? between date_begin and date_end', [now()]);
+                })
+                ->where('status', '=', '1')->orderBy('created_at', 'desc')
+                ->paginate(12);
+        } else {
+            $list_product = Product::with(['sale'])
+                ->whereHas('sale', function ($query) {
+                    $query->whereNotNull('price_sale')->whereRaw('? between date_begin and date_end', [now()]);
+                })
+                ->where('status', '=', '1')->orderBy('created_at', 'desc')
+                ->paginate(12);
+        }
 
+        $title = 'Sản phẩm khuyến mãi';
+      
+        $min_price = ProductSale::min('price_sale');
+        $max_price = ProductSale::max('price_sale');
+        $max_price_range = $max_price + 100000;
+        return view('frontend.product-sale', compact('title', 'list_product', 'min_price', 'max_price', 'max_price_range'));
+    }
 
     #category
     private function ProductCategory($slug)
@@ -160,6 +251,7 @@ class SiteController extends Controller
         }])->find($product->id);
 
 
+        $type = $product->type;
 
         $list_comment = Comment::with(['product', 'user'])
             ->where('type', '=', 'product')
@@ -168,7 +260,7 @@ class SiteController extends Controller
             ->orderBy('created_at', 'DESC')
             ->paginate(7);
 
-        return view('frontend.product-detail', compact('list_comment',  'product', 'list_product', 'product_sale'));
+        return view('frontend.product-detail', compact('list_comment',  'product', 'list_product', 'product_sale', 'type'));
     }
     #Brand
     private function ProductBrand($slug)
@@ -291,11 +383,20 @@ class SiteController extends Controller
         return view('frontend.post-page');
     }
     #Detail
-    private function PostDetail($slug)
+    private function PostDetail($post)
     {
-        $post = Post::where('id',$slug->id)->first();
+        // $post = Post::where('id',$slug->id)->first();
         // dd($post->toArray());
-        return view('frontend.post-detail', compact('post'));
+        $list = Post::where([['status', 1], ['id', '<>', $post->id], ['topic_id', '=', $post->topic_id]])->take(6)->get();
+        // dd($list);
+        $list_comment = Comment::with(['post', 'user'])
+            ->where('type', '=', 'post')
+            ->where('table_id', '=', $post->id)
+            ->where('parent_id', '=', 0)
+            ->orderBy('created_at', 'DESC')
+            ->paginate(7);
+        $type = $post->type;
+        return view('frontend.post-detail', compact('post', 'type', 'list_comment', 'list'));
     }
     #Error_404
     private function Error_404($slug)

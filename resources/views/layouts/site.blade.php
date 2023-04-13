@@ -330,22 +330,7 @@
 
                 <div class="col-md-9 col-12 mx-auto">
                     <ul class="nav mt-3 mt-md-0">
-                        <li class="nav-item mx-auto">
-                            <a class="nav-link active " aria-current="page" href="#">Trang chủ
-                            </a>
-                        </li>
-                        <li class="nav-item mx-auto">
-                            <a class="nav-link " href="#">Giới thiệu</a>
-                        </li>
-                        <li class="nav-item mx-auto">
-                            <a class="nav-link " href="#">Sản phẩm</a>
-                        </li>
-                        <li class="nav-item mx-auto">
-                            <a class="nav-link " href="#">Tin tức</a>
-                        </li>
-                        <li class="nav-item mx-auto">
-                            <a class="nav-link " href="#">Liên hệ</a>
-                        </li>
+                        <x-footer-menu />
                     </ul>
                 </div>
             </div>
@@ -656,8 +641,9 @@
 
                 });
             });
+            // contact
 
-
+            // loadcart
             function loadcart() {
                 $.ajax({
                     method: "GET",
@@ -689,7 +675,7 @@
     <!-- vendors -->
     <script src="{{ asset('assets/vendors/highlight.js') }}"></script>
     <script src="{{ asset('assets/js/app.js') }}"></script>
-    <script src="{{ asset('js/sticky.js') }}"></script>
+    {{-- <script src="{{ asset('js/sticky.js') }}"></script> --}}
     @yield('footer')
 </body>
 

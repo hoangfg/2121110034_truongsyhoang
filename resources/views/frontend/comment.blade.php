@@ -1,16 +1,21 @@
 <div class="d-flex justify-content-center row">
     <div class="col-md-12">
-        @if (Auth::guard('users')->check() || Auth::guard('admin')->check())
+        @if (Auth::guard('users')->check())
             <form action="{{ route('comment.store') }}" method="POST" class="my-3">
                 @csrf
-                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                @if ($type == 'product')
+                    <input type="hidden" name="table_id" value="{{ $product->id }}">
+                @else
+                    <input type="hidden" name="table_id" value="{{ $post->id }}">
+                @endif
+                <input type="hidden" name="type" value="{{ $type }}">
                 <div class="mt-2 row d-flex justify-content-between">
                     <h3 class="col-md-6 col-6 m-0">New Comment</h3>
                     <button class="btn btn-outline-primary btn-sm shadow-none col-md-1 col-2 me-3" type="submit"
                         name="NEW">Submit</button>
                 </div>
                 <div class="d-flex flex-row align-items-start my-2">
-                    @if (Auth::guard('admin')->check())
+                    @if (Auth::guard('users')->check())
                         <img class="rounded-circle me-2"
                             src="{{ asset('images/user/' . Auth::guard('admin')->user()->image) }}" width="40">
                     @else
@@ -27,8 +32,9 @@
                 @endif
             </form>
         @else
-            <h3 class="col-md-12 col-12 m-0 text-danger text-center my-3 border-bottom">Vui lòng đăng nhập để bình luận
-                và trả lời.</h3>
+            <h3 class="col-md-12 col-12 m-0  text-center my-3 border-bottom"><a class="text-danger" href="{{ route('site.getlogin') }}">Vui lòng đăng
+                    nhập để bình luận
+                    và trả lời.</a></h3>
         @endif
         <h3>{{ count($list_comment) }} Comments</h3>
         @if (count($list_comment) > 0)
@@ -43,7 +49,7 @@
                                 <div class="d-flex flex-column justify-content-start ml-2">
                                     <span class="d-block font-weight-bold name">{{ $item->user->name }}</span>
                                     <span class="date text-black-50">
-                                        {{ \Carbon\Carbon::parse($item->user->created_at)->format('H:i:s d-m-Y') }}
+                                        {{ $item->created_at->format('H:i:s d-m-Y') }}
                                     </span>
                                 </div>
                             </div>
@@ -76,6 +82,7 @@
                             <input type="hidden" name="product_id" value="{{ $item->table_id }}">
                             <input type="hidden" name="parent_id" value="{{ $item->id }}">
                             <input type="hidden" name="reply_id" value="{{ $item->user_id }}">
+                            <input type="hidden" name="type" value="{{ $item->type }}">
                             <div class="d-flex flex-row align-items-start"><img class="rounded-circle me-2"
                                     src="https://i.imgur.com/RpzrMR2.jpg" width="40">
                                 <textarea class="form-control ml-1 shadow-none textarea" name="body1"></textarea>

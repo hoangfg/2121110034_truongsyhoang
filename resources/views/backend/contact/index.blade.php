@@ -61,7 +61,7 @@
                                     <th class="col-md-1 col-sm-1 col-1 align-middle text-center">Trạng thái</th>
                                     <th class="col-md-2 col-sm-3 col-3 align-middle text-center">Tên người gửi</th>
                                     <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Tiêu đề liên hệ</th>
-                                    <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Nội dung liên hệ</th>
+                                    
                                     <th class="col-md-2 col-sm-2 col-2 align-middle text-center">Chức năng</th>
 
                                     <th class="col-md-1 col-sm-1 col-1 align-middle text-center">id</th>
@@ -89,9 +89,7 @@
                                     <td>
                                         <strong>{{ $contact->title }}</strong>
                                     </td>
-                                    <td>
-                                        {{ $contact->detail }}
-                                    </td>
+                                    
                                     <td class="text-center">
                                         <a href="{{ route('contact.edit', ['contact' => $contact->id]) }}"
                                             class="btn btn-sm btn-info" title="replay">
