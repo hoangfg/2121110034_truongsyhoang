@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title')</title>
 
     <!-- Google Font: Source Sans Pro -->
@@ -13,12 +14,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
 
     <!-- Theme style -->
-    <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.css">
     <script src="{{ asset('plugins/ckeditor/ckeditor.js') }}"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     @yield('header')
+    <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -220,10 +223,10 @@
             $('#checkAll').click(function() {
                 if ($(this).is(":checked")) {
                     $(".CheckItem").prop('checked', true);
-                    
+
                 } else {
-                   
-                     $(".CheckItem").prop('checked', false);
+
+                    $(".CheckItem").prop('checked', false);
                 }
             });
         });

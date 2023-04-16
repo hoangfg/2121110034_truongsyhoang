@@ -10,6 +10,7 @@
         href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;1,300;1,500&family=Roboto:wght@500;700&display=swap"
         rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('css/all.min.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet"
@@ -21,7 +22,7 @@
     <link rel="stylesheet" href="{{ asset('assets/owlcarousel/assets/owl.theme.default.min.css') }}">
     <!-- javascript -->
     <script src="{{ asset('assets/vendors/jquery.min.js') }}"></script>
-    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+
     <script src="{{ asset('assets/owlcarousel/owl.carousel.js') }}"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="{{ asset('css/login.css') }}" />

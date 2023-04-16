@@ -39,6 +39,7 @@
                                 </div>
 
                                 <div class="container">
+                                    for
                                     @if ($errors->has('image'))
                                         <div class="text-danger">
                                             {{ $errors->first('image') }}

@@ -78,12 +78,15 @@ Route::prefix('admin')->middleware('adminlogin')->group(function () {
     Route::resource('product', ProductController::class);
     Route::prefix('product')->group(function () {
         Route::get('status/{product}', [ProductController::class, 'status'])->name('product.status');
+        Route::get('image/{product}', [ProductController::class, 'image'])->name('product.image');
         Route::get('delete/{product}', [ProductController::class, 'delete'])->name('product.delete');
         Route::get('destroy/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
         Route::get('show/{product}', [ProductController::class, 'show'])->name('product.show');
         Route::get('restore/{product}', [ProductController::class, 'restore'])->name('product.restore');
         Route::post('deleteAll', [ProductController::class, 'deleteAll'])->name('product.deleteAll');
         Route::post('trashAll', [ProductController::class, 'trashAll'])->name('product.trashAll');
+        Route::post('imageDelete', [ProductController::class, 'imageDelete'])->name('product.imageDelete');
+        Route::post('imageUpload', [ProductController::class, 'imageUpload'])->name('product.imageUpload');
     });
     // brand
     route::get('brand/trash', [BrandController::class, 'trash'])->name('brand.trash')->where('trash', '[A-Za-x]+');

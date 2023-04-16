@@ -60,11 +60,11 @@
                                     data-target="#product_detail" type="button" role="tab"
                                     aria-controls="product_detail" aria-selected="true">mô tả sản phẩm</button>
                             </li>
-                            <li class="nav-item" role="presentation">
+                            {{-- <li class="nav-item" role="presentation">
                                 <button class="nav-link " id="product_image-tab" data-toggle="tab"
                                     data-target="#product_image" type="button" role="tab" aria-controls="product_image"
                                     aria-selected="true">Hình ảnh</button>
-                            </li>
+                            </li> --}}
 
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link " id="product_sale-tab" data-toggle="tab"
@@ -88,10 +88,10 @@
                                 role="tabpanel" aria-labelledby="product_detail-tab">
                                 @includeIf('backend.product.edit.tab_product_detail', ['some' => 'data'])
                             </div>
-                            <div class="tab-pane fade show  border-right border-bottom border-left p-3 " id="product_image"
+                            {{-- <div class="tab-pane fade show  border-right border-bottom border-left p-3 " id="product_image"
                                 role="tabpanel" aria-labelledby="product_image-tab">
                                 @includeIf('backend.product.edit.tab_product_image', ['some' => 'data'])
-                            </div>
+                            </div> --}}
                             <div class="tab-pane fade show  border-right border-bottom border-left p-3 "
                                 id="product_atribute" role="tabpanel" aria-labelledby="product_atribute-tab">
                                 @includeIf('backend.product.edit.tab_product_atribute', ['some' => 'data'])

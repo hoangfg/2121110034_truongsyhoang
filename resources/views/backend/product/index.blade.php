@@ -81,7 +81,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <img src="{{ asset('images/product/' . $product->image) }}" alt=""
+                                            <img src="{{ asset('images/product/' . $product->images[0]->image) }}" alt=""
                                                 class="w-100">
                                         </td>
                                         <td style="word-break: break-word;">{{ $product->name }}</td>
@@ -108,7 +108,7 @@
                                                 class="btn btn-sm btn-info" title="edit">
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                             </a>
-                                            <a href="{{ route('product.edit', ['product' => $product->id]) }}"
+                                            <a href="{{ route('product.image', ['product' => $product->id]) }}"
                                                 class="btn btn-sm border" title="image">
                                                 <i class="fa-solid fa-image"></i>
                                             </a>

@@ -37,11 +37,8 @@ class ProductController extends Controller
             ->select('product.*', 'category.name as category_name', 'brand.name as brand_name')
             ->where('product.status', '<>', '0')
             ->orderBy('created_at', 'desc')
-            ->get()
-            ->map(function ($product) {
-                $product->image = $product->images->first()->image;
-                return $product;
-            });
+            ->get();
+
         return view("backend.product.index", compact('list_product', 'title',));
     }
 
@@ -242,31 +239,31 @@ class ProductController extends Controller
 
         if ($product->save()) {
             // // upload file
-            if ($request->has('image')) {
-                $array_file = $request->file('image');
-                $list_images = ProductImage::where('product_image.product_id', '=', $id)->get();
-                $count = 1;
-                $path_dir = "images/product/";
-                $array_file = $request->file('image');
-                foreach ($list_images as $list_images) {
-                    $list_images->delete();
-                    if (File::exists(public_path($path_dir . $list_images->image))) {
-                        File::delete(public_path($path_dir . $list_images->image));
-                    }
-                }
+            // if ($request->has('image')) {
+            //     $array_file = $request->file('image');
+            //     $list_images = ProductImage::where('product_image.product_id', '=', $id)->get();
+            //     $count = 1;
+            //     $path_dir = "images/product/";
+            //     $array_file = $request->file('image');
+            //     foreach ($list_images as $list_images) {
+            //         $list_images->delete();
+            //         if (File::exists(public_path($path_dir . $list_images->image))) {
+            //             File::delete(public_path($path_dir . $list_images->image));
+            //         }
+            //     }
 
-                foreach ($array_file as $file) {
-                    $extension = $file->getClientOriginalExtension();
-                    $filename = $product->slug . '_' . $count . '_' .  $product->id . '.' . $extension;
-                    $file->move($path_dir, $filename);
-                    $product_image = new ProductImage();
-                    $product_image->product_id = $product->id;
-                    $product_image->ordinal_number = $count;
-                    $product_image->image = $filename;
-                    $product_image->save();
-                    $count++;
-                }
-            }
+            //     foreach ($array_file as $file) {
+            //         $extension = $file->getClientOriginalExtension();
+            //         $filename = $product->slug . '_' . $count . '_' .  $product->id . '.' . $extension;
+            //         $file->move($path_dir, $filename);
+            //         $product_image = new ProductImage();
+            //         $product_image->product_id = $product->id;
+            //         $product_image->ordinal_number = $count;
+            //         $product_image->image = $filename;
+            //         $product_image->save();
+            //         $count++;
+            //     }
+            // }
             // sale
             if (strlen($request->price_sale) && strlen($request->date_begin) && strlen($request->date_end)) {
                 $product_sale = ProductSale::where('product_id', '=', $id)->first();
@@ -464,6 +461,42 @@ class ProductController extends Controller
             } else {
                 return redirect()->route('product.trash')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
             }
+        }
+    }
+
+    public function image($id)
+    {
+        $title = 'Hình ảnh';
+        $product = Product::find($id);
+        $image = ProductImage::where('product_id', $id)->get();
+        // dd($image);
+        return view('backend.product.image', compact('product', 'image',  'title'));
+    }
+
+    public function imageUpload(Request $request)
+    {
+    }
+    public function imageDelete(Request $request)
+    {
+
+        $path_dir = "images/product/";
+        $imageId = $request->input('img_id');
+        $prodID = $request->input('prod_id');
+        $count = ProductImage::where('product_id', $prodID)->count();
+    
+        if($count >= 2) {
+            if (ProductImage::where('id', $imageId)) {
+                $imageItem = ProductImage::where('id', $imageId)->first();
+                // dd($imageItem);
+                $path_image_delete = public_path($path_dir . $imageItem->image);
+                File::delete($path_image_delete);
+                $imageItem->delete();
+                return response()->json(['status' => 'Image delete successfully']);
+            } else {
+                return response()->json(['status' => ' Không tồn tại hình ảnh']);
+            }
+        } else {
+            return response()->json(['status' => ' Số lượng hình ảnh không thể ít hơn 1']);
         }
     }
 }

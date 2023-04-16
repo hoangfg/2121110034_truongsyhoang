@@ -29,9 +29,8 @@ class AuthController extends Controller
             $request->session()->regenerate();
             return redirect()->route('dashboard.index');
         } else {
-            echo bcrypt($password);
+            // echo bcrypt($password);
             $error = 'Thông tin đăng nhập chưa chính xác';
-
             return view('backend.user.login', compact('error'));
         }
     }

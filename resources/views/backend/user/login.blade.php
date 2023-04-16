@@ -46,6 +46,14 @@
                         <p>Remember password</p>
                     </div>
 
+                    @if (isset($error))
+                       
+                            <div class="error-login ">
+                                {{ $error }}
+                            </div>
+                        
+                    @endif
+
                     <button class="button login__submit">
                         <span class="button__text">Log In Now</span>
                         <i class="button__icon fas fa-chevron-right"></i>

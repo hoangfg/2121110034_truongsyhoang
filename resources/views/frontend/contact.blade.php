@@ -2,6 +2,7 @@
 
 @section('title', $title ?? 'trang chủ')
 @section('header')
+
 @endsection
 @section('content')
 
@@ -104,6 +105,8 @@
 @endsection
 
 @section('footer')
+
+
     <script type="text/javascript">
         $(".ContactBtn").click(function(e) {
             e.preventDefault();

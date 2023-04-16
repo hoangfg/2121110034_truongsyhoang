@@ -17,7 +17,7 @@
                 <div class="d-flex flex-row align-items-start my-2">
                     @if (Auth::guard('users')->check())
                         <img class="rounded-circle me-2"
-                            src="{{ asset('images/user/' . Auth::guard('admin')->user()->image) }}" width="40">
+                            src="{{ asset('images/user/' . Auth::guard('users')->user()->image) }}" width="40">
                     @else
                         <img class="rounded-circle me-2"
                             src="{{ asset('images/user/' . Auth::guard('users')->user()->image) }}" width="40">

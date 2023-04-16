@@ -24,9 +24,9 @@ class StoreTopicRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:topic|string|min:5',
-            'metakey' => 'required|min:5',
-            'metadesc' => 'required|min:5',
+            'name' => 'required|unique:topic|string|min:1',
+            'metakey' => 'required|min:1',
+            'metadesc' => 'required|min:1',
             
         ];
     }

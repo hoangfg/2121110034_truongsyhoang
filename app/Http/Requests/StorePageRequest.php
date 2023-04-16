@@ -28,7 +28,7 @@ class StorePageRequest extends FormRequest
             'detail' => 'required|min:5',
             'metakey' => 'required|min:5',
             'metadesc' => 'required|min:5',
-            'image' => 'required|image|mimes:png,jpg,jpeg,webp|max:2048',  // Max file size is 2MB (2048KB)
+            'image' => 'image|mimes:png,jpg,jpeg,webp|max:2048',  // Max file size is 2MB (2048KB)
             
         ];
     }
@@ -52,7 +52,7 @@ class StorePageRequest extends FormRequest
             'image.image' => 'Vui lòng tải lên một tệp hình ảnh.',
             'image.mimes' => 'Vui lòng tải lên một tệp hình ảnh có phần mở rộng hợp lệ (png,jpg,jpeg).',
             'image.max' => 'Kích thước tệp tải lên không được vượt quá 2048KB (2MB).',
-            'image.required' => 'Vui lòng nhập thêm 1 hình ảnh.',
+            // 'image.required' => 'Vui lòng nhập thêm 1 hình ảnh.',
             
         ];
     }

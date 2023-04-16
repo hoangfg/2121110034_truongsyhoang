@@ -96,7 +96,7 @@
                                 <div class="mb-3">
                                     <label for="topic_id">Chủ đề cha</label>
                                     <select name="topic_id" id="topic_id" class="form-control">
-                                        <option>--chon chủ đề--
+                                        <option  value="">--chon chủ đề--
                                         </option>
                                         {!! $html_topic_id !!}
                                     </select>

@@ -47,15 +47,16 @@
                             <img src="{{ asset('images/post/' . $item->image) }}" alt="">
                         </picture>
                         {!! $item->detail !!}
+                    </div>
                 @endif
                 @php
                     $index++;
                 @endphp
             @endforeach
+
         </div>
-    </div>
-@endsection
+    @endsection
 
-@section('footer')
+    @section('footer')
 
-@endsection
+    @endsection

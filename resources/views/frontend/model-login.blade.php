@@ -130,6 +130,13 @@
                         <input id="login-password" name="password" type="password" required>
                     </div>
                 </fieldset>
+                @if (isset($error))
+                    <div class="mt-3">
+                        <div class="text-danger text-center ">
+                            {{ $error }}
+                        </div>
+                    </div>
+                @endif
                 <button type="submit" class="btn-login">Login</button>
             </form>
         </div>

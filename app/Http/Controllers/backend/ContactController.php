@@ -28,7 +28,6 @@ class ContactController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -39,7 +38,6 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-        //
     }
 
     /**
@@ -50,7 +48,9 @@ class ContactController extends Controller
      */
     public function show($id)
     {
-
+        $contact = Contact::find($id);
+        $title = 'Read Mail';
+        return view("backend.contact.show", compact('contact', 'title'));
         //
     }
 
@@ -62,7 +62,9 @@ class ContactController extends Controller
      */
     public function edit($id)
     {
-        //
+        $title = 'Reply Mail';
+        $contact = Contact::find($id);
+        return view("backend.contact.edit", compact('contact', 'title'));
     }
 
     /**
@@ -74,7 +76,23 @@ class ContactController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $contact = Contact::find($id);
+        $request->validate([
+            'reply_content' => ['required', 'not_in:null,false,0,'],
+        ], [
+            'reply_content.not_in' => 'Trường :attribute không được phép có giá trị :values.',
+        ]);
+        if ($contact == null) {
+            return redirect()->route('contact.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
+        } else {
+            $contact->replay_id = Auth::guard('admin')->user()->id;
+            $contact->reply_content = $request->reply_content;
+            $contact->status = 1;
+            $contact->updated_by = $contact->replay_id;
+            $contact->updated_at = date('Y-m-d H:i:s');
+            $contact->save();
+            return redirect()->route('contact.index')->with('message', ['type' => 'success', 'msg' => 'Tin nhắn đã được gửi thành công.']);
+        }
     }
 
     /**
@@ -118,7 +136,7 @@ class ContactController extends Controller
             $contact->updated_at = date('Y-m-d H:i:s');
             $contact->updated_by =   Auth::guard('admin')->user()->id;
             $contact->save();
-            return redirect()->route('contact.trash')->with('message', ['type' => 'success', 'msg' => 'Khôi phục sản phẩm thành công']);
+            return redirect()->route('contact.trash')->with('message', ['type' => 'success', 'msg' => 'Khôi phục tin nhắn thành công']);
         }
     }
     // trash

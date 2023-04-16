@@ -92,7 +92,7 @@ class SiteLoginController extends Controller
                     'emails.actived_send_again',
                     compact('user'),
                     function ($send_email) use ($user) {
-                        $send_email->subject('ShopTK - Xác nhận tài khoản');
+                        $send_email->subject('BookStore - Xác nhận tài khoản');
                         $send_email->to($user->email, $user->name);
                     }
                 );
