@@ -12,6 +12,7 @@ use App\Models\Category;
 use App\Models\ProductSale;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\ProductImage;
 
 class SiteController extends Controller
 {
@@ -157,7 +158,7 @@ class SiteController extends Controller
         }
 
         $title = 'Sản phẩm khuyến mãi';
-      
+
         $min_price = ProductSale::min('price_sale');
         $max_price = ProductSale::max('price_sale');
         $max_price_range = $max_price + 100000;
@@ -225,6 +226,7 @@ class SiteController extends Controller
     #Detail
     private function ProductDetail($product)
     {
+        // dd($product->images->toArray());
         $cat = $product->category_id;
 
         $listcatid = array();
@@ -259,7 +261,8 @@ class SiteController extends Controller
             ->where('parent_id', '=', 0)
             ->orderBy('created_at', 'DESC')
             ->paginate(7);
-
+        $list_image = ProductImage::where('product_id', $product->id)->get();
+        // dd($list_image);
         return view('frontend.product-detail', compact('list_comment',  'product', 'list_product', 'product_sale', 'type'));
     }
     #Brand

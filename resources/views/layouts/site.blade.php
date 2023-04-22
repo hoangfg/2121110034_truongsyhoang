@@ -39,8 +39,10 @@
             <div class="row py-3 border-2 border-bottom m-0">
                 <!-- logo -->
                 <div class="col-md-2 col-6  my-auto">
-                    <img src="https://demo.wpthemego.com/themes/sw_coruja/wp-content/uploads/2019/11/logo-default.png"
-                        alt="logo" class="img-fluid rounded-top">
+                    <a href="{{ route('site.home') }}">
+                        <img src="https://demo.wpthemego.com/themes/sw_coruja/wp-content/uploads/2019/11/logo-default.png"
+                            alt="logo" class="img-fluid rounded-top">
+                    </a>
                 </div>
                 <div class="col-md-1 d-md-block d-none"></div>
                 <div class="col-md-7 d-md-block d-none my-auto">

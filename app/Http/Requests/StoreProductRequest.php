@@ -30,7 +30,7 @@ class StoreProductRequest extends FormRequest
             'metakey' => 'required|min:5',
             'detail' => 'required|min:5|max:10000',
             'metadesc' => 'required|min:5|max:10000',
-            'image' => 'required|array|min:2',
+            'image' => 'required|array',
             'image.*' => 'image|mimes:jpg,png,jpeg,gif,svg,webp|max:2048',
             'price_buy' => 'required|numeric|digits_between:1,10',
             'price' => 'required|numeric|digits_between:1,10',
@@ -66,7 +66,7 @@ class StoreProductRequest extends FormRequest
             'metadesc.min' => 'Nhập nhiều nhất :max ký tự',
 
             'image.required' => 'Hình ảnh không được để trống.',
-            'image.min' => 'Bạn cần tải lên ít nhất 2 hình ảnh.',
+            
             'image.*.image' => 'Tập tin phải là hình ảnh.',
             'image.*.mimes' => 'Hình ảnh phải có định dạng jpg, png, jpeg, gif hoặc svg.',
             'image.*.max' => 'Kích thước hình ảnh tối đa là 2048KB.',

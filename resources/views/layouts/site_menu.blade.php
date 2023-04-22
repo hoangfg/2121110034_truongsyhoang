@@ -37,7 +37,7 @@
                                                     class="fa-solid fa-arrow-right-to-bracket me-2"></i> Tài khoản</a>
                                     
                                         </li> --}}
-                                        <li class="nav-item me-5 d-md-block d-none">
+                                        <li class="nav-item me-5">
                                             <a class="nav-link  mt-0"
                                                 href="" data-bs-toggle="modal" data-bs-target="#myModalLogin"><i
                                                     class="fa-solid fa-arrow-right-to-bracket me-2"></i>Đăng

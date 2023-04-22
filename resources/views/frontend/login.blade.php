@@ -5,7 +5,7 @@
 @endsection
 @section('content')
     <div class="container modal-body">
-        @includeIf('backend.messageAlert', ['some' => 'data'])
+        @includeIf('frontend.messageAlert', ['some' => 'data'])
         <div class="row my-3 ">
             <div class="d-flex justify-content-center">
 

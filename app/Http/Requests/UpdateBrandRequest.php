@@ -24,7 +24,7 @@ class UpdateBrandRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:255|min:5|string',
+            'name' => 'required|max:255|min:1|string',
             'metakey' => 'required|min:5',
             'metadesc' => 'required|min:5',
             'image' => 'image|mimes:png,jpg,jpeg|max:2048'  // Max file size is 2MB (2048KB)
@@ -37,7 +37,7 @@ class UpdateBrandRequest extends FormRequest
         ];
         return [
             'name.required' => $messages['required'],
-            'name.min' => 'Nhập ít nhất 5 ký tự',
+            'name.min' => 'Nhập ít nhất :min ký tự',
             'name.max' => 'Nhập nhiều nhất 255 ký tự',
             'name.string' => 'Tên phải là chuỗi chỉ chứa các ký tự chữ cái và số',
             'name.unique' => 'Tên đã được sử dụng, vui lòng sử dụng một tên khác',

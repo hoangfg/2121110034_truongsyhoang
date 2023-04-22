@@ -405,6 +405,8 @@ class MenuController extends Controller
         } else {
             $typeTable = Str::studly($menu->type); // Chuyển đổi tên bảng sang dạng StudlyCase
             $type = DB::table($typeTable)->where('id', $menu->table_id)->first();
+            dd($type);
+
             if ($type->status == 1) {
                 $menu->status = ($menu->status == 1) ? 2 : 1;
             } else {

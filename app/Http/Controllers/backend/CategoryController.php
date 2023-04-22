@@ -53,6 +53,7 @@ class CategoryController extends Controller
                 $html_sort_order .= "<option value='" . ($category->sort_order + 1) . "'>Sau: " . $category->name . "</option>";
             }
         }
+        // dd($html_parent_id);
         return view('backend.category.create', compact('html_parent_id', 'html_sort_order', 'title'));
     }
 

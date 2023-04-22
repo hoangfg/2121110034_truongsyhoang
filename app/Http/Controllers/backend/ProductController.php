@@ -84,7 +84,7 @@ class ProductController extends Controller
         $product->category_id = $request->category_id;
         $product->brand_id = $request->brand_id;
         $product->name = $request->name;
-        $product->slug = Str::slug($request->name, '-');
+        $product->slug = Str::slug($request->name, '-') . '_' .  date('Y-m-d');
         $product->price_buy = $request->price_buy;
         $product->detail = $request->detail;
         $product->metakey = $request->metakey;
@@ -228,7 +228,7 @@ class ProductController extends Controller
         $product->category_id = $request->category_id;
         $product->brand_id = $request->brand_id;
         $product->name = $request->name;
-        $product->slug = Str::slug($request->name, '-');
+        $product->slug = Str::slug($request->name, '-') . '_' . date('Y-m-d');
         $product->price_buy = $request->price_buy;
         $product->detail = $request->detail;
         $product->metakey = $request->metakey;
@@ -469,12 +469,47 @@ class ProductController extends Controller
         $title = 'Hình ảnh';
         $product = Product::find($id);
         $image = ProductImage::where('product_id', $id)->get();
+       
         // dd($image);
         return view('backend.product.image', compact('product', 'image',  'title'));
     }
 
-    public function imageUpload(Request $request)
+    public function imageUpload(Request $request, $id)
     {
+        $request->validate([
+            'image' => 'required|array',
+            'image.*' => 'image|mimes:jpg,png,jpeg,gif,svg,webp|max:2048',
+        ], [
+            'image.required' => 'Hình ảnh không được để trống.',
+            'image.min' => 'Bạn cần tải lên ít nhất 2 hình ảnh.',
+            'image.*.image' => 'Tập tin phải là hình ảnh.',
+            'image.*.mimes' => 'Hình ảnh phải có định dạng :mimes.',
+            'image.*.max' => 'Kích thước hình ảnh tối đa là 2048KB.',
+
+
+        ]);
+        $product = Product::find($id);
+        // dd($product->images);
+        $max = ProductImage::where('product_id', $id)->max('ordinal_number');
+        // dd($max);
+        if ($request->has('image')) {
+            $count = $max + 1;
+            $path_dir = "images/product/";
+            $array_file = $request->file('image');
+            foreach ($array_file as $file) {
+                $extension = $file->getClientOriginalExtension();
+                $filename = $product->slug . '_' . $count . '_' .  $product->id . '.' . $extension;
+                $file->move($path_dir, $filename);
+                $product_image = new ProductImage();
+                $product_image->product_id = $product->id;
+                $product_image->ordinal_number = $count;
+                $product_image->image = $filename;
+                // dd($product_image);
+                $product_image->save();
+                $count++;
+            }
+        }
+        return redirect()->route('product.index')->with('message', ['type' => 'success', 'msg' => 'Thêm hình ảnh thành công']);
     }
     public function imageDelete(Request $request)
     {
@@ -483,8 +518,8 @@ class ProductController extends Controller
         $imageId = $request->input('img_id');
         $prodID = $request->input('prod_id');
         $count = ProductImage::where('product_id', $prodID)->count();
-    
-        if($count >= 2) {
+
+        if ($count >= 2) {
             if (ProductImage::where('id', $imageId)) {
                 $imageItem = ProductImage::where('id', $imageId)->first();
                 // dd($imageItem);

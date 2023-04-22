@@ -116,7 +116,7 @@
                 Login
                 <span class="underline"></span>
             </button>
-            <form action="{{ route('site.postlogin') }}" method="post"class="form form-login">
+            <form action="{{ route('site.postlogin') }}" method="post" class="form form-login">
                 @csrf
 
                 <fieldset>
@@ -151,7 +151,7 @@
                 <fieldset>
                     <legend>Please, enter your email, password and password confirmation for sign up.</legend>
                     <div class="input-block">
-                        <label for="signup-username">E-mail</label>
+                        <label for="signup-username">Username</label>
                         <input id="signup-username" name="username" type="email" required>
                     </div>
                     <div class="input-block">
