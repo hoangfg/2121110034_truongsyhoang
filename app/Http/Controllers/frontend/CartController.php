@@ -28,6 +28,9 @@ class CartController extends Controller
     {
         $productid = $request->input('product_id');
         $quality = $request->input('product_qty');
+        if ($quality < 1) {
+            return response()->json(['status' => 'Quality > 0']);
+        }
         if (Auth::guard('users')->check()) {
             $prod_check = Product::where('id', $productid)->first();
             if ($prod_check) {

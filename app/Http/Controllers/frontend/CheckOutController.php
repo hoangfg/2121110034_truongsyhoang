@@ -31,7 +31,7 @@ class CheckOutController extends Controller
     {
         $request->validate([
             'name' => 'required|max:50',
-            'email' => 'required|email|max:30',
+            'email' => 'required|email|min:10',
             'phone' => 'required|min:10|max:12',
             'address' => 'required|max:255',
         ], [
@@ -39,7 +39,7 @@ class CheckOutController extends Controller
             'email.required' => 'Bạn chưa điền email',
             'email.email' => 'Email không hợp lệ',
 
-            'email.max' => 'Email không được dài quá 30 ký tự',
+            'email.min' => 'Email không được dài quá 10 ký tự',
             'phone.required' => 'Số điện thoại là trường bắt buộc',
             'phone.min' => 'Số điện thoại phải có ít nhất 10 chữ số',
             'phone.max' => 'Số điện thoại không được vượt quá 12 chữ số',

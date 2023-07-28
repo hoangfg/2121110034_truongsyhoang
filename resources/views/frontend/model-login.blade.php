@@ -123,11 +123,21 @@
                     <legend>Please, enter your email and password for login.</legend>
                     <div class="input-block">
                         <label for="login-email">Username</label>
-                        <input id="login-email" name="username" type="text" required>
+                        <input id="login-email" name="username" type="text">
+                        @if ($errors->has('username'))
+                            <div class="text-danger">
+                                {{ $errors->first('username') }}
+                            </div>
+                        @endif
                     </div>
                     <div class="input-block">
                         <label for="login-password">Password</label>
-                        <input id="login-password" name="password" type="password" required>
+                        <input id="login-password" name="password" type="password">
+                        @if ($errors->has('password'))
+                            <div class="text-danger">
+                                {{ $errors->first('password') }}
+                            </div>
+                        @endif
                     </div>
                 </fieldset>
                 @if (isset($error))
@@ -152,19 +162,39 @@
                     <legend>Please, enter your email, password and password confirmation for sign up.</legend>
                     <div class="input-block">
                         <label for="signup-username">Username</label>
-                        <input id="signup-username" name="username" type="email" required>
+                        <input id="signup-username" name="username" type="text">
+                        @if ($errors->has('username'))
+                            <div class="text-danger">
+                                {{ $errors->first('username') }}
+                            </div>
+                        @endif
                     </div>
                     <div class="input-block">
                         <label for="signup-email">E-mail</label>
-                        <input id="signup-email" name="email" type="email" required>
+                        <input id="signup-email" name="email" type="text">
+                        @if ($errors->has('email'))
+                            <div class="text-danger">
+                                {{ $errors->first('email') }}
+                            </div>
+                        @endif
                     </div>
                     <div class="input-block">
                         <label for="signup-password">Password</label>
-                        <input id="signup-password" name="password" type="password" required>
+                        <input id="signup-password" name="password" type="password">
+                        @if ($errors->has('password'))
+                            <div class="text-danger">
+                                {{ $errors->first('password') }}
+                            </div>
+                        @endif
                     </div>
                     <div class="input-block">
                         <label for="signup-password-confirm">Confirm password</label>
-                        <input id="signup-password-confirm" name="confirm_password" type="password" required>
+                        <input id="signup-password-confirm" name="confirm_password" type="password">
+                        @if ($errors->has('confirm_password'))
+                            <div class="text-danger">
+                                {{ $errors->first('confirm_password') }}
+                            </div>
+                        @endif
                     </div>
                 </fieldset>
                 <button type="submit" class="btn-signup">SignUp</button>

@@ -5,6 +5,23 @@
 @endsection
 @section('content')
     <div class="container mt-5">
+        <div class="row my-3 ">
+            <div class="d-flex justify-content-center">
+
+
+                <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{{ route('site.home') }}" class="text-bl_gr">Trang
+                                chủ</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url('gio-hang') }}" class="text-bl_gr">Giỏ hàng</a></li>
+                        <li class="breadcrumb-item" aria-current="page">
+                            Thanh toán</a>
+                        </li>
+
+                    </ol>
+                </nav>
+            </div>
+        </div>
         @includeIf('backend.messageAlert', ['some' => 'data'])
         <form action="{{ url('place-order') }}" method="POST">
             @csrf
@@ -123,6 +140,8 @@
                             </table>
                             <hr>
                             <button type="submit " class="btn btn-outline-success w-100 placeOrderBtn">Place order</button>
+                            <a href="{{ url('gio-hang') }}" class="btn btn-outline-success w-100 placeOrderBtn">Quay lại
+                                giỏ hàng</a>
                         </div>
                     </div>
                 </div>

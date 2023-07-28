@@ -28,19 +28,25 @@ class SiteLoginController extends Controller
             return Str::endsWith($value, '@gmail.com');
         });
         $request->validate([
-            'username' => 'required|unique:user|max:35|min:5|string',
-            'email' => 'required|unique:user,email|email|gmail|max:30',
-            'password' => 'required|max:40',
+            'username' => 'required|unique:user|max:30|min:5|string',
+            'email' => 'required|unique:user,email|email|gmail|min:10',
+            'password' => 'required|max:40|min:6',
             'confirm_password' => 'required|same:password|max:40',
         ], [
+            'username.required' => 'Bạn chưa điền username',
+            'username.min' => 'username không được ít hơn :min ký tự',
+            'username.max' => 'username không được dài quá 30 ký tự',
+            'username.unique' => 'username này đã được đăng ký, Xin hãy đăng nhập.',
+
             'email.required' => 'Bạn chưa điền email',
             'email.email' => 'Email không hợp lệ',
             'email.gmail' => 'Gmail không hợp lệ "@gmail.com"',
-            'email.max' => 'Email không được dài quá 30 ký tự',
+            'email.min' => 'Email không được ít hơn 10 ký tự',
             'email.unique' => 'Email này đã được đăng ký, Xin hãy đăng nhập.',
 
             'password.required' => 'Bạn chưa điền mật khẩu',
             'password.max' => 'Mật khẩu không được dài quá 40 ký tự',
+            'password.min' => 'Mật khẩu không được ít hơn :min ký tự',
 
             'confirm_password.required' => 'Bạn chưa nhập lại mật khẩu',
             'confirm_password.max' => 'Không được dài quá 40 ký tự',
@@ -173,13 +179,14 @@ class SiteLoginController extends Controller
     public function postget_password($user, Request $request)
     {
         $request->validate([
-            'password' => 'required|max:40',
+            'password' => 'required|max:40|min:6',
             'new_password' => 'required|max:40',
             'confirm_password' => 'required|same:new_password|max:40',
         ], [
 
             'password.required' => 'Bạn chưa điền mật khẩu',
             'password.max' => 'Mật khẩu không được dài quá 40 ký tự',
+            'password.max' => 'Mật khẩu không được ít hơn :min ký tự',
             'new_password.required' => 'Bạn chưa điền mật khẩu',
             'new_password.max' => 'Mật khẩu không được dài quá 40 ký tự',
 
@@ -201,12 +208,17 @@ class SiteLoginController extends Controller
     public function postlogin(Request $request)
     {
         $request->validate([
-            'username' => 'required|string|max:50',
-            'password' => 'required'
+            'username' => 'required|string|max:31|min:5',
+            'password' => 'required|max:40|min:6'
         ], [
             'username.required' => 'Bạn chưa điền tên tài khoản hoặc email',
-            'username.max' => 'Không được dài quá 50 ký tự',
-            'password.required' => 'Bạn chưa điền mật khẩu'
+            'username.max' => 'Không được dài quá 30 ký tự',
+            'username.min' => 'Không được ít hon :min ký tự',
+            'password.required' => 'Bạn chưa điền mật khẩu',
+            'password.max' => 'Mật khẩu không được dài quá 40 ký tự',
+            'password.min' => 'Mật khẩu không được ít hơn :min ký tự',
+
+
 
         ]);
         $username = $request->username;
@@ -235,6 +247,7 @@ class SiteLoginController extends Controller
         }
         $error = "Thông tin đăng nhập không chính xác";
         return view('frontend.login', compact('error'));
+        // return response()->json(['status' => 'Quality > 0']);
     }
     public function logout(Request $request)
     {
@@ -245,7 +258,7 @@ class SiteLoginController extends Controller
     public function profile()
     {
         $profile = User::where('id', Auth::guard('users')->user()->id)->first();
-       
+
         return view('frontend.profile.profile', compact('profile'));
     }
 }

@@ -26,7 +26,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="product py-5">
+                {{-- <div class="product py-5">
 
                     <div class="row d-flex justify-content-between">
                         <x-sale-home />
@@ -131,7 +131,7 @@
 
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
 
                 <div class="new_product py-5 owl-carousel-parent">
